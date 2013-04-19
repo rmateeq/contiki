@@ -41,6 +41,12 @@
 #include "i2cmaster.h"
 #include "isr_compat.h"
 
+#ifdef UART1_ISR_DISABLED
+#define I2C_ISR_ENABLE UART1_ISR_DISABLED
+#else /* UART0_CONF_TX_WITH_INTERRUPT */
+#define I2C_ISR_ENABLE 1
+#endif /* UART0_CONF_TX_WITH_INTERRUPT */
+
 signed   char tx_byte_ctr, rx_byte_ctr;
 unsigned char rx_buf[2];
 unsigned char* tx_buf_ptr;
@@ -210,6 +216,7 @@ i2c_transmit_n(uint8_t byte_ctr, uint8_t *tx_buf) {
 }
 
 /*----------------------------------------------------------------------------*/
+#if I2C_ISR_ENABLE
 ISR(USCIAB1TX, i2c_tx_interrupt)
 {
   // TX Part
@@ -235,7 +242,7 @@ ISR(USCIAB1TX, i2c_tx_interrupt)
         UC1IFG &= ~UCB1RXIFG;        // Clear USCI_B1 RX int flag. XXX Just in case, check if necessary
     }
   }
-#endif
+#endif /* I2C_RX_WITH_INTERRUPT */
 }
 
 ISR(USCIAB1RX, i2c_rx_interrupt)
@@ -246,3 +253,4 @@ ISR(USCIAB1RX, i2c_rx_interrupt)
     UCB1STAT &= ~UCNACKIFG;
   }
 }
+#endif /* I2C_ISR_ENABLE */

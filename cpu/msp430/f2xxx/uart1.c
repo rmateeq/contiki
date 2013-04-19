@@ -60,7 +60,7 @@ static uint8_t txbuf_data[TXBUFSIZE];
 uint8_t
 uart1_active(void)
 {
-  return (UCA0STAT & UCBUSY) | transmitting;
+  return (UCA1STAT & UCBUSY) | transmitting;
 }
 /*---------------------------------------------------------------------------*/
 void
@@ -84,16 +84,14 @@ uart1_writeb(unsigned char c)
      the first byte into the UART. */
   if(transmitting == 0) {
     transmitting = 1;
-    UCA0TXBUF = ringbuf_get(&txbuf);
+    UCA1TXBUF = ringbuf_get(&txbuf);
   }
 
 #else /* TX_WITH_INTERRUPT */
-
   /* Loop until the transmission buffer is available. */
-  while(!(IFG2 & UCA0TXIFG));
-
+  while((UCA1STAT & UCBUSY));
   /* Transmit the data. */
-  UCA0TXBUF = c;
+  UCA1TXBUF = c;
 #endif /* TX_WITH_INTERRUPT */
 }
 /*---------------------------------------------------------------------------*/
@@ -107,15 +105,32 @@ uart1_writeb(unsigned char c)
 void
 uart1_init(unsigned long ubr)
 {
+
   /* RS232 */
-  P3SEL |= 0x30;                            /* P3.4,5 = USCI_A0 TXD/RXD */
-  UCA0CTL1 |= UCSSEL_2;                     /* CLK = SMCLK */
-  UCA0BR0 = 0x45;                           /* 8MHz/115200 = 69 = 0x45 */
-  UCA0BR1 = 0x00;
-  UCA0MCTL = UCBRS2;                        /* Modulation UCBRSx = 4 */
-  UCA0CTL1 &= ~UCSWRST;                     /* Initialize USCI state machine */
+  UCA1CTL1 |= UCSWRST;            /* Hold peripheral in reset state */
+  UCA1CTL1 |= UCSSEL_2;           /* CLK = SMCLK */
+
+  UCA1BR0 = ubr;                  /* 8MHz/115200 = 69 = 0x45 */
+  UCA1BR1 = 0x00;
+  UCA1MCTL = UCBRS_3;             /* Modulation UCBRSx = 3 */
+
+  P3DIR &= ~0x80;                 /* P3.7 = USCI_A1 RXD as input */
+  P3DIR |= 0x40;                  /* P3.6 = USCI_A1 TXD as output */
+  P3SEL |= 0xC0;                  /* P3.4,5 = USCI_A1 TXD/RXD */
 
   transmitting = 0;
+
+  /* XXX Clear pending interrupts before enable */
+  IFG2 &= ~UCA1RXIFG;
+  IFG2 &= ~UCA1TXIFG;
+  UCA1CTL1 &= ~UCSWRST;                   /* Initialize USCI state machine **before** enabling interrupts */
+  IE2 |= UCA1RXIE;                        /* Enable UCA1 RX interrupt */
+
+  /* Enable USCI_A1 TX interrupts (if TX_WITH_INTERRUPT enabled) */
+#if TX_WITH_INTERRUPT
+  ringbuf_init(&txbuf, txbuf_data, sizeof(txbuf_data));
+  IE2 |= UCA1TXIE;                        /* Enable UCA1 TX interrupt */
+#endif /* TX_WITH_INTERRUPT */
  
 }
 /*---------------------------------------------------------------------------*/
@@ -125,10 +140,10 @@ ISR(USCIAB1RX, uart1_rx_interrupt)
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
 
   /* Check status register for receive errors. */
-  if(UCA0STAT & UCRXERR) {
-    c = UCA0RXBUF;   /* Clear error flags by forcing a dummy read. */
+  if(UCA1STAT & UCRXERR) {
+    c = UCA1RXBUF;   /* Clear error flags by forcing a dummy read. */
   } else {
-    c = UCA0RXBUF;
+    c = UCA1RXBUF;
     if(uart1_input_handler != NULL) {
       if(uart1_input_handler(c)) {
 	LPM4_EXIT;
@@ -142,11 +157,11 @@ ISR(USCIAB1RX, uart1_rx_interrupt)
 ISR(USCIAB1TX, uart1_tx_interrupt)
 {
   ENERGEST_ON(ENERGEST_TYPE_IRQ);
-  if(IFG2 & UCA0TXIFG) {
+  if(IFG2 & UCA1TXIFG) {
     if(ringbuf_elements(&txbuf) == 0) {
       transmitting = 0;
     } else {
-      UCA0TXBUF = ringbuf_get(&txbuf);
+      UCA1TXBUF = ringbuf_get(&txbuf);
     }
   }
   

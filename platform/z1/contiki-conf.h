@@ -120,8 +120,11 @@
 #define PROCESS_CONF_STATS 1
 /*#define PROCESS_CONF_FASTPOLL    4*/
 
+/* As interrupt vector is shared with i2cmaster, we only enable one */
+#define UART1_ISR_DISABLED 0
 
 #define UART0_CONF_TX_WITH_INTERRUPT 0 // So far, printfs without interrupt.
+#define UART1_CONF_TX_WITH_INTERRUPT 0
 
 #ifdef WITH_UIP6
 

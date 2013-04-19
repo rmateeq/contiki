@@ -10,6 +10,7 @@ endif
 
 CLEAN += symbols.c symbols.h
 
+# uart1 not included by default as it increases code size even if not used
 ARCH=msp430.c leds.c watchdog.c xmem.c \
      spi.c cc2420.c cc2420-aes.c cc2420-arch.c cc2420-arch-sfd.c\
      node-id.c sensors.c button-sensor.c cfs-coffee.c \
@@ -17,7 +18,7 @@ ARCH=msp430.c leds.c watchdog.c xmem.c \
      checkpoint-arch.c slip.c slip_uart0.c \
      z1-phidgets.c sht11.c sht11-sensor.c light-sensor.c \
      battery-sensor.c sky-sensors.c tmp102.c temperature-sensor.c light-ziglet.c \
-     relay-phidget.c
+     relay-phidget.c uart1.c slip_uart1.c uart1-putchar.c
 
 CONTIKI_TARGET_DIRS = . dev apps net
 ifndef CONTIKI_TARGET_MAIN
