@@ -5,7 +5,7 @@
   <project EXPORT="discard">[CONTIKI_DIR]/tools/cooja/apps/avrora</project>
   <project EXPORT="discard">[CONTIKI_DIR]/tools/cooja/apps/serial_socket</project>
   <simulation>
-    <title>Sky Websense with RPL router</title>
+    <title>Z1 Websense with RPL router</title>
     <delaytime>0</delaytime>
     <randomseed>123456</randomseed>
     <motedelay_us>1000000</motedelay_us>
@@ -34,21 +34,17 @@
       <moteinterface>se.sics.cooja.mspmote.interfaces.MspClock</moteinterface>
       <moteinterface>se.sics.cooja.mspmote.interfaces.MspMoteID</moteinterface>
       <moteinterface>se.sics.cooja.mspmote.interfaces.SkyButton</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyFlash</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyCoffeeFilesystem</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyByteRadio</moteinterface>
+      <moteinterface>se.sics.cooja.mspmote.interfaces.Msp802154Radio</moteinterface>
       <moteinterface>se.sics.cooja.mspmote.interfaces.MspSerial</moteinterface>
       <moteinterface>se.sics.cooja.mspmote.interfaces.SkyLED</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.MspDebugOutput</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyTemperature</moteinterface>
     </motetype>
     <motetype>
-      se.sics.cooja.mspmote.SkyMoteType
-      <identifier>skyweb</identifier>
-      <description>Sky Websense</description>
-      <source EXPORT="discard">[CONTIKI_DIR]/examples/ipv6/sky-websense/sky-websense.c</source>
-      <commands EXPORT="discard">make sky-websense.sky TARGET=sky</commands>
-      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/ipv6/sky-websense/sky-websense.sky</firmware>
+      se.sics.cooja.mspmote.Z1MoteType
+      <identifier>z1web</identifier>
+      <description>Z1 Websense</description>
+      <source EXPORT="discard">[CONTIKI_DIR]/examples/z1/ipv6/z1-websense/z1-websense.c</source>
+      <commands EXPORT="discard">make z1-websense.z1 TARGET=z1</commands>
+      <firmware EXPORT="copy">[CONTIKI_DIR]/examples/z1/ipv6/z1-websense/z1-websense.z1</firmware>
       <moteinterface>se.sics.cooja.interfaces.Position</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.RimeAddress</moteinterface>
       <moteinterface>se.sics.cooja.interfaces.IPAddress</moteinterface>
@@ -56,14 +52,10 @@
       <moteinterface>se.sics.cooja.interfaces.MoteAttributes</moteinterface>
       <moteinterface>se.sics.cooja.mspmote.interfaces.MspClock</moteinterface>
       <moteinterface>se.sics.cooja.mspmote.interfaces.MspMoteID</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyButton</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyFlash</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyCoffeeFilesystem</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyByteRadio</moteinterface>
+      <moteinterface>se.sics.cooja.mspmote.interfaces.MspButton</moteinterface>
+      <moteinterface>se.sics.cooja.mspmote.interfaces.Msp802154Radio</moteinterface>
       <moteinterface>se.sics.cooja.mspmote.interfaces.MspSerial</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyLED</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.MspDebugOutput</moteinterface>
-      <moteinterface>se.sics.cooja.mspmote.interfaces.SkyTemperature</moteinterface>
+      <moteinterface>se.sics.cooja.mspmote.interfaces.MspLED</moteinterface>
     </motetype>
     <mote>
       <breakpoints />
@@ -91,7 +83,7 @@
         se.sics.cooja.mspmote.interfaces.MspMoteID
         <id>2</id>
       </interface_config>
-      <motetype_identifier>skyweb</motetype_identifier>
+      <motetype_identifier>z1web</motetype_identifier>
     </mote>
     <mote>
       <breakpoints />
@@ -105,7 +97,7 @@
         se.sics.cooja.mspmote.interfaces.MspMoteID
         <id>3</id>
       </interface_config>
-      <motetype_identifier>skyweb</motetype_identifier>
+      <motetype_identifier>z1web</motetype_identifier>
     </mote>
     <mote>
       <breakpoints />
@@ -119,7 +111,7 @@
         se.sics.cooja.mspmote.interfaces.MspMoteID
         <id>4</id>
       </interface_config>
-      <motetype_identifier>skyweb</motetype_identifier>
+      <motetype_identifier>z1web</motetype_identifier>
     </mote>
     <mote>
       <breakpoints />
@@ -133,7 +125,7 @@
         se.sics.cooja.mspmote.interfaces.MspMoteID
         <id>5</id>
       </interface_config>
-      <motetype_identifier>skyweb</motetype_identifier>
+      <motetype_identifier>z1web</motetype_identifier>
     </mote>
     <mote>
       <breakpoints />
@@ -147,7 +139,7 @@
         se.sics.cooja.mspmote.interfaces.MspMoteID
         <id>6</id>
       </interface_config>
-      <motetype_identifier>skyweb</motetype_identifier>
+      <motetype_identifier>z1web</motetype_identifier>
     </mote>
   </simulation>
   <plugin>
