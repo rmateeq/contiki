@@ -49,7 +49,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DEBUG 0
+#define DEBUG 1
 #if DEBUG
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
@@ -78,7 +78,7 @@
 static const char http_content_type_json[] = "application/json";
 
 /* Maximum 40 chars in host name?: 5 x 8 */
-static char callback_host[40] = "[2001:470:1f10:333::2]";
+static char callback_host[40] = "[aaaa::1]";
 static uint16_t callback_port = CALLBACK_PORT;
 static uint16_t callback_interval = SEND_INTERVAL;
 static char callback_path[80] = "/debug/";
@@ -89,13 +89,13 @@ static struct jsontree_object *tree;
 static struct ctimer periodic_timer;
 long json_time_offset = 0;
 
-/* support for submitting to cosm */
-#if WITH_COSM
-extern struct jsontree_callback cosm_value_callback;
+/* support for submitting to Xively */
+#if WITH_XIVELY
+extern struct jsontree_callback xively_value_callback;
 
-JSONTREE_OBJECT_EXT(cosm_tree,
-                    JSONTREE_PAIR("current_value", &cosm_value_callback));
-#endif /* WITH_COSM */
+JSONTREE_OBJECT_EXT(xively_tree,
+                    JSONTREE_PAIR("current_value", &xively_value_callback));
+#endif /* WITH_XIVELY */
 
 static void periodic(void *ptr);
 
@@ -137,21 +137,26 @@ cfg_set(struct jsontree_context *js_ctx, struct jsonparse_state *parser)
   while((type = jsonparse_next(parser)) != 0) {
     if(type == JSON_TYPE_PAIR_NAME) {
       if(jsonparse_strcmp_value(parser, "host") == 0) {
+        PRINTF("json-ws: cfg_set host %s\n", callback_host);
         json_copy_string(parser, callback_host, sizeof(callback_host));
         update++;
       } else if(jsonparse_strcmp_value(parser, "path") == 0) {
+        PRINTF("json-ws: cfg_set path %s\n", callback_path);
         json_copy_string(parser, callback_path, sizeof(callback_path));
         update++;
       } else if(jsonparse_strcmp_value(parser, "appdata") == 0) {
+        PRINTF("json-ws: cfg_set appdata %s\n", callback_appdata);
         json_copy_string(parser, callback_appdata, sizeof(callback_appdata));
         update++;
       } else if(jsonparse_strcmp_value(parser, "proto") == 0) {
+        PRINTF("json-ws: cfg_set proto %s\n", callback_proto);
         json_copy_string(parser, callback_proto, sizeof(callback_proto));
         update++;
       } else if(jsonparse_strcmp_value(parser, "port") == 0) {
         jsonparse_next(parser);
         jsonparse_next(parser);
         callback_port = jsonparse_get_value_as_int(parser);
+        PRINTF("json-ws: cfg_set port %u\n", callback_port);
         if(callback_port == 0) {
           callback_port = CALLBACK_PORT;
         }
@@ -160,6 +165,7 @@ cfg_set(struct jsontree_context *js_ctx, struct jsonparse_state *parser)
         jsonparse_next(parser);
         jsonparse_next(parser);
         callback_interval = jsonparse_get_value_as_int(parser);
+        PRINTF("json-ws: cfg_set interval %u\n", callback_interval);
         if(callback_interval == 0) {
           callback_interval = SEND_INTERVAL;
         }
@@ -420,7 +426,7 @@ httpd_ws_get_script(struct httpd_ws_state *s)
   return NULL;
 }
 /*---------------------------------------------------------------------------*/
-#if JSON_POST_EXTRA_HEADER || WITH_COSM
+#if JSON_POST_EXTRA_HEADER || WITH_XIVELY
 static int
 output_headers(struct httpd_ws_state *s, char *buffer, int buffer_size,
                int index)
@@ -430,16 +436,16 @@ output_headers(struct httpd_ws_state *s, char *buffer, int buffer_size,
     return snprintf(buffer, buffer_size, "%s\r\n", JSON_POST_EXTRA_HEADER);
   } else if(index == 1) {
 #endif
-#if WITH_COSM
-    if(strncmp(callback_proto, "cosm", 4) == 0 && callback_appdata[0] != '\0') {
-      return snprintf(buffer, buffer_size, "X-PachubeApiKey:%s\r\n",
+#if WITH_XIVELY
+    if(strncmp(callback_proto, "xively", 6) == 0 && callback_appdata[0] != '\0') {
+      return snprintf(buffer, buffer_size, "X-ApiKey:%s\r\n",
                       callback_appdata);
     }
 #endif
   }
   return 0;
 }
-#endif /* JSON_POST_EXTRA_HEADER || WITH_COSM */
+#endif /* JSON_POST_EXTRA_HEADER || WITH_XIVELY */
 /*---------------------------------------------------------------------------*/
 static void
 periodic(void *ptr)
@@ -467,23 +473,23 @@ periodic(void *ptr)
       } else {
         PRINTF("PERIODIC CALLBACK FAILED\n");
       }
-#if WITH_COSM
-    } else if(strncmp(callback_proto, "cosm", 4) == 0) {
+#if WITH_XIVELY
+    } else if(strncmp(callback_proto, "xively", 6) == 0) {
       callback_size = calculate_json_size(NULL, (struct jsontree_value *)
-                                          &cosm_tree);
+                                          &xively_tree);
       /* printf("JSON Size:%d\n", callback_size); */
-      s = httpd_ws_request(HTTPD_WS_PUT, callback_host, "api.pachube.com",
+      s = httpd_ws_request(HTTPD_WS_PUT, callback_host, "api.xively.com",
                            callback_port, callback_path,
                            http_content_type_json, callback_size, send_values);
-      /* host = cosm host */
+      /* host = xively host */
       /* path => path to datastream / data point */
       s->output_extra_headers = output_headers;
-      s->json.values[0] = (struct jsontree_value *)&cosm_tree;
+      s->json.values[0] = (struct jsontree_value *)&xively_tree;
       jsontree_reset(&s->json);
       s->json.path = 0;
 
-      PRINTF("PERIODIC cosm callback: %d\n", callback_size);
-#endif /* WITH_COSM */
+      PRINTF("PERIODIC xively callback: %d\n", callback_size);
+#endif /* WITH_XIVELY */
     }
 #if WITH_UDP
     else {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Swedish Institute of Computer Science.
+ * Copyright (c) 2011-2012, Swedish Institute of Computer Science.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,35 +26,33 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
+ * This file is part of the Contiki operating system.
  */
 
-#ifndef PROJECT_ROUTER_CONF_H_
-#define PROJECT_ROUTER_CONF_H_
+/**
+ * \file
+ *         JSON webservice util
+ * \author
+ *         Niclas Finne    <nfi@sics.se>
+ *         Joakim Eriksson <joakime@sics.se>
+ *         Joel Hoglund    <joel@sics.se>
+ */
 
-#define NETSTACK_RDC nullrdc_driver
-#define NULLRDC_CONF_802154_AUTOACK 1
+#ifndef JSON_WS_H_
+#define JSON_WS_H_
 
-#undef NETSTACK_CONF_RDC
-#define NETSTACK_CONF_RDC nullrdc_driver
+#include "jsontree.h"
 
-#ifndef UIP_FALLBACK_INTERFACE
-#define UIP_FALLBACK_INTERFACE rpl_interface
+void json_ws_init(struct jsontree_object *json);
+void json_ws_set_callback(const char *json_path);
+int  json_ws_udp_setup(const char *host, uint16_t port);
+
+extern struct jsontree_object json_subscribe_callback;
+extern struct jsontree_callback json_time_callback;
+
+#if PLATFORM_HAS_LEDS
+extern struct jsontree_callback json_leds_callback;
 #endif
+extern struct jsontree_object xively_tree;
 
-#ifndef QUEUEBUF_CONF_NUM
-#define QUEUEBUF_CONF_NUM          4
-#endif
-
-#ifndef UIP_CONF_BUFFER_SIZE
-#define UIP_CONF_BUFFER_SIZE    140
-#endif
-
-#ifndef UIP_CONF_RECEIVE_WINDOW
-#define UIP_CONF_RECEIVE_WINDOW  60
-#endif
-
-#ifndef WEBSERVER_CONF_CFS_CONNS
-#define WEBSERVER_CONF_CFS_CONNS 2
-#endif
-
-#endif /* PROJECT_ROUTER_CONF_H_ */
+#endif /* JSON_WS_H_ */
