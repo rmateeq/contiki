@@ -1,0 +1,5 @@
+Execute:
+python sensniff.py --non-interactive -d /dev/ttyUSB0 -p test.pcap
+
+Launch wireshark from command line as below:
+sudo wireshark -i /tmp/sensniff
