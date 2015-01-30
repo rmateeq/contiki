@@ -32,6 +32,7 @@
 
 #include "contiki.h"
 #include "lib/random.h"
+#include "dev/leds.h"
 #include "sys/ctimer.h"
 #include "sys/etimer.h"
 #include "net/ip/uip.h"
@@ -41,16 +42,22 @@
 #include "simple-udp.h"
 #include "servreg-hack.h"
 
+#include "dev/cc2420/cc2420.h"
+
 #include "net/rpl/rpl.h"
+#include "serial-feed.h"
 
 #include <stdio.h>
 #include <string.h>
 
-#define UDP_PORT 1234
+#define DEBUG_APP 0
+
+#define UDP_PORT  1234
+
 #define SERVICE_ID 190
 
-#define SEND_INTERVAL		(10 * CLOCK_SECOND)
-#define SEND_TIME		(random_rand() % (SEND_INTERVAL))
+#define SEND_INTERVAL  (10 * CLOCK_SECOND)
+#define SEND_TIME      (random_rand() % (SEND_INTERVAL))
 
 static struct simple_udp_connection unicast_connection;
 
@@ -67,10 +74,36 @@ receiver(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
+  uint8_t i;
+  struct serialfeed_msg_t msg;
+  struct serialfeed_msg_t *msgPtr = data;
+
+  leds_toggle(LEDS_GREEN);
+
+#if DEBUG_APP
   printf("Data received from ");
   uip_debug_ipaddr_print(sender_addr);
-  printf(" on port %d from port %d with length %d: '%s'\n",
-         receiver_port, sender_port, datalen, data);
+  printf(" on port %d from port %d\n",
+         receiver_port, sender_port);
+
+  printf("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(),
+                                     cc2420_last_rssi,
+                                     cc2420_last_correlation);
+#endif
+
+  if (receiver_port == UDP_PORT){
+#if DEBUG_APP
+    printf("ID: 0x%02X, len %u\n", msgPtr->id, msgPtr->len);
+    printf("KEY\t%s\n", msgPtr->var_key);
+    printf("Temp\t%d\n", msgPtr->value[0]);
+    printf("X\t%d\n", msgPtr->value[1]);
+    printf("Y\t%d\n", msgPtr->value[2]);
+    printf("Z\t%d\n", msgPtr->value[3]);
+#else
+    send_to_serial(msgPtr->var_key, msgPtr->id, msgPtr->value);
+#endif
+  }
+
 }
 /*---------------------------------------------------------------------------*/
 static uip_ipaddr_t *
