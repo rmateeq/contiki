@@ -75,17 +75,15 @@
 #undef LEDS_RED
 #undef LEDS_CONF_ALL
 
-/* In leds.h the LEDS_BLUE is defined by LED_YELLOW definition
-   LEDS_YELLOW value choosen to avoid ambiguity with possible LEDs combinations,
-   the proper GPIO mask is given by LEDS_CONF_PXx definition */
-#define LEDS_GREEN    5 /**< LED3 (Green) -> PD5 */
-#define LEDS_YELLOW   1 /**< LED2 (Blue)  -> PC3 */
-#define LEDS_RED      2 /**< LED1 (Red)   -> PD2 */
+/* In leds.h the LEDS_BLUE is defined by LED_YELLOW definition */
+#define LEDS_GREEN    32 /**< LED3 (Green) -> PD5 */
+#define LEDS_YELLOW   8  /**< LED2 (Blue)   -> PC3 */
+#define LEDS_RED      4  /**< LED1 (Red)    -> PD2 */
 
 /* Only groups PDx LEDs, PC3 have to be handled separately */
-#define LEDS_CONF_PDx 7
-#define LEDS_CONF_PCx 3
-#define LEDS_CONF_ALL 8
+#define LEDS_CONF_PDx 36
+#define LEDS_CONF_PCx 8
+#define LEDS_CONF_ALL 44
 
 /* Notify various examples that we have LEDs */
 #define PLATFORM_HAS_LEDS        1

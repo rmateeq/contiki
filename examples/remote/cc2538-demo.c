@@ -93,8 +93,8 @@ static void
 broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from)
 {
   leds_toggle(LEDS_RF_RX);
-  printf("Received %u bytes: '0x%04x'\n", packetbuf_datalen(),
-         *(uint16_t *)packetbuf_dataptr());
+  printf("*** Received %u bytes from %u:%u: '0x%04x'\n", packetbuf_datalen(),
+         from->u8[0], from->u8[1], *(uint16_t *)packetbuf_dataptr());
 }
 /*---------------------------------------------------------------------------*/
 static const struct broadcast_callbacks bc_rx = { broadcast_recv };
@@ -117,6 +117,8 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
   counter = 0;
   broadcast_open(&bc, BROADCAST_CHANNEL, &bc_rx);
 
+  printf("Re-Mote test application, initial values:\n");
+
   etimer_set(&et, CLOCK_SECOND);
 
   while(1) {
@@ -124,7 +126,6 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
     PROCESS_YIELD();
 
     if(ev == PROCESS_EVENT_TIMER) {
-      leds_on(LEDS_PERIODIC);
       printf("-----------------------------------------\n"
              "Counter = 0x%08x\n", counter);
 

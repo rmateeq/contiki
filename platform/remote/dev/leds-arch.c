@@ -51,19 +51,19 @@ leds_arch_init(void)
 {
   /* Initialize LED1 (Red) and LED3 (Green) */
   GPIO_SET_OUTPUT(GPIO_D_BASE, LEDS_CONF_PDx);
+  GPIO_SET_PIN(GPIO_D_BASE, LEDS_CONF_PDx);
+
   /* Initialize LED2 - Blue */
   GPIO_SET_OUTPUT(GPIO_C_BASE, LEDS_CONF_PCx);
+  GPIO_SET_PIN(GPIO_C_BASE, LEDS_CONF_PCx);
+
 }
 /*---------------------------------------------------------------------------*/
 unsigned char
 leds_arch_get(void)
 {
-  /* As LEDS_RED plus LEDS_YELLOW equals LEDS_GREEN, this is inconvenient,
-   * fix this */
   uint8_t mask_leds;
-  if (GPIO_READ_PIN(GPIO_C_BASE, LEDS_CONF_PCx)){
-    mask_leds = LEDS_YELLOW;
-  }
+  mask_leds = GPIO_READ_PIN(GPIO_C_BASE, LEDS_CONF_PCx);
   mask_leds += GPIO_READ_PIN(GPIO_D_BASE, LEDS_CONF_PDx);
   return mask_leds;
 }
@@ -72,27 +72,28 @@ void
 leds_arch_set(unsigned char leds)
 {
   /* Possible combinations for leds value, not optimized...
-   * 1 -> LEDS_YELLOW
-   * 2 -> LEDS_RED
-   * 3 -> LEDS_YELLOW + LEDS_RED
-   * 5 -> LEDS_GREEN
-   * 6 -> LEDS_GREEN + LEDS_YELLOW
-   * 7 -> LEDS_GREEN + LEDS_RED
-   * 8 -> LEDS_ALL
+   * 4  ->  LEDS_RED
+   * 8  ->  LEDS_YELLOW
+   * 12 ->  LEDS_RED + LEDS_YELLOW
+   * 32 ->  LEDS_GREEN
+   * 36 ->  LEDS_GREEN + LEDS_RED
+   * 40 ->  LEDS_GREEN + LEDS_YELLOW
+   * 44 ->  LEDS_RED + LEDS_YELLOW + LEDS_GREEN
    */
 
-  uint8_t mask_leds_d;
+  GPIO_WRITE_PIN(GPIO_C_BASE, LEDS_CONF_PCx, LEDS_CONF_PCx);
+  GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_CONF_PDx, LEDS_CONF_PDx);
 
-  if ((leds == 1) || (leds == 3) || (leds == 6) || (leds == LEDS_CONF_ALL)){
-    GPIO_WRITE_PIN(GPIO_C_BASE, LEDS_CONF_PCx, LEDS_CONF_PCx);
+  if ((leds == 4) || (leds == 12) || (leds == 36) || (leds == LEDS_CONF_ALL)){
+    GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_RED, 0);
   }
 
-  if ((leds == 2) || (leds == 3) || (leds == 7) || (leds == LEDS_CONF_ALL)){
-    GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_RED, LEDS_RED);
+  if ((leds == 8) || (leds == 12) || (leds == 40) || (leds == LEDS_CONF_ALL)){
+    GPIO_WRITE_PIN(GPIO_C_BASE, LEDS_YELLOW, 0);
   }
 
-  if ((leds == 5) || (leds == 6) || (leds == 7) || (leds == LEDS_CONF_ALL)){
-    GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_GREEN, LEDS_GREEN);
+  if ((leds == 32) || (leds == 36) || (leds == 40) || (leds == LEDS_CONF_ALL)){
+    GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_GREEN, 0);
   }
 }
 /*---------------------------------------------------------------------------*/
