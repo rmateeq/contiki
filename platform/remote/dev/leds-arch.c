@@ -44,56 +44,57 @@
 #include "reg.h"
 #include "dev/leds.h"
 #include "dev/gpio.h"
+/*---------------------------------------------------------------------------*/
+#define LED_GREEN_PORT GPIO_D_BASE
+#define LED_GREEN_PIN  (1 << 5)
 
+#define LED_BLUE_PORT  GPIO_C_BASE
+#define LED_BLUE_PIN   (1 << 3)
+
+#define LED_RED_PORT   GPIO_D_BASE
+#define LED_RED_PIN    (1 << 2)
+
+#define PORT_D_LEDS (LED_RED_PIN | LED_GREEN_PIN)
+#define PORT_C_LEDS LED_BLUE_PIN
 /*---------------------------------------------------------------------------*/
 void
 leds_arch_init(void)
 {
   /* Initialize LED1 (Red) and LED3 (Green) */
-  GPIO_SET_OUTPUT(GPIO_D_BASE, LEDS_CONF_PDx);
-  GPIO_SET_PIN(GPIO_D_BASE, LEDS_CONF_PDx);
+  GPIO_SET_OUTPUT(GPIO_D_BASE, PORT_D_LEDS);
+  GPIO_SET_PIN(GPIO_D_BASE, PORT_D_LEDS);
 
   /* Initialize LED2 - Blue */
-  GPIO_SET_OUTPUT(GPIO_C_BASE, LEDS_CONF_PCx);
-  GPIO_SET_PIN(GPIO_C_BASE, LEDS_CONF_PCx);
-
+  GPIO_SET_OUTPUT(GPIO_C_BASE, PORT_C_LEDS);
+  GPIO_SET_PIN(GPIO_C_BASE, PORT_C_LEDS);
 }
 /*---------------------------------------------------------------------------*/
 unsigned char
 leds_arch_get(void)
 {
   uint8_t mask_leds;
-  mask_leds = GPIO_READ_PIN(GPIO_C_BASE, LEDS_CONF_PCx);
-  mask_leds += GPIO_READ_PIN(GPIO_D_BASE, LEDS_CONF_PDx);
+
+  mask_leds = GPIO_READ_PIN(LED_GREEN_PORT, LED_GREEN_PIN) == 0? LEDS_GREEN : 0;
+  mask_leds |= GPIO_READ_PIN(LED_BLUE_PORT, LED_BLUE_PIN) == 0? LEDS_BLUE : 0;
+  mask_leds |= GPIO_READ_PIN(LED_RED_PORT, LED_RED_PIN) == 0? LEDS_RED : 0;
+
   return mask_leds;
 }
 /*---------------------------------------------------------------------------*/
 void
 leds_arch_set(unsigned char leds)
 {
-  /* Possible combinations for leds value, not optimized...
-   * 4  ->  LEDS_RED
-   * 8  ->  LEDS_YELLOW
-   * 12 ->  LEDS_RED + LEDS_YELLOW
-   * 32 ->  LEDS_GREEN
-   * 36 ->  LEDS_GREEN + LEDS_RED
-   * 40 ->  LEDS_GREEN + LEDS_YELLOW
-   * 44 ->  LEDS_RED + LEDS_YELLOW + LEDS_GREEN
-   */
+  GPIO_SET_PIN(GPIO_D_BASE, PORT_D_LEDS);
+  GPIO_SET_PIN(GPIO_C_BASE, PORT_C_LEDS);
 
-  GPIO_WRITE_PIN(GPIO_C_BASE, LEDS_CONF_PCx, LEDS_CONF_PCx);
-  GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_CONF_PDx, LEDS_CONF_PDx);
-
-  if ((leds == 4) || (leds == 12) || (leds == 36) || (leds == LEDS_CONF_ALL)){
-    GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_RED, 0);
+  if(leds & LEDS_GREEN) {
+    GPIO_CLR_PIN(LED_GREEN_PORT, LED_GREEN_PIN);
   }
-
-  if ((leds == 8) || (leds == 12) || (leds == 40) || (leds == LEDS_CONF_ALL)){
-    GPIO_WRITE_PIN(GPIO_C_BASE, LEDS_YELLOW, 0);
+  if(leds & LEDS_BLUE) {
+    GPIO_CLR_PIN(LED_BLUE_PORT, LED_BLUE_PIN);
   }
-
-  if ((leds == 32) || (leds == 36) || (leds == 40) || (leds == LEDS_CONF_ALL)){
-    GPIO_WRITE_PIN(GPIO_D_BASE, LEDS_GREEN, 0);
+  if(leds & LEDS_RED) {
+    GPIO_CLR_PIN(LED_RED_PORT, LED_RED_PIN);
   }
 }
 /*---------------------------------------------------------------------------*/

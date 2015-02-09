@@ -72,18 +72,21 @@
  * leds.h before we provide correct definitions */
 #undef LEDS_GREEN
 #undef LEDS_YELLOW
+#undef LEDS_BLUE
 #undef LEDS_RED
 #undef LEDS_CONF_ALL
 
 /* In leds.h the LEDS_BLUE is defined by LED_YELLOW definition */
-#define LEDS_GREEN    32 /**< LED3 (Green) -> PD5 */
-#define LEDS_YELLOW   8  /**< LED2 (Blue)   -> PC3 */
-#define LEDS_RED      4  /**< LED1 (Red)    -> PD2 */
+#define LEDS_GREEN    1  /**< LED1 (Green) -> PD5 */
+#define LEDS_BLUE     2  /**< LED2 (Blue)  -> PC3 */
+#define LEDS_RED      4  /**< LED3 (Red)   -> PD2 */
 
-/* Only groups PDx LEDs, PC3 have to be handled separately */
-#define LEDS_CONF_PDx 36
-#define LEDS_CONF_PCx 8
-#define LEDS_CONF_ALL 44
+#define LEDS_CONF_ALL 7
+
+#define LEDS_LIGHT_BLUE (LEDS_GREEN | LEDS_BLUE) /**< Green + Blue (3) */
+#define LEDS_YELLOW     (LEDS_GREEN | LEDS_RED) /**< Green + Red (5) */
+#define LEDS_PURPLE     (LEDS_BLUE | LEDS_RED) /**< Blue + Red (6) */
+#define LEDS_WHITE      LEDS_ALL /**< Green + Blue + Red (7) */
 
 /* Notify various examples that we have LEDs */
 #define PLATFORM_HAS_LEDS        1
