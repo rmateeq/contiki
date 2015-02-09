@@ -52,32 +52,6 @@
 static struct timer debouncetimer;
 /*---------------------------------------------------------------------------*/
 /**
- * \brief Common initialiser for all buttons
- * \param port_base GPIO port's register offset
- * \param pin_mask Pin mask corresponding to the button's pin
- */
-static void
-config(uint32_t port_base, uint32_t pin_mask)
-{
-  /* Software controlled */
-  GPIO_SOFTWARE_CONTROL(port_base, pin_mask);
-
-  /* Set pin to input */
-  GPIO_SET_INPUT(port_base, pin_mask);
-
-  /* Enable edge detection */
-  GPIO_DETECT_EDGE(port_base, pin_mask);
-
-  /* Single edge */
-  GPIO_TRIGGER_SINGLE_EDGE(port_base, pin_mask);
-
-  /* Trigger interrupt on Falling edge */
-  GPIO_DETECT_RISING(port_base, pin_mask);
-
-  GPIO_ENABLE_INTERRUPT(port_base, pin_mask);
-}
-/*---------------------------------------------------------------------------*/
-/**
  * \brief Callback registered with the GPIO module. Gets fired with a button
  * port/pin generates an interrupt
  * \param port The port number that generated the interrupt
@@ -112,7 +86,22 @@ btn_callback(uint8_t port, uint8_t pin)
 static int
 config_user(int type, int value)
 {
-  config(BUTTON_USER_PORT_BASE, BUTTON_USER_PIN_MASK);
+  /* Software controlled */
+  GPIO_SOFTWARE_CONTROL(BUTTON_USER_PORT_BASE, BUTTON_USER_PIN_MASK);
+
+  /* Set pin to input */
+  GPIO_SET_INPUT(BUTTON_USER_PORT_BASE, BUTTON_USER_PIN_MASK);
+
+  /* Enable edge detection */
+  GPIO_DETECT_EDGE(BUTTON_USER_PORT_BASE, BUTTON_USER_PIN_MASK);
+
+  /* Single edge */
+  GPIO_TRIGGER_SINGLE_EDGE(BUTTON_USER_PORT_BASE, BUTTON_USER_PIN_MASK);
+
+  /* Trigger interrupt on Falling edge */
+  GPIO_DETECT_RISING(BUTTON_USER_PORT_BASE, BUTTON_USER_PIN_MASK);
+
+  GPIO_ENABLE_INTERRUPT(BUTTON_USER_PORT_BASE, BUTTON_USER_PIN_MASK);
 
   ioc_set_over(BUTTON_USER_PORT, BUTTON_USER_PIN, IOC_OVERRIDE_PUE);
 
