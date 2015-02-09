@@ -93,7 +93,7 @@ btn_callback(uint8_t port, uint8_t pin)
 
   timer_set(&debouncetimer, CLOCK_SECOND / 8);
 
-  if ((port == GPIO_A_NUM) && (pin == BUTTON_USER_PIN)){
+  if((port == GPIO_A_NUM) && (pin == BUTTON_USER_PIN)) {
     sensors_changed(&button_user_sensor);
   }
 }
