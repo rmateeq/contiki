@@ -64,7 +64,7 @@
 #include "dev/leds.h"
 #include "dev/uart.h"
 #include "dev/button-sensor.h"
-#include "dev/adc-sensor.h"
+#include "dev/remote-sensors.h"
 #include "dev/watchdog.h"
 #include "dev/serial-line.h"
 #include "dev/sys-ctrl.h"
@@ -108,8 +108,6 @@ rt_callback(struct rtimer *t, void *ptr)
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(cc2538_demo_process, ev, data)
 {
-  int16_t value;
-
   PROCESS_EXITHANDLER(broadcast_close(&bc))
 
   PROCESS_BEGIN();
@@ -129,18 +127,17 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
       printf("-----------------------------------------\n"
              "Counter = 0x%08x\n", counter);
 
-      value = adc_sensor.value(ADC_SENSOR_VDD_3);
-      printf("VDD = %d mV\n", value * (3 * 1190) / (2047 << 4));
+      printf("VDD = %d mV\n",
+             vdd3_sensor.value(REMOTE_SENSORS_VALUE_TYPE_CONVERTED));
 
-      value = adc_sensor.value(ADC_SENSOR_TEMP);
       printf("Temperature = %d mC\n",
-             25000 + ((value >> 4) - 1422) * 10000 / 42);
+             temp_sensor.value(REMOTE_SENSORS_VALUE_TYPE_CONVERTED));
 
-      value = adc_sensor.value(ADC_PHIDGET_ADC2);
-      printf("Phidget ADC2 = %d raw\n", value);
+      printf("Phidget ADC2 = %d raw\n",
+             phidget_sensor.value(PHIDGET_SENSORS_ADC2));
 
-      value = adc_sensor.value(ADC_PHIDGET_ADC3);
-      printf("Phidget ADC3 = %d raw\n", value);
+      printf("Phidget ADC3 = %d raw\n",
+             phidget_sensor.value(PHIDGET_SENSORS_ADC3));
 
       etimer_set(&et, CLOCK_SECOND);
       rtimer_set(&rt, RTIMER_NOW() + LEDS_OFF_HYSTERISIS, 1,
