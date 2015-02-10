@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013, ADVANSEE - http://www.advansee.com/
- * Benoît Thébaudeau <benoit.thebaudeau@advansee.com>
+ * Copyright (c) 2015, Zolertia - http://www.zolertia.com
+ * Copyright (c) 2015, University of Bristol - http://www.bristol.ac.uk
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,22 +29,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*---------------------------------------------------------------------------*/
 /**
- * \addtogroup cc2538dk-adc-sensor
+ * \addtogroup remote-phidget-sensor
  * @{
  *
  * \file
- *  Driver for the Re-Mote ADC
+ * Generic driver for the Re-Mote Phidget/ADC sensors
  */
+/*---------------------------------------------------------------------------*/
 #include "contiki.h"
 #include "sys/clock.h"
 #include "dev/ioc.h"
 #include "dev/gpio.h"
 #include "dev/adc.h"
-#include "dev/adc-sensor.h"
+#include "dev/phidget-sensor.h"
+#include "dev/remote-sensors.h"
 
 #include <stdint.h>
-
+/*---------------------------------------------------------------------------*/
 #define ADC_PHIDGET_PORT_BASE      GPIO_PORT_TO_BASE(ADC_PHIDGET_PORT)
 #define ADC_PHIDGET_ADC2_PIN_MASK  GPIO_PIN_MASK(ADC_PHIDGET_ADC2_PIN)
 #define ADC_PHIDGET_ADC3_PIN_MASK  GPIO_PIN_MASK(ADC_PHIDGET_ADC3_PIN)
@@ -56,23 +59,17 @@ value(int type)
   int16_t res;
 
   switch(type) {
-  case ADC_SENSOR_VDD_3:
-    channel = SOC_ADC_ADCCON_CH_VDD_3;
-    break;
-  case ADC_SENSOR_TEMP:
-    channel = SOC_ADC_ADCCON_CH_TEMP;
-    break;
-  case ADC_PHIDGET_ADC2:
+  case PHIDGET_SENSORS_ADC2:
     channel = SOC_ADC_ADCCON_CH_AIN0 + ADC_PHIDGET_ADC2_PIN;
-    clock_delay_usec(2000);
     break;
-  case ADC_PHIDGET_ADC3:
+  case PHIDGET_SENSORS_ADC3:
     channel = SOC_ADC_ADCCON_CH_AIN0 + ADC_PHIDGET_ADC3_PIN;
-    clock_delay_usec(2000);
     break;
   default:
-    return 0;
+    return REMOTE_SENSORS_READING_ERROR;
   }
+
+  clock_delay_usec(2000);
 
   res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, SOC_ADC_ADCCON_DIV_512);
 
@@ -87,9 +84,11 @@ configure(int type, int value)
     GPIO_SOFTWARE_CONTROL(GPIO_A_BASE, ADC_PHIDGET_ADC2_PIN_MASK);
     GPIO_SET_INPUT(GPIO_A_BASE, ADC_PHIDGET_ADC2_PIN_MASK);
     ioc_set_over(GPIO_A_NUM, ADC_PHIDGET_ADC2_PIN, IOC_OVERRIDE_ANA);
+
     GPIO_SOFTWARE_CONTROL(GPIO_A_BASE, ADC_PHIDGET_ADC3_PIN_MASK);
     GPIO_SET_INPUT(GPIO_A_BASE, ADC_PHIDGET_ADC3_PIN_MASK);
     ioc_set_over(GPIO_A_NUM, ADC_PHIDGET_ADC3_PIN, IOC_OVERRIDE_ANA);
+
     adc_init();
     break;
   }
@@ -102,6 +101,6 @@ status(int type)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(adc_sensor, ADC_SENSOR, value, configure, status);
-
+SENSORS_SENSOR(phidget_sensor, PHIDGET_SENSOR, value, configure, status);
+/*---------------------------------------------------------------------------*/
 /** @} */

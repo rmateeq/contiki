@@ -50,6 +50,7 @@
 #include "dev/button-sensor.h"
 #include "dev/temp-sensor.h"
 #include "dev/vdd3-sensor.h"
+#include "dev/phidget-sensor.h"
 /*---------------------------------------------------------------------------*/
 /**
  * \name ReMote sensor

@@ -46,13 +46,14 @@
 #include "dev/button-sensor.h"
 #include "dev/vdd3-sensor.h"
 #include "dev/temp-sensor.h"
+#include "dev/phidget-sensor.h"
 
 #include <string.h>
 /*---------------------------------------------------------------------------*/
 /* TODO: include the tmp102 sensor as well */
 /*---------------------------------------------------------------------------*/
 /** \brief Exports global symbols for the sensor API */
-SENSORS(&button_user_sensor, &vdd3_sensor, &temp_sensor);
+SENSORS(&button_user_sensor, &vdd3_sensor, &temp_sensor, &phidget_sensor);
 /*---------------------------------------------------------------------------*/
 /**
  * @}

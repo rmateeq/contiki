@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2013, ADVANSEE - http://www.advansee.com/
- * Benoît Thébaudeau <benoit.thebaudeau@advansee.com>
+ * Copyright (c) 2015, Zolertia - http://www.zolertia.com
+ * Copyright (c) 2015, University of Bristol - http://www.bristol.ac.uk
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,39 +29,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+/*---------------------------------------------------------------------------*/
 /**
- * \addtogroup cc2538-smartrf-sensors
+ * \addtogroup remote-sensors
  * @{
  *
- * \defgroup cc2538dk-adc-sensor Re-Mote ADC Driver
+ * \defgroup remote-phidget-sensor Re-Mote Generic Phidget Sensor
  *
- * Driver for the Re-Mote ADC sensors
+ * Driver for the Re-Mote phidget ADC sensor
+ *
+ * This driver supports phidgets connected to both the ADC2 and AND3 channels.
+ * This is controlled by the type argument of the value() function. Possible
+ * choices are:
+ * - PHIDGET_SENSORS_ADC2 (channel 2)
+ * - PHIDGET_SENSORS_ADC3 (channel 3)
  * @{
  *
  * \file
- * Header file for the Re-Mote ADC Driver
+ * Header file for the Re-Mote Generic Driver for Phidget/ADC sensors
  */
-#ifndef ADC_SENSOR_H_
-#define ADC_SENSOR_H_
-
-#include "lib/sensors.h"
-
 /*---------------------------------------------------------------------------*/
-/** \name ADC sensors
+#ifndef PHIDGET_SENSOR_H_
+#define PHIDGET_SENSOR_H_
+/*---------------------------------------------------------------------------*/
+#include "lib/sensors.h"
+/*---------------------------------------------------------------------------*/
+/**
+ * \name Generic phidget sensor
  * @{
  */
-#define ADC_SENSOR "ADC"
+#define PHIDGET_SENSOR "Phidget ADC"
 
-#define ADC_SENSOR_VDD_3        0 /**< On-chip VDD / 3 */
-#define ADC_SENSOR_TEMP         1 /**< On-chip temperature */
-#define ADC_PHIDGET_ADC2        2 /**< 3V3 ADC phidget-like connector ADC2 */
-#define ADC_PHIDGET_ADC3        3 /**< 3V3 ADC phidget-like connector ADC3 */
+#define PHIDGET_SENSORS_ADC2      2 /**< 3V3 ADC phidget-like connector ADC2 */
+#define PHIDGET_SENSORS_ADC3      3 /**< 3V3 ADC phidget-like connector ADC3 */
 /** @} */
-
-extern const struct sensors_sensor adc_sensor;
-
-#endif /* ADC_SENSOR_H_ */
-
+/*---------------------------------------------------------------------------*/
+extern const struct sensors_sensor phidget_sensor;
+/*---------------------------------------------------------------------------*/
+#endif /* PHIDGET_SENSOR_H_ */
+/*---------------------------------------------------------------------------*/
 /**
  * @}
  * @}
