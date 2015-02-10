@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2012, Texas Instruments Incorporated - http://www.ti.com/
+ * Copyright (c) 2015, Zolertia - http://www.zolertia.com
+ * Copyright (c) 2015, University of Bristol - http://www.bristol.ac.uk
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
