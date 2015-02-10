@@ -31,28 +31,39 @@
  */
 /*---------------------------------------------------------------------------*/
 /**
- * \addtogroup cc2538-smartrf
+ * \addtogroup remote-sensors
  * @{
  *
- * \defgroup cc2538-smartrf-sensors Re-Mote Sensors
+ * \defgroup remote-vdd3-sensor Re-Mote VDD3 Sensor
  *
- * Generic module controlling sensors on the Re-Mote platform
+ * Driver for the Re-Mote VDD3 sensor
+ *
+ * This driver can return the raw as well as the converted value of the sensor
+ * reading. This is controlled by the type argument of the sensor driver's
+ * value() function. The choices for the type argument are:
+ * - REMOTE_SENSORS_VALUE_TYPE_RAW (value() returns the raw reading)
+ * - REMOTE_SENSORS_VALUE_TYPE_CONVERTED (value() returns mV)
  * @{
  *
  * \file
- * Implementation of a generic module controlling Re-Mote sensors
+ * Header file for the Re-Mote VDD3 Sensor Driver
  */
-#include "contiki.h"
-#include "dev/button-sensor.h"
-#include "dev/vdd3-sensor.h"
-#include "dev/temp-sensor.h"
-
-#include <string.h>
 /*---------------------------------------------------------------------------*/
-/* TODO: include the tmp102 sensor as well */
+#ifndef VDD3_SENSOR_H_
+#define VDD3_SENSOR_H_
 /*---------------------------------------------------------------------------*/
-/** \brief Exports global symbols for the sensor API */
-SENSORS(&button_user_sensor, &vdd3_sensor, &temp_sensor);
+#include "lib/sensors.h"
+/*---------------------------------------------------------------------------*/
+/**
+ * \name VDD3 sensors
+ * @{
+ */
+#define VDD3_SENSOR "VDD3"
+/** @} */
+/*---------------------------------------------------------------------------*/
+extern const struct sensors_sensor vdd3_sensor;
+/*---------------------------------------------------------------------------*/
+#endif /* VDD3_SENSOR_H_ */
 /*---------------------------------------------------------------------------*/
 /**
  * @}

@@ -31,10 +31,10 @@
  */
 /*---------------------------------------------------------------------------*/
 /**
- * \addtogroup cc2538-smartrf
+ * \addtogroup remote
  * @{
  *
- * \defgroup cc2538-smartrf-sensors Re-Mote Sensors
+ * \defgroup remote-sensors Re-Mote Sensors
  *
  * Generic module controlling sensors on the Re-Mote platform
  * @{
@@ -42,17 +42,26 @@
  * \file
  * Implementation of a generic module controlling Re-Mote sensors
  */
-#include "contiki.h"
+/*---------------------------------------------------------------------------*/
+#ifndef REMOTE_SENSORS_H_
+#define REMOTE_SENSORS_H_
+/*---------------------------------------------------------------------------*/
+#include "lib/sensors.h"
 #include "dev/button-sensor.h"
-#include "dev/vdd3-sensor.h"
 #include "dev/temp-sensor.h"
+#include "dev/vdd3-sensor.h"
+/*---------------------------------------------------------------------------*/
+/**
+ * \name ReMote sensor
+ * @{
+ */
+#define REMOTE_SENSORS_VALUE_TYPE_RAW         0
+#define REMOTE_SENSORS_VALUE_TYPE_CONVERTED   1
 
-#include <string.h>
+#define REMOTE_SENSORS_READING_ERROR 0x80000000
+/** @} */
 /*---------------------------------------------------------------------------*/
-/* TODO: include the tmp102 sensor as well */
-/*---------------------------------------------------------------------------*/
-/** \brief Exports global symbols for the sensor API */
-SENSORS(&button_user_sensor, &vdd3_sensor, &temp_sensor);
+#endif /* REMOTE_SENSORS_H_ */
 /*---------------------------------------------------------------------------*/
 /**
  * @}

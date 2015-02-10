@@ -31,30 +31,53 @@
  */
 /*---------------------------------------------------------------------------*/
 /**
- * \addtogroup cc2538-smartrf
- * @{
- *
- * \defgroup cc2538-smartrf-sensors Re-Mote Sensors
- *
- * Generic module controlling sensors on the Re-Mote platform
+ * \addtogroup remote-vdd3-sensor
  * @{
  *
  * \file
- * Implementation of a generic module controlling Re-Mote sensors
+ *  Driver for the Re-Mote VDD3 sensor
  */
+/*---------------------------------------------------------------------------*/
 #include "contiki.h"
-#include "dev/button-sensor.h"
+#include "lib/sensors.h"
 #include "dev/vdd3-sensor.h"
-#include "dev/temp-sensor.h"
+#include "dev/adc.h"
+#include "dev/remote-sensors.h"
 
-#include <string.h>
+#include <stdint.h>
 /*---------------------------------------------------------------------------*/
-/* TODO: include the tmp102 sensor as well */
+static int
+value(int type)
+{
+  int raw = adc_get(SOC_ADC_ADCCON_CH_VDD_3, SOC_ADC_ADCCON_REF_INT,
+                    SOC_ADC_ADCCON_DIV_512);
+
+  if(type == REMOTE_SENSORS_VALUE_TYPE_RAW) {
+    return raw;
+  } else if(type == REMOTE_SENSORS_VALUE_TYPE_CONVERTED) {
+    return raw * (3 * 1190) / (2047 << 4);
+  }
+
+  return REMOTE_SENSORS_READING_ERROR;
+}
 /*---------------------------------------------------------------------------*/
-/** \brief Exports global symbols for the sensor API */
-SENSORS(&button_user_sensor, &vdd3_sensor, &temp_sensor);
+static int
+configure(int type, int value)
+{
+  switch(type) {
+  case SENSORS_HW_INIT:
+    adc_init();
+    break;
+  }
+  return 0;
+}
 /*---------------------------------------------------------------------------*/
-/**
- * @}
- * @}
- */
+static int
+status(int type)
+{
+  return 1;
+}
+/*---------------------------------------------------------------------------*/
+SENSORS_SENSOR(vdd3_sensor, VDD3_SENSOR, value, configure, status);
+/*---------------------------------------------------------------------------*/
+/** @} */
