@@ -59,7 +59,7 @@
 #define REMOTE_SENSORS_VALUE_TYPE_RAW         0
 #define REMOTE_SENSORS_VALUE_TYPE_CONVERTED   1
 
-#define REMOTE_SENSORS_READING_ERROR 0x80000000
+#define REMOTE_SENSORS_ERROR         0x80000000
 /** @} */
 /*---------------------------------------------------------------------------*/
 #endif /* REMOTE_SENSORS_H_ */

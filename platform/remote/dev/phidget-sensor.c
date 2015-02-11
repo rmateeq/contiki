@@ -66,7 +66,7 @@ value(int type)
     channel = SOC_ADC_ADCCON_CH_AIN0 + ADC_PHIDGET_ADC3_PIN;
     break;
   default:
-    return REMOTE_SENSORS_READING_ERROR;
+    return REMOTE_SENSORS_ERROR;
   }
 
   clock_delay_usec(2000);

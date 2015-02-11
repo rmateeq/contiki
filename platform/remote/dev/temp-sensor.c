@@ -58,7 +58,7 @@ value(int type)
     return 25000 + ((raw >> 4) - 1422) * 10000 / 42;
   }
 
-  return REMOTE_SENSORS_READING_ERROR;
+  return REMOTE_SENSORS_ERROR;
 }
 /*---------------------------------------------------------------------------*/
 static int

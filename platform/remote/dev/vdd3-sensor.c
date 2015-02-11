@@ -58,7 +58,7 @@ value(int type)
     return raw * (3 * 1190) / (2047 << 4);
   }
 
-  return REMOTE_SENSORS_READING_ERROR;
+  return REMOTE_SENSORS_ERROR;
 }
 /*---------------------------------------------------------------------------*/
 static int
