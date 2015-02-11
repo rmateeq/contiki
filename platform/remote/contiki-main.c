@@ -209,7 +209,7 @@ main(void)
   process_start(&tcpip_process, NULL);
 #endif /* NETSTACK_CONF_WITH_IPV6 */
 
-  config_antenna_sw();
+  antenna_sw_config();
 
   process_start(&sensors_process, NULL);
 

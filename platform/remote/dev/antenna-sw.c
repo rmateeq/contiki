@@ -27,8 +27,9 @@
  * SUCH DAMAGE.
  *
  */
+/*---------------------------------------------------------------------------*/
 /**
- * \addtogroup cc2538-smartrf-sensors
+ * \addtogroup remote-antenna
  * @{
  *
  * Driver for the Re-Mote 2.4Ghz antenna switch, to enable either the internal
@@ -38,29 +39,20 @@
  * \file
  * Driver for the Re-Mote 2.4Ghz antenna switch
  */
-#include <stdio.h>
+/*---------------------------------------------------------------------------*/
 #include "contiki.h"
 #include "dev/gpio.h"
 #include "antenna-sw.h"
 
+#include <stdint.h>
+/*---------------------------------------------------------------------------*/
 #define ANTENNA_2_4GHZ_SW_PORT_BASE  GPIO_PORT_TO_BASE(ANTENNA_2_4GHZ_SW_PORT)
 #define ANTENNA_2_4GHZ_SW_PIN_MASK   GPIO_PIN_MASK(ANTENNA_2_4GHZ_SW_PIN)
-
-static uint8_t initialized = 0;
-
 /*---------------------------------------------------------------------------*/
-/**
- * \brief Init function for the antenna switch
- *
- * The Re-Mote platform allows to programatically select between the 2.4Ghz
- * internal or external antenna.
- * The function is set to enable using the internal ceramic antenna as default,
- * it should be called from the contiki-main initialization process.
- *
- * \return ignored
- */
-int
-config_antenna_sw(void)
+static uint8_t initialized = 0;
+/*---------------------------------------------------------------------------*/
+void
+antenna_sw_config(void)
 {
   /* Software controlled */
   GPIO_SOFTWARE_CONTROL(ANTENNA_2_4GHZ_SW_PORT_BASE, ANTENNA_2_4GHZ_SW_PIN_MASK);
@@ -72,22 +64,17 @@ config_antenna_sw(void)
   GPIO_CLR_PIN(ANTENNA_2_4GHZ_SW_PORT_BASE, ANTENNA_2_4GHZ_SW_PIN_MASK);
 
   initialized = 1;
-
-  return 1;
 }
 /*---------------------------------------------------------------------------*/
-/**
- * \brief Function to select between the internal or external 2.4Ghz antenna
- *
- * \param val Write 1 to enable the internal antenna, 0 for the external one
- * \return the selected antenna position, -1 if not previously configured
- */
 int
-select_antenna_sw(uint8_t val)
+antenna_sw_select(uint8_t val)
 {
-
   if(!initialized) {
-    return -1;
+    return ANTENNA_SW_SELECT_ERROR;
+  }
+
+  if(val != ANTENNA_SW_SELECT_INTERNAL && val != ANTENNA_SW_SELECT_EXTERNAL) {
+    return ANTENNA_SW_SELECT_ERROR;
   }
 
   /* Set the antenna selector to a default position */

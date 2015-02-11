@@ -26,11 +26,12 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
+/* -------------------------------------------------------------------------- */
 /**
- * \addtogroup cc2538-smartrf-sensors
+ * \addtogroup remote
  * @{
  *
- * \defgroup cc2538dk-button-sensor Re-Mote Antenna switch
+ * \defgroup remote-antenna Re-Mote Antenna switch
  *
  * Driver for the Re-Mote 2.4Ghz antenna switch, to enable either the internal
  * ceramic antenna or an external one connected to the uFL connector
@@ -39,19 +40,42 @@
  * \file
  * Header file for the Re-Mote 2.4Ghz antenna switch Driver
  */
+/* -------------------------------------------------------------------------- */
 #ifndef ANTENNA_SW_H_
 #define ANTENNA_SW_H_
-#include <stdio.h>
+/* -------------------------------------------------------------------------- */
+#include <stdint.h>
+/* -------------------------------------------------------------------------- */
+#define ANTENNA_SW_SELECT_EXTERNAL  0
+#define ANTENNA_SW_SELECT_INTERNAL  1
 
+#define ANTENNA_SW_SELECT_ERROR    -1
+/* -------------------------------------------------------------------------- */
+/**
+ * \brief Init function for the antenna switch
+ *
+ * The Re-Mote platform allows to programatically select between the 2.4Ghz
+ * internal or external antenna.
+ * The function is set to enable using the internal ceramic antenna as default,
+ * it should be called from the contiki-main initialization process.
+ *
+ * \return ignored
+ */
+void antenna_sw_config(void);
+
+/**
+ * \brief Function to select between the internal or external 2.4Ghz antenna
+ *
+ * \param val Select antenna.
+ *            External: ANTENNA_SW_SELECT_EXTERNAL or
+ *            Internal (ceramic): ANTENNA_SW_SELECT_INTERNAL
+ * \return the selected antenna position, or ANTENNA_SW_SELECT_ERROR if not
+ *         previously configured
+ */
+int antenna_sw_select(uint8_t val);
 /* -------------------------------------------------------------------------- */
 #endif /* ifndef ANTENNA_SW_H_ */
-
-/** \brief Initialiser for the 2.4Ghz antenna switch */
-int config_antenna_sw(void);
-
-/** \brief Function to chose between the internal or external antenna */
-int select_antenna_sw(uint8_t val);
-
+/* -------------------------------------------------------------------------- */
 /**
  * @}
  * @}
