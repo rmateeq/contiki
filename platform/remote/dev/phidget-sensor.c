@@ -69,8 +69,6 @@ value(int type)
     return REMOTE_SENSORS_ERROR;
   }
 
-  clock_delay_usec(2000);
-
   res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, SOC_ADC_ADCCON_DIV_512);
 
   return res;
