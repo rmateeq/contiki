@@ -54,6 +54,8 @@
  *                  packet will toggle LEDs defined as LEDS_RF_RX
  * - Button       : Keeping the button pressed will print a counter that
  *                  increments every BUTTON_PRESS_EVENT_INTERVAL ticks
+ * - TMP102       : Built-in digital temperature sensor, every LOOP_INTERVAL 
+ *                  clock ticks a sensor reading will be taken
  *
  * @{
  *
@@ -90,7 +92,7 @@
 /*---------------------------------------------------------------------------*/
 static struct etimer et;
 static struct rtimer rt;
-static uint16_t counter;
+static uint16_t counter, temperature;
 /*---------------------------------------------------------------------------*/
 PROCESS(cc2538_demo_process, "cc2538 demo process");
 AUTOSTART_PROCESSES(&cc2538_demo_process);
@@ -124,6 +126,8 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
   button_sensor.configure(BUTTON_SENSOR_CONFIG_TYPE_INTERVAL,
                           BUTTON_PRESS_EVENT_INTERVAL);
 
+  tmp102_init();
+
   printf("Re-Mote test application, initial values:\n");
 
   etimer_set(&et, LOOP_INTERVAL);
@@ -149,6 +153,9 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
 
       printf("Phidget ADC3 = %d raw\n",
              phidget_sensor.value(PHIDGET_SENSORS_ADC3));
+
+      tmp102_read(&temperature);
+      printf("TMP102 sensor = %u ºmC\n", temperature);
 
       etimer_set(&et, LOOP_INTERVAL);
       rtimer_set(&rt, RTIMER_NOW() + LEDS_OFF_HYSTERISIS, 1,

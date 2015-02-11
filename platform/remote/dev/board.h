@@ -170,7 +170,7 @@
  * \name SPI configuration
  *
  * These values configure which CC2538 pins to use for the SPI lines, shared 
- * with the I2C lines
+ * with the I2C bus and the tmp102 built-in temperature sensor
  * TODO: rename better...
  * @{
  */
@@ -180,6 +180,12 @@
 #define SPI_MOSI_PIN             0
 #define SPI_MISO_PORT            GPIO_C_NUM /**< as GPIO for I2C */
 #define SPI_MISO_PIN             1
+
+#define I2C_SCL_PORT             SPI_CLK_PORT
+#define I2C_SCL_PIN              SPI_CLK_PIN
+#define I2C_SDA_PORT             SPI_MOSI_PORT
+#define I2C_SDA_PIN              SPI_MOSI_PIN
+
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
