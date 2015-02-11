@@ -128,10 +128,10 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
              "Counter = 0x%08x\n", counter);
 
       printf("VDD = %d mV\n",
-             vdd3_sensor.value(REMOTE_SENSORS_VALUE_TYPE_CONVERTED));
+             vdd3_sensor.value(CC2538_SENSORS_VALUE_TYPE_CONVERTED));
 
       printf("Temperature = %d mC\n",
-             temp_sensor.value(REMOTE_SENSORS_VALUE_TYPE_CONVERTED));
+             temp_sensor.value(CC2538_SENSORS_VALUE_TYPE_CONVERTED));
 
       printf("Phidget ADC2 = %d raw\n",
              phidget_sensor.value(PHIDGET_SENSORS_ADC2));

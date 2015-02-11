@@ -47,25 +47,20 @@
 #define REMOTE_SENSORS_H_
 /*---------------------------------------------------------------------------*/
 #include "lib/sensors.h"
+#include "dev/cc2538-sensors.h"
 #include "dev/button-sensor.h"
-#include "dev/temp-sensor.h"
-#include "dev/vdd3-sensor.h"
 #include "dev/phidget-sensor.h"
 /*---------------------------------------------------------------------------*/
 /**
  * \name ReMote sensor constants
  *
  * These constants are used by various sensors on the ReMote. They can be used
- * to differentiate between raw and converted readings, to configure ADC
- * decimation rate (where applicable), change ADC reference voltage (ToDo).
+ * to configure ADC decimation rate (where applicable).
  * @{
  */
-#define REMOTE_SENSORS_VALUE_TYPE_RAW         0 /**< Request the raw reading */
-#define REMOTE_SENSORS_VALUE_TYPE_CONVERTED   1 /**< Request the converted reading */
-
 #define REMOTE_SENSORS_CONFIGURE_TYPE_DECIMATION_RATE   0x0100  /**< Change decimation rate (used with configure()) */
 
-#define REMOTE_SENSORS_ERROR         0x80000000 /**< Error */
+#define REMOTE_SENSORS_ERROR              CC2538_SENSORS_ERROR /**< Error */
 /** @} */
 /*---------------------------------------------------------------------------*/
 #endif /* REMOTE_SENSORS_H_ */
