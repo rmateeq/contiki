@@ -71,7 +71,8 @@ value(int type)
 
   res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, SOC_ADC_ADCCON_DIV_512);
 
-  return res;
+  /* 12-bit decimation rate: Shift right 4 bits */
+  return res >> 4;
 }
 /*---------------------------------------------------------------------------*/
 static int
