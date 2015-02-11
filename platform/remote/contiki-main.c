@@ -32,7 +32,7 @@
  * \addtogroup platform
  * @{
  *
- * \defgroup cc2538 The Re-Mote Development Kit platform
+ * \defgroup remote The Re-Mote Development Kit platform
  *
  * The Re-Mote is the new platform by Zolertia based on the cc2538, featuring a
  * cc2530 SoC with an ARM Cortex-M3 core.
