@@ -66,6 +66,7 @@
 #include "reg.h"
 #include "ieee-addr.h"
 #include "lpm.h"
+#include "dev/antenna-sw.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -207,6 +208,8 @@ main(void)
   queuebuf_init();
   process_start(&tcpip_process, NULL);
 #endif /* NETSTACK_CONF_WITH_IPV6 */
+
+  config_antenna_sw();
 
   process_start(&sensors_process, NULL);
 
