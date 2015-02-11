@@ -53,13 +53,16 @@
 #include "dev/phidget-sensor.h"
 /*---------------------------------------------------------------------------*/
 /**
- * \name ReMote sensor
+ * \name ReMote sensor constants
+ *
+ * These constants are used by various sensors on the ReMote. They can be used
+ * to differentiate between raw and converted readings.
  * @{
  */
-#define REMOTE_SENSORS_VALUE_TYPE_RAW         0
-#define REMOTE_SENSORS_VALUE_TYPE_CONVERTED   1
+#define REMOTE_SENSORS_VALUE_TYPE_RAW         0 /**< Request the raw reading */
+#define REMOTE_SENSORS_VALUE_TYPE_CONVERTED   1 /**< Request the converted reading */
 
-#define REMOTE_SENSORS_ERROR         0x80000000
+#define REMOTE_SENSORS_ERROR         0x80000000 /**< Error */
 /** @} */
 /*---------------------------------------------------------------------------*/
 #endif /* REMOTE_SENSORS_H_ */
