@@ -52,6 +52,36 @@
 #define ADC_PHIDGET_ADC2_PIN_MASK  GPIO_PIN_MASK(ADC_PHIDGET_ADC2_PIN)
 #define ADC_PHIDGET_ADC3_PIN_MASK  GPIO_PIN_MASK(ADC_PHIDGET_ADC3_PIN)
 /*---------------------------------------------------------------------------*/
+static uint8_t decimation_rate;
+static uint8_t shift;
+/*---------------------------------------------------------------------------*/
+static int
+set_decimation_rate(uint8_t rate)
+{
+  switch(rate) {
+  case SOC_ADC_ADCCON_DIV_64:
+    decimation_rate = rate;
+    shift = SOC_ADC_7_BIT_RSHIFT;
+    break;
+  case SOC_ADC_ADCCON_DIV_128:
+    decimation_rate = rate;
+    shift = SOC_ADC_9_BIT_RSHIFT;
+    break;
+  case SOC_ADC_ADCCON_DIV_256:
+    decimation_rate = rate;
+    shift = SOC_ADC_10_BIT_RSHIFT;
+    break;
+  case SOC_ADC_ADCCON_DIV_512:
+    decimation_rate = rate;
+    shift = SOC_ADC_12_BIT_RSHIFT;
+    break;
+  default:
+    return REMOTE_SENSORS_ERROR;
+  }
+
+  return decimation_rate;
+}
+/*---------------------------------------------------------------------------*/
 static int
 value(int type)
 {
@@ -69,10 +99,10 @@ value(int type)
     return REMOTE_SENSORS_ERROR;
   }
 
-  res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, SOC_ADC_ADCCON_DIV_512);
+  res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, decimation_rate);
 
-  /* 12-bit decimation rate: Shift right 4 bits */
-  return res >> 4;
+  /* Shift right by a number of bits depending on the decimation rate */
+  return res >> shift;
 }
 /*---------------------------------------------------------------------------*/
 static int
@@ -87,9 +117,12 @@ configure(int type, int value)
     GPIO_SOFTWARE_CONTROL(GPIO_A_BASE, ADC_PHIDGET_ADC3_PIN_MASK);
     GPIO_SET_INPUT(GPIO_A_BASE, ADC_PHIDGET_ADC3_PIN_MASK);
     ioc_set_over(GPIO_A_NUM, ADC_PHIDGET_ADC3_PIN, IOC_OVERRIDE_ANA);
-
     adc_init();
+    set_decimation_rate(SOC_ADC_ADCCON_DIV_512);
+
     break;
+  case REMOTE_SENSORS_CONFIGURE_TYPE_DECIMATION_RATE:
+    return set_decimation_rate((uint8_t)value);
   }
   return 0;
 }

@@ -43,6 +43,15 @@
  * choices are:
  * - PHIDGET_SENSORS_ADC2 (channel 2)
  * - PHIDGET_SENSORS_ADC3 (channel 3)
+ *
+ * The decimation rate can be set by passing
+ * REMOTE_SENSORS_CONFIGURE_TYPE_DECIMATION_RATE as the type argument to the
+ * configure() function and then specifying the rate through the value
+ * argument. Valid values are:
+ * - SOC_ADC_ADCCON_DIV_64 (64 bit rate)
+ * - SOC_ADC_ADCCON_DIV_128 (128 bit rate)
+ * - SOC_ADC_ADCCON_DIV_256 (256 bit rate)
+ * - SOC_ADC_ADCCON_DIV_512 (512 bit rate)
  * @{
  *
  * \file
@@ -53,6 +62,7 @@
 #define PHIDGET_SENSOR_H_
 /*---------------------------------------------------------------------------*/
 #include "lib/sensors.h"
+#include "dev/soc-adc.h"
 /*---------------------------------------------------------------------------*/
 /**
  * \name Generic phidget sensor
