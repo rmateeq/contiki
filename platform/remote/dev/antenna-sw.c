@@ -55,7 +55,8 @@ void
 antenna_sw_config(void)
 {
   /* Software controlled */
-  GPIO_SOFTWARE_CONTROL(ANTENNA_2_4GHZ_SW_PORT_BASE, ANTENNA_2_4GHZ_SW_PIN_MASK);
+  GPIO_SOFTWARE_CONTROL(ANTENNA_2_4GHZ_SW_PORT_BASE,
+                        ANTENNA_2_4GHZ_SW_PIN_MASK);
 
   /* Set pin to output */
   GPIO_SET_OUTPUT(ANTENNA_2_4GHZ_SW_PORT_BASE, ANTENNA_2_4GHZ_SW_PIN_MASK);
@@ -77,7 +78,7 @@ antenna_sw_select(uint8_t val)
     return ANTENNA_SW_SELECT_ERROR;
   }
 
-  /* Set the antenna selector to a default position */
+  /* Set the antenna selector */
   GPIO_WRITE_PIN(ANTENNA_2_4GHZ_SW_PORT_BASE, ANTENNA_2_4GHZ_SW_PIN_MASK, val);
 
   return val;
