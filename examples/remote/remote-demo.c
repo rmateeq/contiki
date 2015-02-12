@@ -74,6 +74,7 @@
 #include "dev/serial-line.h"
 #include "dev/sys-ctrl.h"
 #include "net/rime/broadcast.h"
+#include "dev/tmp102.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -155,7 +156,7 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
              phidget_sensor.value(PHIDGET_SENSORS_ADC3));
 
       tmp102_read(&temperature);
-      printf("TMP102 sensor = %u ºmC\n", temperature);
+      printf("TMP102 sensor = %u mC\n", temperature);
 
       etimer_set(&et, LOOP_INTERVAL);
       rtimer_set(&rt, RTIMER_NOW() + LEDS_OFF_HYSTERISIS, 1,
