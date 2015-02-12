@@ -149,7 +149,7 @@ main(void)
   gpio_init();
 
   leds_init();
-  fade(LEDS_YELLOW);
+  fade(LEDS_RED);
 
   process_init();
 
@@ -180,7 +180,7 @@ main(void)
   serial_line_init();
 
   INTERRUPTS_ENABLE();
-  fade(LEDS_GREEN);
+  fade(LEDS_BLUE);
 
   PUTS(CONTIKI_VERSION_STRING);
   PUTS(BOARD_STRING);
@@ -219,7 +219,7 @@ main(void)
   autostart_start(autostart_processes);
 
   watchdog_start();
-  fade(LEDS_RED);
+  fade(LEDS_GREEN);
 
   while(1) {
     uint8_t r;
