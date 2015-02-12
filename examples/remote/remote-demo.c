@@ -29,13 +29,13 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- * \addtogroup cc2538
+ * \addtogroup remote
  * @{
  *
- * \defgroup cc2538-examples Re-Mote Example Projects
+ * \defgroup remote-examples Re-Mote Example Projects
  * @{
  *
- * \defgroup cc2538-demo Re-Mote Demo Project
+ * \defgroup remote-demo Re-Mote Demo Project
  *
  *   Example project demonstrating the Re-Mote functionality
  *

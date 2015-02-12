@@ -29,7 +29,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /**
- * \addtogroup cc2538-examples
+ * \addtogroup remote-examples
  * @{
  *
  * \file
