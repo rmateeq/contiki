@@ -39,15 +39,16 @@
  *
  *   Example project demonstrating the Re-Mote functionality
  *
- * - Boot sequence: LEDs flashing, LED2 followed by LED3 then LED4
- * - etimer/clock : Every LOOP_INTERVAL clock ticks the LED defined as
- *                  LEDS_PERIODIC will turn on
+ * - Boot sequence: LEDs flashing (Red, then yellow, finally green)
+ *
+ * - etimer/clock : Every LOOP_INTERVAL clock ticks (LOOP_PERIOD secs) the LED
+ *                  defined as LEDS_PERIODIC will turn on
  * - rtimer       : Exactly LEDS_OFF_HYSTERISIS rtimer ticks later,
  *                  LEDS_PERIODIC will turn back off
- * - ADC sensors  : On-chip VDD / 3 and temperature, and ambient light sensor
+ * - ADC sensors  : On-chip VDD / 3, temperature, and Phidget sensor
  *                  values are printed over UART periodically.
- * - UART         : Every LOOP_INTERVAL the EM will print something over the
- *                  UART. Receiving an entire line of text over UART (ending
+ * - UART         : Every LOOP_INTERVAL the Remote will print something over
+ *                  the UART. Receiving an entire line of text over UART (ending
  *                  in \\r) will cause LEDS_SERIAL_IN to toggle
  * - Radio comms  : BTN_USER sends a rime broadcast. Reception of a rime
  *                  packet will toggle LEDs defined as LEDS_RF_RX
@@ -73,9 +74,10 @@
 #include <stdio.h>
 #include <stdint.h>
 /*---------------------------------------------------------------------------*/
-#define LOOP_INTERVAL       CLOCK_SECOND
-#define LEDS_OFF_HYSTERISIS (RTIMER_SECOND >> 1)
-#define LEDS_PERIODIC       LEDS_YELLOW
+#define LOOP_PERIOD         8
+#define LOOP_INTERVAL       (CLOCK_SECOND * LOOP_PERIOD)
+#define LEDS_OFF_HYSTERISIS ((RTIMER_SECOND * LOOP_PERIOD) >> 1)
+#define LEDS_PERIODIC       LEDS_BLUE
 #define LEDS_BUTTON         LEDS_RED
 #define LEDS_SERIAL_IN      LEDS_GREEN
 #define LEDS_REBOOT         LEDS_ALL
@@ -117,13 +119,15 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
 
   printf("Re-Mote test application, initial values:\n");
 
-  etimer_set(&et, CLOCK_SECOND);
+  etimer_set(&et, LOOP_INTERVAL);
 
   while(1) {
 
     PROCESS_YIELD();
 
     if(ev == PROCESS_EVENT_TIMER) {
+      leds_on(LEDS_PERIODIC);
+
       printf("-----------------------------------------\n"
              "Counter = 0x%08x\n", counter);
 
@@ -139,7 +143,7 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
       printf("Phidget ADC3 = %d raw\n",
              phidget_sensor.value(PHIDGET_SENSORS_ADC3));
 
-      etimer_set(&et, CLOCK_SECOND);
+      etimer_set(&et, LOOP_INTERVAL);
       rtimer_set(&rt, RTIMER_NOW() + LEDS_OFF_HYSTERISIS, 1,
                  rt_callback, NULL);
       counter++;
