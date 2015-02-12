@@ -52,6 +52,8 @@
  *                  in \\r) will cause LEDS_SERIAL_IN to toggle
  * - Radio comms  : BTN_USER sends a rime broadcast. Reception of a rime
  *                  packet will toggle LEDs defined as LEDS_RF_RX
+ * - Button       : Keeping the button pressed will print a counter that
+ *                  increments every BUTTON_PRESS_EVENT_INTERVAL ticks
  *
  * @{
  *
@@ -83,6 +85,8 @@
 #define LEDS_REBOOT         LEDS_ALL
 #define LEDS_RF_RX          (LEDS_YELLOW | LEDS_RED)
 #define BROADCAST_CHANNEL   129
+
+#define BUTTON_PRESS_EVENT_INTERVAL (CLOCK_SECOND)
 /*---------------------------------------------------------------------------*/
 static struct etimer et;
 static struct rtimer rt;
@@ -117,6 +121,9 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
   counter = 0;
   broadcast_open(&bc, BROADCAST_CHANNEL, &bc_rx);
 
+  button_sensor.configure(BUTTON_SENSOR_CONFIG_TYPE_INTERVAL,
+                          BUTTON_PRESS_EVENT_INTERVAL);
+
   printf("Re-Mote test application, initial values:\n");
 
   etimer_set(&et, LOOP_INTERVAL);
@@ -148,12 +155,21 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
                  rt_callback, NULL);
       counter++;
     } else if(ev == sensors_event) {
-      if(data == &button_user_sensor) {
-        packetbuf_copyfrom(&counter, sizeof(counter));
-        broadcast_send(&bc);
+      if(data == &button_sensor) {
+        if(button_sensor.value(BUTTON_SENSOR_VALUE_TYPE_LEVEL) ==
+           BUTTON_SENSOR_PRESSED_LEVEL) {
+          printf("Press\n");
+          packetbuf_copyfrom(&counter, sizeof(counter));
+          broadcast_send(&bc);
+        } else {
+          printf("Release\n");
+        }
       }
     } else if(ev == serial_line_event_message) {
       leds_toggle(LEDS_SERIAL_IN);
+    } else if(ev == button_press_duration_exceeded) {
+      printf("Button press event: %u [%u]\n", *((uint8_t *)data),
+             button_sensor.value(BUTTON_SENSOR_VALUE_TYPE_PRESS_DURATION));
     }
   }
 
