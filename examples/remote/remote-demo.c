@@ -176,7 +176,8 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
     } else if(ev == serial_line_event_message) {
       leds_toggle(LEDS_SERIAL_IN);
     } else if(ev == button_press_duration_exceeded) {
-      printf("Button press event: %u [%u]\n", *((uint8_t *)data),
+      printf("Button pressed for %d ticks [%u events]\n",
+             (*((uint8_t *)data) * BUTTON_PRESS_EVENT_INTERVAL),
              button_sensor.value(BUTTON_SENSOR_VALUE_TYPE_PRESS_DURATION));
     }
   }
