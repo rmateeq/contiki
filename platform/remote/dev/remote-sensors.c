@@ -43,9 +43,8 @@
  * Implementation of a generic module controlling Re-Mote sensors
  */
 #include "contiki.h"
+#include "dev/cc2538-sensors.h"
 #include "dev/button-sensor.h"
-#include "dev/vdd3-sensor.h"
-#include "dev/temp-sensor.h"
 #include "dev/phidget-sensor.h"
 
 #include <string.h>
@@ -53,7 +52,7 @@
 /* TODO: include the tmp102 sensor as well */
 /*---------------------------------------------------------------------------*/
 /** \brief Exports global symbols for the sensor API */
-SENSORS(&button_sensor, &vdd3_sensor, &temp_sensor, &phidget_sensor);
+SENSORS(&button_sensor, &vdd3_sensor, &cc2538_temp_sensor, &phidget_sensor);
 /*---------------------------------------------------------------------------*/
 /**
  * @}
