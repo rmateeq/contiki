@@ -53,7 +53,7 @@
 /* TODO: include the tmp102 sensor as well */
 /*---------------------------------------------------------------------------*/
 /** \brief Exports global symbols for the sensor API */
-SENSORS(&button_user_sensor, &vdd3_sensor, &temp_sensor, &phidget_sensor);
+SENSORS(&button_sensor, &vdd3_sensor, &temp_sensor, &phidget_sensor);
 /*---------------------------------------------------------------------------*/
 /**
  * @}

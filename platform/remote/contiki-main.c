@@ -213,6 +213,8 @@ main(void)
 
   process_start(&sensors_process, NULL);
 
+  SENSORS_ACTIVATE(button_sensor);
+
   energest_init();
   ENERGEST_ON(ENERGEST_TYPE_CPU);
 

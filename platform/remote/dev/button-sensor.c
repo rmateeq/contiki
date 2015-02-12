@@ -111,12 +111,6 @@ config_user(int type, int value)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-void
-button_sensor_init()
-{
-  timer_set(&debouncetimer, 0);
-}
+SENSORS_SENSOR(button_sensor, BUTTON_SENSOR, value, config_user, NULL);
 /*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(button_user_sensor, BUTTON_SENSOR, NULL, config_user, NULL);
-
 /** @} */

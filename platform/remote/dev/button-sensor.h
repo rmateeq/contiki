@@ -48,14 +48,10 @@
 
 #define BUTTON_SENSOR "Button"
 
-#define button_sensor button_user_sensor
-extern const struct sensors_sensor button_user_sensor;
-
+extern const struct sensors_sensor button_sensor;
 /*---------------------------------------------------------------------------*/
 #endif /* BUTTON_SENSOR_H_ */
 
-/** \brief Common initialiser for all SmartRF Buttons */
-void button_sensor_init();
 
 /**
  * @}
