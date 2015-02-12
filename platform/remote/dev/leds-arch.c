@@ -85,17 +85,22 @@ leds_arch_get(void)
 void
 leds_arch_set(unsigned char leds)
 {
-  GPIO_SET_PIN(GPIO_D_BASE, PORT_D_LEDS);
-  GPIO_SET_PIN(GPIO_C_BASE, PORT_C_LEDS);
-
   if(leds & LEDS_GREEN) {
     GPIO_CLR_PIN(LED_GREEN_PORT, LED_GREEN_PIN);
+  } else {
+    GPIO_SET_PIN(LED_GREEN_PORT, LED_GREEN_PIN);
   }
+
   if(leds & LEDS_BLUE) {
     GPIO_CLR_PIN(LED_BLUE_PORT, LED_BLUE_PIN);
+  } else {
+    GPIO_SET_PIN(LED_BLUE_PORT, LED_BLUE_PIN);
   }
+
   if(leds & LEDS_RED) {
     GPIO_CLR_PIN(LED_RED_PORT, LED_RED_PIN);
+  } else {
+    GPIO_SET_PIN(LED_RED_PORT, LED_RED_PIN);
   }
 }
 /*---------------------------------------------------------------------------*/
