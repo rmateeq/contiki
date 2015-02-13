@@ -4,6 +4,13 @@ ifndef CONTIKI
   $(error CONTIKI not defined! You must specify where CONTIKI resides!)
 endif
 
+PYTHON = python
+BSL_FLAGS += -e -w -v -b 115200
+
+ifdef PORT
+  BSL_FLAGS += -p $(PORT)
+endif
+
 CONTIKI_TARGET_DIRS = . dev
 
 CONTIKI_TARGET_SOURCEFILES += leds.c leds-arch.c
@@ -38,5 +45,5 @@ BSL = $(CONTIKI)/tools/cc2538-bsl/cc2538-bsl.py
 ifeq ($(wildcard $(BSL)), )
 	@echo "ERROR: Could not find the cc2538-bsl script. Did you run 'git submodule update --init' ?"
 else
-	python $(BSL) -e -w -v $<
+	$(PYTHON) $(BSL) $(BSL_FLAGS) $<
 endif
