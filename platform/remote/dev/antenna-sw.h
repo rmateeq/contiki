@@ -46,8 +46,8 @@
 /* -------------------------------------------------------------------------- */
 #include <stdint.h>
 /* -------------------------------------------------------------------------- */
-#define ANTENNA_SW_SELECT_EXTERNAL  0
-#define ANTENNA_SW_SELECT_INTERNAL  1
+#define ANTENNA_SW_SELECT_EXTERNAL  0xFF
+#define ANTENNA_SW_SELECT_INTERNAL  0x00
 
 #define ANTENNA_SW_SELECT_ERROR    -1
 /* -------------------------------------------------------------------------- */
