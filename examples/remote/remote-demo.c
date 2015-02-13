@@ -124,6 +124,9 @@ PROCESS_THREAD(cc2538_demo_process, ev, data)
   counter = 0;
   broadcast_open(&bc, BROADCAST_CHANNEL, &bc_rx);
 
+  /* Enable antenna */
+  antenna_sw_select(ANTENNA_SW_SELECT_INTERNAL);
+
   button_sensor.configure(BUTTON_SENSOR_CONFIG_TYPE_INTERVAL,
                           BUTTON_PRESS_EVENT_INTERVAL);
 
