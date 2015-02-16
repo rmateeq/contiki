@@ -74,6 +74,7 @@
 #include "dev/serial-line.h"
 #include "dev/sys-ctrl.h"
 #include "net/rime/broadcast.h"
+#include "dev/antenna-sw.h"
 #include "dev/tmp102.h"
 
 #include <stdio.h>
