@@ -51,24 +51,20 @@ tmp102_init(void)
 uint8_t
 tmp102_read(uint16_t *data)
 {
+  uint8_t buf[2];
   uint16_t temp;
+
+  /* Write to the temperature register to trigger a reading */
   if(i2c_single_send(TMP102_ADDR, TMP102_TEMP) == I2C_MASTER_ERR_NONE) {
-    i2c_master_set_slave_address(TMP102_ADDR, I2C_RECEIVE);
-    i2c_master_command(I2C_MASTER_CMD_BURST_RECEIVE_START);
-    while(i2c_master_busy());
-    if(i2c_master_error() == I2C_MASTER_ERR_NONE) {
-      temp = i2c_master_data_get() << 8;
-      i2c_master_command(I2C_MASTER_CMD_BURST_RECEIVE_FINISH);
-      while(i2c_master_busy());
-      if(i2c_master_error() == I2C_MASTER_ERR_NONE) {
-        temp |= i2c_master_data_get();
-        if(temp > 2047) {
-          temp -= (1 << 12);
-        }
-        temp *= 0.625;
-        *data = temp;
-        return I2C_MASTER_ERR_NONE;
+    /* Read two bytes only */
+    if(i2c_burst_receive(TMP102_ADDR, buf, 2) == I2C_MASTER_ERR_NONE) {
+      temp = (buf[0] << 8) + buf[1];
+      if(temp > 2047) {
+        temp -= (1 << 12);
       }
+      temp *= 0.625;
+      *data = temp;
+      return I2C_MASTER_ERR_NONE;
     }
   }
   return i2c_master_error();
