@@ -40,15 +40,16 @@
 
 #include "simple-udp.h"
 #include "servreg-hack.h"
-
+#include "serial-ubidots.h"
 #include "net/rpl/rpl.h"
+#include "dev/cc2420/cc2420.h"
 
 #include <stdio.h>
 #include <string.h>
 
 #define UDP_PORT 1234
 #define SERVICE_ID 190
-
+#define DEBUG DEBUG_NONE
 #define SEND_INTERVAL		(10 * CLOCK_SECOND)
 #define SEND_TIME		(random_rand() % (SEND_INTERVAL))
 
@@ -67,10 +68,15 @@ receiver(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
-  printf("Data received from ");
+  struct ubidots_msg_t msg;
+  struct ubidots_msg_t *msgPtr = data;
+
+  PRINTF("Data received from ");
   uip_debug_ipaddr_print(sender_addr);
-  printf(" on port %d from port %d with length %d: '%s'\n",
-         receiver_port, sender_port, datalen, data);
+  PRINTF(" on port %d from port %d\n", receiver_port, sender_port);
+  PRINTF("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(), cc2420_last_rssi,
+                                     cc2420_last_correlation);
+  send_to_ubidots(msgPtr->api_key, msgPtr->var_key, &msgPtr->value[0]);
 }
 /*---------------------------------------------------------------------------*/
 static uip_ipaddr_t *
@@ -84,13 +90,13 @@ set_global_address(void)
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
-  printf("IPv6 addresses: ");
+  PRINTF("IPv6 addresses: ");
   for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
     state = uip_ds6_if.addr_list[i].state;
     if(uip_ds6_if.addr_list[i].isused &&
        (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) {
       uip_debug_ipaddr_print(&uip_ds6_if.addr_list[i].ipaddr);
-      printf("\n");
+      PRINTF("\n");
     }
   }
 

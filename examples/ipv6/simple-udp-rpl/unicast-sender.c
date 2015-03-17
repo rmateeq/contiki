@@ -37,21 +37,27 @@
 #include "net/ip/uip.h"
 #include "net/ipv6/uip-ds6.h"
 #include "net/ip/uip-debug.h"
+#include "serial-ubidots.h"
 
 #include "sys/node-id.h"
 
 #include "simple-udp.h"
 #include "servreg-hack.h"
-
+#include "dev/z1-phidgets.h"
+#include "dev/button-sensor.h"
 #include <stdio.h>
 #include <string.h>
 
 #define UDP_PORT 1234
 #define SERVICE_ID 190
 
-#define SEND_INTERVAL		(60 * CLOCK_SECOND)
-#define SEND_TIME		(random_rand() % (SEND_INTERVAL))
+#define SEND_INTERVAL	CLOCK_SECOND/2
 
+static struct ubidots_msg_t msg;
+static struct ubidots_msg_t *msgPtr = &msg;
+
+static const char api_key[] = "kjfdkjg455g4jh54g5jh4g5jh4g54jhg54jh55jj";
+static const char var_key[] = "545jh45jh5jh456jh546jh45";
 static struct simple_udp_connection unicast_connection;
 
 /*---------------------------------------------------------------------------*/
@@ -95,6 +101,7 @@ set_global_address(void)
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(unicast_sender_process, ev, data)
 {
+  static skinr;
   static struct etimer periodic_timer;
   static struct etimer send_timer;
   uip_ipaddr_t *addr;
@@ -105,31 +112,35 @@ PROCESS_THREAD(unicast_sender_process, ev, data)
 
   set_global_address();
 
+  SENSORS_ACTIVATE(phidgets);
+
+  memcpy(msg.var_key, var_key, UBIDOTS_MSG_KEYLEN);
+  memcpy(msg.api_key, api_key, UBIDOTS_MSG_APILEN);
+
   simple_udp_register(&unicast_connection, UDP_PORT,
                       NULL, UDP_PORT, receiver);
 
   etimer_set(&periodic_timer, SEND_INTERVAL);
+
   while(1) {
 
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
-    etimer_reset(&periodic_timer);
-    etimer_set(&send_timer, SEND_TIME);
-
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&send_timer));
     addr = servreg_hack_lookup(SERVICE_ID);
-    if(addr != NULL) {
-      static unsigned int message_number;
-      char buf[20];
 
-      printf("Sending unicast to ");
+    if(addr != NULL) {
+      skinr = phidgets.value(PHIDGET3V_2);
+      msg.id = 0xAB;
+      msg.len = 1;
+      memcpy(&msg.value[0], &skinr, 2);
+      printf("Sending SR --> %u to ", skinr);
       uip_debug_ipaddr_print(addr);
       printf("\n");
-      sprintf(buf, "Message %d", message_number);
-      message_number++;
-      simple_udp_sendto(&unicast_connection, buf, strlen(buf) + 1, addr);
-    } else {
+      simple_udp_sendto(&unicast_connection, msgPtr, UBIDOTS_MSG_LEN, addr);
+    } else{
       printf("Service %d not found\n", SERVICE_ID);
     }
+
+    etimer_reset(&periodic_timer);
   }
 
   PROCESS_END();
