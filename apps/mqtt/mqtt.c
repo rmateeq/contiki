@@ -64,9 +64,10 @@
 /*---------------------------------------------------------------------------*/
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 /*---------------------------------------------------------------------------*/
-#define DEBUG 0
+#define DEBUG 1
 #if DEBUG
-#define PRINTF(...) PRINTF(__VA_ARGS__)
+#define PRINTF(...) printf(__VA_ARGS__)
+#define DBG(...) printf(__VA_ARGS__)
 #else
 #define PRINTF(...)
 #endif
@@ -361,7 +362,7 @@ keep_alive_callback(void *ptr)
 
   /* The flag is set when the PINGREQ has been sent */
   if(conn->waiting_for_pingresp) {
-    PRINTF("MQTT - Disconnect due to no PINGRESP from broker.\n");
+    DBG("MQTT - Disconnect due to no PINGRESP from broker.\n");
     disconnect_tcp(conn);
     return;
   }
