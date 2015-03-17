@@ -23,12 +23,12 @@ from plotly.graph_objs import *
 PORT     = "/dev/ttyUSB0"
 
 # Plotly constants
-PLOTLY_USER    = "alinanco"
-PLOTLY_API_KEY = "ewobici0wh"
-STREAM_KEY_A   = "5lcns6p2ft"
-STREAM_KEY_B   = "x8j8hgh5ky"
-STREAM_KEY_C   = "2jiexyvlpl"
-STREAM_KEY_D   = "2jiexyvlpl"
+PLOTLY_USER    = "YOUR_USER"
+PLOTLY_API_KEY = "YOUR_API_KEY"
+STREAM_KEY_A   = "YOUR_STREAM_ID"
+STREAM_KEY_B   = "YOUR_STREAM_ID"
+STREAM_KEY_C   = "YOUR_STREAM_ID"
+STREAM_KEY_D   = "YOUR_STREAM_ID"
 
 # ----------------------------------------------------------------------------#
 # Create a serial object and connect to mote over USB
@@ -76,7 +76,7 @@ if __name__=='__main__':
   trace1 = Scatter(x=[], y=[], stream=dict(token=STREAM_KEY_A, maxpoints=200))
 
   # Set up and open the streaming channel
-  layout = Layout(title='Antonio stress level')
+  layout = Layout(title='Zolertia Z1 Sensor Data')
   fig = Figure(data=[trace1], layout=layout)
   print "Plotly URL: " + py.plot(fig, filename='Zolertia Z1 Sensor Data')
   client = py.Stream(STREAM_KEY_A)
