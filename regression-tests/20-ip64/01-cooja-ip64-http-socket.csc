@@ -214,7 +214,7 @@ while(!msg.equals("stop")) {&#xD;
         if (msg.split(' ')[3] &gt; 0) {&#xD;
             log.testOK();&#xD;
         } else {&#xD;
-            log.testFail();    &#xD;
+            log.testFailed();    &#xD;
         }&#xD;
     }&#xD;
     YIELD();&#xD;
