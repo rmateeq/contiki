@@ -144,11 +144,29 @@
 /* Handle 10 routes    */
 #define UIP_CONF_MAX_ROUTES   15
 
-#define UIP_CONF_ND6_SEND_RA		0
+#if WITH_IP64
+#define WITH_SLIP 1
+#ifndef UIP_FALLBACK_INTERFACE
+#define UIP_FALLBACK_INTERFACE ip64_uip_fallback_interface
+#endif
+#endif /* WITH_IP64 */
+
+#ifndef UIP_CONF_ND6_RA_RDNSS
+#define UIP_CONF_ND6_RA_RDNSS 1
+#endif
+
+#ifndef UIP_CONF_ND6_SEND_RA
+#define UIP_CONF_ND6_SEND_RA 1
+#endif
+
+#ifndef UIP_CONF_ROUTER
+#define UIP_CONF_ROUTER 1
+#endif
+
 #define UIP_CONF_ND6_REACHABLE_TIME     600000
 #define UIP_CONF_ND6_RETRANS_TIMER      10000
 
-#define NETSTACK_CONF_WITH_IPV6                   1
+#define NETSTACK_CONF_WITH_IPV6         1
 #define UIP_CONF_IPV6_QUEUE_PKT         0
 #define UIP_CONF_IPV6_CHECKS            1
 #define UIP_CONF_IPV6_REASSEMBLY        0
@@ -192,11 +210,8 @@
 
 #define UIP_CONF_TCP_SPLIT       0
 
-
 #ifdef PROJECT_CONF_H
 #include PROJECT_CONF_H
 #endif /* PROJECT_CONF_H */
-
-
 
 #endif /* CONTIKI_CONF_H */

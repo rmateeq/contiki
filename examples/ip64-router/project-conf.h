@@ -1,0 +1,3 @@
+
+#undef  UIP_CONF_BUFFER_SIZE
+#define UIP_CONF_BUFFER_SIZE 600
