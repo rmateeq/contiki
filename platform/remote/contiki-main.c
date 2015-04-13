@@ -154,7 +154,7 @@ main(void)
   process_init();
 
   watchdog_init();
-  button_sensor_init();
+  SENSORS_ACTIVATE(button_sensor);
 
   /*
    * Character I/O Initialisation.
