@@ -100,7 +100,7 @@ The implementation in Contiki is pure CDC-ACM: The Linux and OS X kernels know e
 On windows, you will need to provide a driver:
 
   * Download this LUFA CDC-ACM driver:
-<http://code.google.com/p/lufa-lib/source/browse/trunk/Demos/Device/LowLevel/VirtualSerial/LUFA+VirtualSerial.inf>
+<https://github.com/abcminiuser/lufa/blob/master/Demos/Device/LowLevel/VirtualSerial/LUFA%20VirtualSerial.inf>
   * Adjust the VID and PID near the end with the values at the start of this section.
   * Next time you get prompted for the driver, include the directory containing the .inf file in the search path and the driver will be installed.
 
