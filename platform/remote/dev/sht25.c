@@ -41,6 +41,8 @@
 #include "dev/sht25.h"
 #include "lib/sensors.h"
 /*---------------------------------------------------------------------------*/
+#warning I2C SDA AND SCL are inverted in JP8 connector, inverted in init() call
+/*---------------------------------------------------------------------------*/
 static uint8_t enabled;
 /*---------------------------------------------------------------------------*/
 static int
@@ -50,7 +52,7 @@ configure(int type, int value)
     return SHT25_ERROR;
   }
   if(value) {
-    i2c_init(I2C_SDA_PORT, I2C_SDA_PIN, I2C_SCL_PORT, I2C_SCL_PIN, 
+    i2c_init(I2C_SCL_PORT, I2C_SCL_PIN, I2C_SDA_PORT, I2C_SDA_PIN, 
              I2C_SCL_NORMAL_BUS_SPEED);
   }
   enabled = value;

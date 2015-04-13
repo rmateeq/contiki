@@ -46,6 +46,8 @@
 #include "lib/sensors.h"
 #include "tsl2563.h"
 /*---------------------------------------------------------------------------*/
+#warning I2C SDA AND SCL are inverted in JP8 connector, inverted in init() call
+/*---------------------------------------------------------------------------*/
 static uint8_t enabled;
 /*---------------------------------------------------------------------------*/
 static uint16_t
@@ -140,7 +142,7 @@ configure(int type, int value)
   }
   enabled = value;
   if(value) {
-    i2c_init(I2C_SDA_PORT, I2C_SDA_PIN, I2C_SCL_PORT, I2C_SCL_PIN,
+    i2c_init(I2C_SCL_PORT, I2C_SCL_PIN, I2C_SDA_PORT, I2C_SDA_PIN,
              I2C_SCL_NORMAL_BUS_SPEED);
   } else {
     light_ziglet_off();
