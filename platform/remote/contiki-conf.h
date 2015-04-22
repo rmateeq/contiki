@@ -323,7 +323,11 @@ typedef uint32_t rtimer_clock_t;
 #endif /* NETSTACK_CONF_WITH_IPV6 */
 #endif /* NETSTACK_CONF_FRAMER */
 
+/* This can be overriden to use the cc1120_driver instead */
+#ifndef NETSTACK_CONF_RADIO
 #define NETSTACK_CONF_RADIO   cc2538_rf_driver
+#endif
+
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
@@ -408,6 +412,17 @@ typedef uint32_t rtimer_clock_t;
 #ifndef CC2538_RF_CONF_RX_USE_DMA
 #define CC2538_RF_CONF_RX_USE_DMA            1 /**< RF RX over DMA */
 #endif
+/** @} */
+/*---------------------------------------------------------------------------*/
+/**
+ * \name CC1120 SPI configuration
+ *
+ * @{
+ */
+#define CC1120_ARCH_SPI_ENABLE  cc1120_arch_spi_enable
+#define CC1120_ARCH_SPI_DISABLE cc1120_arch_spi_disable
+#define CC1120_ARCH_SPI_RW_BYTE cc1120_arch_spi_rw_byte
+#define CC1120_ARCH_SPI_RW      cc1120_arch_spi_rw
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**

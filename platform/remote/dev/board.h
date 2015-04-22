@@ -167,25 +167,31 @@
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
- * \name SPI configuration
+ * \name SPI (SSI0) configuration
  *
- * These values configure which CC2538 pins to use for the SPI lines, shared 
- * with the I2C bus and the tmp102 built-in temperature sensor
- * TODO: rename better...
+ * These values configure which CC2538 pins to use for the SPI (SSI0) lines,
+ * shared with the CC1120 RF transceiver
  * @{
  */
-#define SPI_CLK_PORT             GPIO_B_NUM /**< Shared with SCL */
+#define SPI_CLK_PORT             GPIO_D_NUM
 #define SPI_CLK_PIN              1
-#define SPI_MOSI_PORT            GPIO_B_NUM /**< Shared with SDA */
+#define SPI_MOSI_PORT            GPIO_D_NUM
 #define SPI_MOSI_PIN             0
-#define SPI_MISO_PORT            GPIO_C_NUM /**< as GPIO for I2C */
-#define SPI_MISO_PIN             1
-
-#define I2C_SCL_PORT             SPI_CLK_PORT
-#define I2C_SCL_PIN              SPI_CLK_PIN
-#define I2C_SDA_PORT             SPI_MOSI_PORT
-#define I2C_SDA_PIN              SPI_MOSI_PIN
-
+#define SPI_MISO_PORT            GPIO_C_NUM
+#define SPI_MISO_PIN             4
+/** @} */
+/*---------------------------------------------------------------------------*/
+/**
+ * \name I2C configuration
+ *
+ * These values configure which CC2538 pins to use for the I2C lines, shared
+ * with the TMP102 built-in temperature sensor
+ * @{
+ */
+#define I2C_SCL_PORT             GPIO_B_NUM
+#define I2C_SCL_PIN              1
+#define I2C_SDA_PORT             GPIO_B_NUM
+#define I2C_SDA_PIN              0
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
@@ -208,27 +214,28 @@
  * These values configure the required pins to drive the CC1120/CC1200
  * @{
  */
-#define CC1120_CLK_PORT             GPIO_D_NUM
-#define CC1120_CLK_PIN              1
-#define CC1120_MOSI_PORT            GPIO_D_NUM
-#define CC1120_MOSI_PIN             0
-#define CC1120_MISO_PORT            GPIO_C_NUM
-#define CC1120_MISO_PIN             4
-#define CC1120_CS_PORT              GPIO_D_NUM
-#define CC1120_CS_PIN               3
-#define CC1120_G0_PORT              GPIO_B_NUM
-#define CC1120_G0_PIN               4
-#define CC1120_G2_PORT              GPIO_B_NUM
-#define CC1120_G2_PIN               3
+#define CC1120_SPI_SCLK_PORT        GPIO_D_NUM
+#define CC1120_SPI_SCLK_PIN         1
+#define CC1120_SPI_MOSI_PORT        GPIO_D_NUM
+#define CC1120_SPI_MOSI_PIN         0
+#define CC1120_SPI_MISO_PORT        GPIO_C_NUM
+#define CC1120_SPI_MISO_PIN         4
+#define CC1120_SPI_CSN_PORT         GPIO_D_NUM
+#define CC1120_SPI_CSN_PIN          3
+#define CC1120_GDO0_PORT            GPIO_B_NUM
+#define CC1120_GDO0_PIN             4
+#define CC1120_GDO2_PORT            GPIO_B_NUM
+#define CC1120_GDO2_PIN             3
 #define CC1120_RESET_PORT           GPIO_B_NUM
 #define CC1120_RESET_PIN            2
+#define CC1120_GPIO0_VECTOR         NVIC_INT_GPIO_PORT_B
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
  * \name microSD configuration
  *
  * These values configure the required pins to drive the built-in microSD 
- * external module
+ * external module, to be used with SSI1
  * @{
  */
 #define USD_CLK_PORT             GPIO_B_NUM

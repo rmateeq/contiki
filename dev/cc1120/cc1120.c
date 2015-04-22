@@ -1354,7 +1354,7 @@ init(void)
 
 #if PERFORM_MANUAL_CALIBRATION
   strobe(CC1120_SIDLE);
-  dint(); /* XXX No eint() is performed here! */
+  // dint(); /* XXX No eint() is performed here! */ // TODO: alignan
   calibrate_manual();
 #endif /* PERFORM_MANUAL_CALIBRATION */
 

@@ -200,8 +200,8 @@ main(void)
   process_start(&etimer_process, NULL);
   ctimer_init();
 
-  set_rf_params();
   netstack_init();
+  set_rf_params();
 
 #if NETSTACK_CONF_WITH_IPV6
   memcpy(&uip_lladdr.addr, &linkaddr_node_addr, sizeof(uip_lladdr.addr));

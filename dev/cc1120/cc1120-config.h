@@ -214,28 +214,28 @@
 /* Override exported config, the cc1120 driver depends on below settings! */
 
 /* Variable length packets */
-#define PKT_CFG0_LENGTH_CONFIG_VARIABLE     BV(5)
+#define PKT_CFG0_LENGTH_CONFIG_VARIABLE     (1<<5)
 #undef CC1120_SETTING_PKT_CFG0
 #define CC1120_SETTING_PKT_CFG0             PKT_CFG0_LENGTH_CONFIG_VARIABLE
 
 /* Calculate and append CRC to packets */
-#define PKT_CFG1_APPEND_STATUS              BV(0)
-#define PKT_CFG1_CRC_CFG                    BV(2)
+#define PKT_CFG1_APPEND_STATUS              (1<<0)
+#define PKT_CFG1_CRC_CFG                    (1<<2)
 #undef CC1120_SETTING_PKT_CFG1
 #define CC1120_SETTING_PKT_CFG1             (PKT_CFG1_APPEND_STATUS|PKT_CFG1_CRC_CFG)
 
 /* CCA triggers on RSSI and RX mode */
-#define PKT_CFG2_CCA_MODE_BELOW_OR_RX       (BV(2)|BV(3))
+#define PKT_CFG2_CCA_MODE_BELOW_OR_RX       ((1<<2)|(1<<3))
 #undef CC1120_SETTING_PKT_CFG2
 #define CC1120_SETTING_PKT_CFG2             PKT_CFG2_CCA_MODE_BELOW_OR_RX
 
 /* Return to RX after TX */
-#define RFEND_CFG0_TXOFF_MODE_RETURN_TO_RX  (BV(4)|BV(5))
+#define RFEND_CFG0_TXOFF_MODE_RETURN_TO_RX  ((1<<4)|(1<<5))
 #undef CC1120_SETTING_RFEND_CFG0
 #define CC1120_SETTING_RFEND_CFG0           RFEND_CFG0_TXOFF_MODE_RETURN_TO_RX
 
 /* Return to RX after RX */
-#define RFEND_CFG1_RXOFF_MODE_RETURN_TO_RX  (BV(4)|BV(5))
+#define RFEND_CFG1_RXOFF_MODE_RETURN_TO_RX  ((1<<4)|(1<<5))
 #undef CC1120_SETTING_RFEND_CFG1
 #define CC1120_SETTING_RFEND_CFG1           (0x0F | RFEND_CFG1_RXOFF_MODE_RETURN_TO_RX)
 
@@ -256,6 +256,6 @@
 
 /* Autocalibrate each wakeup */
 #undef CC1120_SETTING_SETTLING_CFG
-#define CC1120_SETTING_SETTLING_CFG         0x03 | (BV(3))
+#define CC1120_SETTING_SETTLING_CFG         0x03 | ((1<<3))
 
 #endif /* CC1120_CONFIG_H */

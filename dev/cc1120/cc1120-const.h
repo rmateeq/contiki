@@ -294,9 +294,9 @@
 /* ----- some GPIO configurations ----- */
 /* Bit fields */
 /* invert assert/de-assert */
-#define IOCFG_GPIO_CFG_INVERT             BV(6)
+#define IOCFG_GPIO_CFG_INVERT             (1<<6)
 /* set pin as "Analog transfer" (==pin not used as GPIO) */
-#define IOCFG_GPIO_CFG_ATRAN              BV(7)
+#define IOCFG_GPIO_CFG_ATRAN              (1<<7)
 
 /* GPIO functionality */
 /* Assert when THR is reached or EOP; de-assert on empty RxFIFO */
