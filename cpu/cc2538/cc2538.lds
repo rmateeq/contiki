@@ -69,6 +69,9 @@ MEMORY
     SRAM (RWX) : ORIGIN = SRAM_START, LENGTH = SRAM_LEN
 }
 
+//End of HEAP, BEGIN is relative, see below.
+_eheapdata = SRAM_START + SRAM_LEN;
+
 SECTIONS
 {
     .text :
@@ -103,6 +106,8 @@ SECTIONS
         *(.bss*)
         *(COMMON)
         _ebss = .;
+        //Begin of HEAP, END is absolute, see above.
+        _heapdata  = ABSOLUTE(.);
     } > SRAM
 
 #if (LPM_CONF_MAX_PM==2) && (LPM_CONF_ENABLE != 0)
