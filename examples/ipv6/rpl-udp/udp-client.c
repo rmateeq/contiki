@@ -109,6 +109,9 @@ print_local_addresses(void)
       }
     }
   }
+  PRINTF("Server address: ");
+  PRINT6ADDR(&server_ipaddr);
+  PRINTF("\n");
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -131,16 +134,7 @@ set_global_address(void)
  * Note the IPCMV6 checksum verification depends on the correct uncompressed addresses.
  */
  
-#if 0
-/* Mode 1 - 64 bits inline */
-   uip_ip6addr(&server_ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 1);
-#elif 1
-/* Mode 2 - 16 bits inline */
-  uip_ip6addr(&server_ipaddr, 0xaaaa, 0, 0, 0, 0, 0x00ff, 0xfe00, 1);
-#else
-/* Mode 3 - derived from server link-local (MAC) address */
-  uip_ip6addr(&server_ipaddr, 0xaaaa, 0, 0, 0, 0x0250, 0xc2ff, 0xfea8, 0xcd1a); //redbee-econotag
-#endif
+  uip_ip6addr(&server_ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 1);
 }
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(udp_client_process, ev, data)

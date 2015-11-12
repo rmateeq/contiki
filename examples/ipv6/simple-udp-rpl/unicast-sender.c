@@ -39,7 +39,7 @@
 #include "net/ip/uip-debug.h"
 
 #include "sys/node-id.h"
-
+#include "dev/leds.h"
 #include "simple-udp.h"
 #include "servreg-hack.h"
 

@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2015, George Oikonomou - <george@contiki-os.org>
+ * Copyright (c) 2012, Texas Instruments Incorporated - http://www.ti.com/
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- *
  * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
+ *
  * 3. Neither the name of the copyright holder nor the names of its
  *    contributors may be used to endorse or promote products derived
  *    from this software without specific prior written permission.
@@ -30,24 +30,24 @@
  */
 /*---------------------------------------------------------------------------*/
 /**
- * \file
- *    Project specific configuration defines for the Ubidots demo
+ * \addtogroup cc2538-mqtt-demo
+ * @{
  *
- * \author
- *    George Oikonomou - <george@contiki-os.org>,
+ * \file
+ * Project specific configuration defines for the MQTT demo
  */
 /*---------------------------------------------------------------------------*/
 #ifndef PROJECT_CONF_H_
 #define PROJECT_CONF_H_
 /*---------------------------------------------------------------------------*/
 /* User configuration */
-#define UBIDOTS_CONF_IN_BUFFER_SIZE    64
-#define UBIDOTS_CONF_REMOTE_HOST       "64:ff9b::3217:7c44"
-#define UBIDOTS_DEMO_CONF_UPTIME       "XXX"
-#define UBIDOTS_DEMO_CONF_SEQUENCE     "XXX"
-
+#define MQTT_DEMO_STATUS_LED      LEDS_GREEN
+#define MQTT_DEMO_PUBLISH_TRIGGER &button_right_sensor
+#define MQTT_DEMO_BROKER_IP_ADDR "aaaa::1"
+#define BOARD_STRING "Antonio"
 #undef NETSTACK_CONF_RDC
 #define NETSTACK_CONF_RDC     nullrdc_driver
 /*---------------------------------------------------------------------------*/
 #endif /* PROJECT_CONF_H_ */
 /*---------------------------------------------------------------------------*/
+/** @} */

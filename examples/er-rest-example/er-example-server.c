@@ -94,9 +94,9 @@ extern resource_t res_battery;
 #include "dev/radio-sensor.h"
 extern resource_t res_radio;
 #endif
-#if PLATFORM_HAS_SHT11
-#include "dev/sht11/sht11-sensor.h"
-extern resource_t res_sht11;
+#if PLATFORM_HAS_SHT25
+#include "dev/sht25.h"
+extern resource_t res_sht25;
 #endif
 */
 
@@ -140,7 +140,7 @@ PROCESS_THREAD(er_example_server, ev, data)
 /*  rest_activate_resource(&res_sub, "test/sub"); */
 /*  rest_activate_resource(&res_b1_sep_b2, "test/b1sepb2"); */
 #if PLATFORM_HAS_LEDS
-/*  rest_activate_resource(&res_leds, "actuators/leds"); */
+  rest_activate_resource(&res_leds, "actuators/leds");
   rest_activate_resource(&res_toggle, "actuators/toggle");
 #endif
 #if PLATFORM_HAS_LIGHT
@@ -160,9 +160,9 @@ PROCESS_THREAD(er_example_server, ev, data)
   rest_activate_resource(&res_radio, "sensors/radio");  
   SENSORS_ACTIVATE(radio_sensor);  
 #endif
-#if PLATFORM_HAS_SHT11
-  rest_activate_resource(&res_sht11, "sensors/sht11");  
-  SENSORS_ACTIVATE(sht11_sensor);  
+#if PLATFORM_HAS_SHT25
+  rest_activate_resource(&res_sht25, "sensors/sht25");  
+  SENSORS_ACTIVATE(sht25);  
 #endif
 */
 

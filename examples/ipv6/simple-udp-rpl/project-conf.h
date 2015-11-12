@@ -29,23 +29,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*---------------------------------------------------------------------------*/
-/**
- * \file
- *    Project specific configuration defines for the Ubidots demo
- *
- * \author
- *    George Oikonomou - <george@contiki-os.org>,
- */
-/*---------------------------------------------------------------------------*/
 #ifndef PROJECT_CONF_H_
 #define PROJECT_CONF_H_
 /*---------------------------------------------------------------------------*/
 /* User configuration */
-#define UBIDOTS_CONF_IN_BUFFER_SIZE    64
-#define UBIDOTS_CONF_REMOTE_HOST       "64:ff9b::3217:7c44"
-#define UBIDOTS_DEMO_CONF_UPTIME       "XXX"
-#define UBIDOTS_DEMO_CONF_SEQUENCE     "XXX"
-
 #undef NETSTACK_CONF_RDC
 #define NETSTACK_CONF_RDC     nullrdc_driver
 /*---------------------------------------------------------------------------*/

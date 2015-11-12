@@ -37,11 +37,12 @@
 #include "net/ip/uip.h"
 #include "net/ipv6/uip-ds6.h"
 #include "net/ip/uip-debug.h"
-
+#include "dev/leds.h"
 #include "simple-udp.h"
 #include "servreg-hack.h"
 
 #include "net/rpl/rpl.h"
+#include "dev/cc2420/cc2420.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -67,10 +68,14 @@ receiver(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
-  printf("Data received from ");
-  uip_debug_ipaddr_print(sender_addr);
-  printf(" on port %d from port %d with length %d: '%s'\n",
-         receiver_port, sender_port, datalen, data);
+  PRINTF("Data received from ");
+  leds_toggle(LEDS_GREEN);
+  #ifdef DEBUG
+    uip_debug_ipaddr_print(sender_addr);
+  #endif
+  PRINTF(" on port %d from port %d\n", receiver_port, sender_port);
+  PRINTF("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(), cc2420_last_rssi,
+                                      cc2420_last_correlation);
 }
 /*---------------------------------------------------------------------------*/
 static uip_ipaddr_t *
@@ -84,13 +89,13 @@ set_global_address(void)
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
-  printf("IPv6 addresses: ");
+  PRINTF("IPv6 addresses: ");
   for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
     state = uip_ds6_if.addr_list[i].state;
     if(uip_ds6_if.addr_list[i].isused &&
        (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) {
       uip_debug_ipaddr_print(&uip_ds6_if.addr_list[i].ipaddr);
-      printf("\n");
+      PRINTF("\n");
     }
   }
 

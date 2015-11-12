@@ -1,5 +1,6 @@
 all: udp-client udp-server
 APPS=servreg-hack
+DEFINES+=PROJECT_CONF_H=\"project-conf.h\"
 CONTIKI=../../..
 
 ifdef WITH_COMPOWER
