@@ -35,7 +35,10 @@
 #include "sys/ctimer.h"
 #include "sys/etimer.h"
 #include "net/ip/uip.h"
+#include "dev/leds.h"
 #include "net/ipv6/uip-ds6.h"
+#include "net/ip/uip-debug.h"
+#include "dev/cc2420/cc2420.h"
 
 #include "simple-udp.h"
 
@@ -45,7 +48,7 @@
 
 #define UDP_PORT 1234
 
-#define SEND_INTERVAL		(20 * CLOCK_SECOND)
+#define SEND_INTERVAL		(5 * CLOCK_SECOND)
 #define SEND_TIME		(random_rand() % (SEND_INTERVAL))
 
 static struct simple_udp_connection broadcast_connection;
@@ -63,14 +66,21 @@ receiver(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
-  printf("Data received on port %d from port %d with length %d\n",
+  leds_toggle(LEDS_GREEN);
+  printf("\n***\nMessage from: ");
+  uip_debug_ipaddr_print(sender_addr);
+  printf("\nData received on port %d from port %d with length %d\n",
          receiver_port, sender_port, datalen);
+  printf("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(), cc2420_last_rssi,
+                                     cc2420_last_correlation);
+  printf("Mesage: %s\n", data);
 }
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(broadcast_example_process, ev, data)
 {
   static struct etimer periodic_timer;
   static struct etimer send_timer;
+  static const char *msg = "Hello, I'm using a Z1 mote!";
   uip_ipaddr_t addr;
 
   PROCESS_BEGIN();
@@ -80,15 +90,19 @@ PROCESS_THREAD(broadcast_example_process, ev, data)
                       receiver);
 
   etimer_set(&periodic_timer, SEND_INTERVAL);
+
+  printf("Start sending broadcasts\n");
+
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
     etimer_reset(&periodic_timer);
     etimer_set(&send_timer, SEND_TIME);
 
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&send_timer));
-    printf("Sending broadcast\n");
+
     uip_create_linklocal_allnodes_mcast(&addr);
-    simple_udp_sendto(&broadcast_connection, "Test", 4, &addr);
+    simple_udp_sendto(&broadcast_connection, msg, strlen(msg), &addr);
+    leds_toggle(LEDS_BLUE);
   }
 
   PROCESS_END();

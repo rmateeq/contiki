@@ -70,9 +70,7 @@ receiver(struct simple_udp_connection *c,
 {
   PRINTF("Data received from ");
   leds_toggle(LEDS_GREEN);
-  #ifdef DEBUG
-    uip_debug_ipaddr_print(sender_addr);
-  #endif
+  uip_debug_ipaddr_print(sender_addr);
   PRINTF(" on port %d from port %d\n", receiver_port, sender_port);
   PRINTF("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(), cc2420_last_rssi,
                                       cc2420_last_correlation);
