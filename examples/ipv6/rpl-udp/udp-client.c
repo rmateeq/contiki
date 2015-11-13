@@ -34,8 +34,14 @@
 #include "net/ipv6/uip-ds6.h"
 #include "net/ip/uip-udp-packet.h"
 #include "sys/ctimer.h"
+#include "../simple-udp-rpl/test-example.h"
 #include <stdio.h>
 #include <string.h>
+
+#include "dev/adxl345.h"
+#include "dev/battery-sensor.h"
+#include "dev/i2cmaster.h"
+#include "dev/tmp102.h"
 
 #define UDP_CLIENT_PORT 8765
 #define UDP_SERVER_PORT 5678
@@ -45,18 +51,17 @@
 #define DEBUG DEBUG_PRINT
 #include "net/ip/uip-debug.h"
 
-#ifndef PERIOD
-#define PERIOD 60
-#endif
-
-#define START_INTERVAL		(15 * CLOCK_SECOND)
-#define SEND_INTERVAL		(PERIOD * CLOCK_SECOND)
+/*---------------------------------------------------------------------------*/
+#define START_INTERVAL		(5 * CLOCK_SECOND)
+#define SEND_INTERVAL		(5 * CLOCK_SECOND)
 #define SEND_TIME		(random_rand() % (SEND_INTERVAL))
-#define MAX_PAYLOAD_LEN		30
-
+#define MAX_PAYLOAD_LEN		64
+/*---------------------------------------------------------------------------*/
 static struct uip_udp_conn *client_conn;
 static uip_ipaddr_t server_ipaddr;
-
+/*---------------------------------------------------------------------------*/
+static struct my_msg_t msg;
+static struct my_msg_t *msgPtr = &msg;
 /*---------------------------------------------------------------------------*/
 PROCESS(udp_client_process, "UDP client process");
 AUTOSTART_PROCESSES(&udp_client_process);
@@ -76,14 +81,17 @@ tcpip_handler(void)
 static void
 send_packet(void *ptr)
 {
-  static int seq_id;
-  char buf[MAX_PAYLOAD_LEN];
 
-  seq_id++;
-  PRINTF("DATA send to %d 'Hello %d'\n",
-         server_ipaddr.u8[sizeof(server_ipaddr.u8) - 1], seq_id);
-  sprintf(buf, "Hello %d from the client", seq_id);
-  uip_udp_packet_sendto(client_conn, buf, strlen(buf),
+  static uint16_t temp;
+
+  /* Read from the sensors */
+  temp  = tmp102_read_temp_x100();
+  msg.temp = temp;
+
+  PRINTF("Send temperature reading %u to %u'\n",
+         temp, server_ipaddr.u8[sizeof(server_ipaddr.u8) - 1]);
+
+  uip_udp_packet_sendto(client_conn, msgPtr, sizeof(msg),
                         &server_ipaddr, UIP_HTONS(UDP_SERVER_PORT));
 }
 /*---------------------------------------------------------------------------*/
@@ -149,12 +157,18 @@ PROCESS_THREAD(udp_client_process, ev, data)
 
   print_local_addresses();
 
+  /* Initialize the sensors */
+  tmp102_init();
+  accm_init();
+  SENSORS_ACTIVATE(battery_sensor);
+
   /* new connection with remote host */
   client_conn = udp_new(NULL, UIP_HTONS(UDP_SERVER_PORT), NULL); 
   if(client_conn == NULL) {
     PRINTF("No UDP connection available, exiting the process!\n");
     PROCESS_EXIT();
   }
+
   udp_bind(client_conn, UIP_HTONS(UDP_CLIENT_PORT)); 
 
   PRINTF("Created a connection with the server ");
@@ -163,6 +177,7 @@ PROCESS_THREAD(udp_client_process, ev, data)
 	UIP_HTONS(client_conn->lport), UIP_HTONS(client_conn->rport));
 
   etimer_set(&periodic, SEND_INTERVAL);
+
   while(1) {
     PROCESS_YIELD();
     if(ev == tcpip_event) {
