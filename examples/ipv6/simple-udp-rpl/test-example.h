@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Zolertia(TM) is a trademark of Advancare,SL
+ * Copyright (c) 2015, Zolertia S.L
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,54 +26,25 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This file is part of the Contiki operating system.
- *
  */
-
 /**
- * \file
- *         Testing the internal MSP430 battery sensor on the Zolertia Z1 Platform.
- * \author
- *         Enric M. Calvo <ecalvo@zolertia.com>
+ * \author Antonio Lignan <alinan@zolertia.com>
  */
 
-
-#include "contiki.h"
-#include "dev/battery-sensor.h"
-#include <stdio.h>
-
-
-float
-floor(float x)
-{
-  if(x >= 0.0f) {
-    return (float) ((int) x);
-  } else {
-    return (float) ((int) x - 1);
-  }
-}
-
+#ifndef __TEST_EXAMPLE__
+#define __TEST_EXAMPLE__
 /*---------------------------------------------------------------------------*/
-PROCESS(test_battery_process, "Battery Sensor Test");
-AUTOSTART_PROCESSES(&test_battery_process);
+#define UDP_PORT   1234
+#define SERVICE_ID 190
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_battery_process, ev, data)
-{
-
-  PROCESS_BEGIN();
-
-  SENSORS_ACTIVATE(battery_sensor);
-
-  while(1) {
-    uint16_t bateria = battery_sensor.value(0);
-    float mv = (bateria * 2.500 * 2) / 4096;
-    printf("Battery: %i (%ld.%03d mV)\n", bateria, (long) mv,
-	   (unsigned) ((mv - floor(mv)) * 1000));
-  }
-
-  SENSORS_DEACTIVATE(battery_sensor);
-
-  PROCESS_END();
-}
-
+struct my_msg_t {
+  uint8_t  id;
+  uint16_t counter;
+  uint16_t temp;
+  uint8_t  x_axis;
+  uint8_t  y_axis;
+  uint8_t  z_axis;
+  uint16_t battery;
+};
 /*---------------------------------------------------------------------------*/
+#endif /* __TEST_EXAMPLE__ */

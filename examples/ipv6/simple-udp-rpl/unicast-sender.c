@@ -41,17 +41,24 @@
 #include "sys/node-id.h"
 #include "dev/leds.h"
 #include "simple-udp.h"
+#include "test-example.h"
 #include "servreg-hack.h"
+#include "dev/cc2420/cc2420.h"
 
 #include <stdio.h>
 #include <string.h>
 
-#define UDP_PORT 1234
-#define SERVICE_ID 190
+#include "dev/adxl345.h"
+#include "dev/battery-sensor.h"
+#include "dev/i2cmaster.h"
+#include "dev/tmp102.h"
 
-#define SEND_INTERVAL		(5 * CLOCK_SECOND)
-#define SEND_TIME		(random_rand() % (SEND_INTERVAL))
+#define ID              8
+#define SEND_INTERVAL	(5 * CLOCK_SECOND)
+#define SEND_TIME	(random_rand() % (SEND_INTERVAL))
 
+static struct my_msg_t msg;
+static struct my_msg_t *msgPtr = &msg;
 static struct simple_udp_connection unicast_connection;
 
 /*---------------------------------------------------------------------------*/
@@ -67,8 +74,14 @@ receiver(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
-  printf("Data received on port %d from port %d with length %d\n",
+  leds_toggle(LEDS_GREEN);
+  printf("\n***\nMessage from: ");
+  uip_debug_ipaddr_print(sender_addr);
+  printf("\nData received on port %d from port %d with length %d\n",
          receiver_port, sender_port, datalen);
+  printf("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(), cc2420_last_rssi,
+                                     cc2420_last_correlation);
+  printf("Mesage: %s\n", data);
 }
 /*---------------------------------------------------------------------------*/
 static void
@@ -97,10 +110,17 @@ PROCESS_THREAD(unicast_sender_process, ev, data)
 {
   static struct etimer periodic_timer;
   static struct etimer send_timer;
+
   uip_ipaddr_t *addr;
 
   PROCESS_BEGIN();
 
+  /* Initialize the sensors */
+  tmp102_init();
+  accm_init();
+  SENSORS_ACTIVATE(battery_sensor);
+
+  /* Register and start sending */
   servreg_hack_init();
 
   set_global_address();
@@ -109,6 +129,7 @@ PROCESS_THREAD(unicast_sender_process, ev, data)
                       NULL, UDP_PORT, receiver);
 
   etimer_set(&periodic_timer, SEND_INTERVAL);
+
   while(1) {
 
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
@@ -117,18 +138,43 @@ PROCESS_THREAD(unicast_sender_process, ev, data)
 
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&send_timer));
     addr = servreg_hack_lookup(SERVICE_ID);
-    if(addr != NULL) {
-      static unsigned int message_number;
-      char buf[20];
 
-      printf("Sending unicast to ");
+    msg.id = ID;
+
+    if(addr != NULL) {
+
+      static uint16_t temp;
+      static uint16_t batt;
+      static uint8_t x_val;
+      static uint8_t y_val;
+      static uint8_t z_val;
+      static unsigned int message_number;
+
+      printf("\n***\nSending unicast to ");
       uip_debug_ipaddr_print(addr);
-      printf("\n");
-      sprintf(buf, "Message %d", message_number);
+
+      /* Read from the sensors */
+      batt = battery_sensor.value(0);
+      x_val = accm_read_axis(X_AXIS);
+      y_val = accm_read_axis(Y_AXIS);
+      z_val = accm_read_axis(Z_AXIS);
+      temp  = tmp102_read_temp_x100();
       message_number++;
-      simple_udp_sendto(&unicast_connection, buf, strlen(buf) + 1, addr);
+
+      /* Pack and send */
+      msg.counter = message_number;
+      msg.temp = temp;
+      msg.x_axis = x_val;
+      msg.y_axis = y_val;
+      msg.z_axis = z_val;
+      msg.battery = batt;
+
+      printf("\nData to sent:\n    temp: %u, x: %u, y: %u, z: %u, batt: %u, counter: %u\n",
+              temp, x_val, y_val, z_val, batt, message_number);
+
+      simple_udp_sendto(&unicast_connection, msgPtr, sizeof(msg), addr);
     } else {
-      printf("Service %d not found\n", SERVICE_ID);
+      printf("Searching for service %d\n", SERVICE_ID);
     }
   }
 

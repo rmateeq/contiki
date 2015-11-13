@@ -39,6 +39,7 @@
 #include "net/ip/uip-debug.h"
 #include "dev/leds.h"
 #include "simple-udp.h"
+#include "test-example.h"
 #include "servreg-hack.h"
 
 #include "net/rpl/rpl.h"
@@ -47,13 +48,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define UDP_PORT 1234
-#define SERVICE_ID 190
-
-#define SEND_INTERVAL		(10 * CLOCK_SECOND)
-#define SEND_TIME		(random_rand() % (SEND_INTERVAL))
-
-static struct simple_udp_connection unicast_connection;
+struct simple_udp_connection unicast_connection;
 
 /*---------------------------------------------------------------------------*/
 PROCESS(unicast_receiver_process, "Unicast receiver example process");
@@ -68,12 +63,19 @@ receiver(struct simple_udp_connection *c,
          const uint8_t *data,
          uint16_t datalen)
 {
-  PRINTF("Data received from ");
+
+  struct my_msg_t msg;
+  struct my_msg_t *msgPtr = data;
+
+  printf("\n***\nFrom ");
   leds_toggle(LEDS_GREEN);
   uip_debug_ipaddr_print(sender_addr);
-  PRINTF(" on port %d from port %d\n", receiver_port, sender_port);
-  PRINTF("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(), cc2420_last_rssi,
-                                      cc2420_last_correlation);
+  printf(" on port %d from port %d\n", receiver_port, sender_port);
+  printf("CH: %u RSSI: %d LQI %u\n", cc2420_get_channel(), cc2420_last_rssi,
+                                     cc2420_last_correlation);
+  printf("Data received:\n    ID: %u, temp: %u, x: %u, y: %u, z: %u, batt: %u, counter: %u\n",
+          msgPtr->id, msgPtr->temp, msgPtr->x_axis, msgPtr->y_axis, msgPtr->z_axis,
+          msgPtr->battery, msgPtr->counter);
 }
 /*---------------------------------------------------------------------------*/
 static uip_ipaddr_t *
@@ -87,13 +89,13 @@ set_global_address(void)
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
-  PRINTF("IPv6 addresses: ");
+  printf("IPv6 addresses: ");
   for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
     state = uip_ds6_if.addr_list[i].state;
     if(uip_ds6_if.addr_list[i].isused &&
        (state == ADDR_TENTATIVE || state == ADDR_PREFERRED)) {
       uip_debug_ipaddr_print(&uip_ds6_if.addr_list[i].ipaddr);
-      PRINTF("\n");
+      printf("\n");
     }
   }
 
@@ -114,9 +116,9 @@ create_rpl_dag(uip_ipaddr_t *ipaddr)
     dag = rpl_get_any_dag();
     uip_ip6addr(&prefix, 0xaaaa, 0, 0, 0, 0, 0, 0, 0);
     rpl_set_prefix(dag, &prefix, 64);
-    PRINTF("created a new RPL dag\n");
+    printf("created a new RPL dag\n");
   } else {
-    PRINTF("failed to create a new RPL DAG\n");
+    printf("failed to create a new RPL DAG\n");
   }
 }
 /*---------------------------------------------------------------------------*/
@@ -136,6 +138,9 @@ PROCESS_THREAD(unicast_receiver_process, ev, data)
 
   simple_udp_register(&unicast_connection, UDP_PORT,
                       NULL, UDP_PORT, receiver);
+
+  /* Wait for messages to arrive */
+  printf("Prepared to received messages\n");
 
   while(1) {
     PROCESS_WAIT_EVENT();
