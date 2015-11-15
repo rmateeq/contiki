@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Zolertia(TM) is a trademark of Advancare,SL
+ * Copyright (c) 2015, Zolertia <http://www.zolertia.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,44 +29,54 @@
  * This file is part of the Contiki operating system.
  *
  */
-
 /**
  * \file
- *         Testing the internal MSP430 battery sensor on the Zolertia Z1 Platform.
+ *         A quick program for testing the Grove's loudness sensor
  * \author
- *         Enric M. Calvo <ecalvo@zolertia.com>
+ *         Antonio Lignan <alinan@zolertia.com>
  */
-/*---------------------------------------------------------------------------*/
-#include "contiki.h"
-#include "dev/battery-sensor.h"
 #include <stdio.h>
+#include "contiki.h"
+#include "dev/leds.h"
+#include "dev/button-sensor.h"
+#include "dev/z1-phidgets.h"
 /*---------------------------------------------------------------------------*/
-float
-floor(float x)
+#define PERIOD  (CLOCK_SECOND/4)
+/*---------------------------------------------------------------------------*/
+PROCESS(test_grove_loud_process, "Test grove loudness sensor");
+AUTOSTART_PROCESSES(&test_grove_loud_process);
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(test_grove_loud_process, ev, data)
 {
-  if(x >= 0.0f) {
-    return (float) ((int) x);
-  } else {
-    return (float) ((int) x - 1);
-  }
-}
-/*---------------------------------------------------------------------------*/
-PROCESS(test_battery_process, "Battery Sensor Test");
-AUTOSTART_PROCESSES(&test_battery_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_battery_process, ev, data)
-{
+  static uint16_t noise;
+  static struct etimer et;
   PROCESS_BEGIN();
-
-  SENSORS_ACTIVATE(battery_sensor);
+  SENSORS_ACTIVATE(phidgets);
 
   while(1) {
-    uint16_t bateria = battery_sensor.value(0);
-    float mv = (bateria * 2.500 * 2) / 4096;
-    printf("Battery: %i (%ld.%03d mV)\n", bateria, (long) mv,
-	   (unsigned) ((mv - floor(mv)) * 1000));
+    etimer_set(&et, PERIOD);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+    noise = phidgets.value(PHIDGET3V_2);
+    printf("Noise (ADC):%u\n", noise);
+
+    if(noise < 100) {
+      leds_off(LEDS_ALL);
+    }
+
+    if((noise >= 100) && (noise < 500)) {
+      leds_on(LEDS_BLUE);
+      leds_off(LEDS_GREEN | LEDS_RED);
+    }
+
+    if((noise >= 500) && (noise < 900)) {
+      leds_on(LEDS_GREEN | LEDS_BLUE);
+      leds_off(LEDS_RED);
+    }
+
+    if(noise >= 900) {
+      leds_on(LEDS_ALL);
+    }
   }
-  SENSORS_DEACTIVATE(battery_sensor);
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

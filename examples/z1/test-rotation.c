@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Zolertia(TM) is a trademark of Advancare,SL
+ * Copyright (c) 2015, Zolertia <http://www.zolertia.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,44 +29,58 @@
  * This file is part of the Contiki operating system.
  *
  */
-
 /**
  * \file
- *         Testing the internal MSP430 battery sensor on the Zolertia Z1 Platform.
+ *         A quick program for testing the Phidget rotation sensor (PN1109)
  * \author
- *         Enric M. Calvo <ecalvo@zolertia.com>
+ *         Antonio Lignan <alinan@zolertia.com>
  */
-/*---------------------------------------------------------------------------*/
-#include "contiki.h"
-#include "dev/battery-sensor.h"
 #include <stdio.h>
+#include "contiki.h"
+#include "dev/leds.h"
+#include "dev/button-sensor.h"
+#include "dev/z1-phidgets.h"
 /*---------------------------------------------------------------------------*/
-float
-floor(float x)
+#define PERIOD  (CLOCK_SECOND/2)
+/*---------------------------------------------------------------------------*/
+PROCESS(test_rotation_process, "Test Rotation sensor (300º)");
+AUTOSTART_PROCESSES(&test_rotation_process);
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(test_rotation_process, ev, data)
 {
-  if(x >= 0.0f) {
-    return (float) ((int) x);
-  } else {
-    return (float) ((int) x - 1);
-  }
-}
-/*---------------------------------------------------------------------------*/
-PROCESS(test_battery_process, "Battery Sensor Test");
-AUTOSTART_PROCESSES(&test_battery_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_battery_process, ev, data)
-{
+  static uint32_t rotation;
+  static struct etimer et;
   PROCESS_BEGIN();
-
-  SENSORS_ACTIVATE(battery_sensor);
+  SENSORS_ACTIVATE(phidgets);
 
   while(1) {
-    uint16_t bateria = battery_sensor.value(0);
-    float mv = (bateria * 2.500 * 2) / 4096;
-    printf("Battery: %i (%ld.%03d mV)\n", bateria, (long) mv,
-	   (unsigned) ((mv - floor(mv)) * 1000));
+    etimer_set(&et, PERIOD);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+    rotation = phidgets.value(PHIDGET3V_2);
+ 
+    /* Is a linear sensor, so 300/4095 = 0.07326, ADC*0.07326 = angle (º) */
+    rotation *= 7326;
+    rotation /= 100000;
+    printf("Rotation (º):%lu\n", rotation);
+
+    if(rotation <= 45) {
+      leds_off(LEDS_ALL);
+    }
+
+    if((rotation > 45) && (rotation < 150)) {
+      leds_on(LEDS_BLUE);
+      leds_off(LEDS_GREEN | LEDS_RED);
+    }
+
+    if((rotation > 150) && (rotation < 250)) {
+      leds_on(LEDS_GREEN | LEDS_BLUE);
+      leds_off(LEDS_RED);
+    }
+
+    if(rotation >= 250) {
+      leds_on(LEDS_ALL);
+    }
   }
-  SENSORS_DEACTIVATE(battery_sensor);
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

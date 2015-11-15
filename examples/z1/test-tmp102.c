@@ -36,64 +36,39 @@
  * \author
  *         Enric M. Calvo <ecalvo@zolertia.com>
  */
-
+/*---------------------------------------------------------------------------*/
 #include <stdio.h>
 #include "contiki.h"
 #include "dev/i2cmaster.h"
 #include "dev/tmp102.h"
-
-
-#if 1
+/*---------------------------------------------------------------------------*/
+#define DEBUG  1
+#if DEBUG
 #define PRINTF(...) printf(__VA_ARGS__)
 #else
 #define PRINTF(...)
 #endif
-
-
-#if 0
-#define PRINTFDEBUG(...) printf(__VA_ARGS__)
-#else
-#define PRINTFDEBUG(...)
-#endif
-
-
+/*---------------------------------------------------------------------------*/
 #define TMP102_READ_INTERVAL (CLOCK_SECOND/2)
-
-PROCESS(temp_process, "Test Temperature process");
+/*---------------------------------------------------------------------------*/
+PROCESS(temp_process, "Test TMP102 sensor");
 AUTOSTART_PROCESSES(&temp_process);
 /*---------------------------------------------------------------------------*/
 static struct etimer et;
-
+/*---------------------------------------------------------------------------*/
 PROCESS_THREAD(temp_process, ev, data)
 {
   PROCESS_BEGIN();
 
   int16_t tempint;
-  uint16_t tempfrac;
-  int16_t raw;
-  uint16_t absraw;
-  int16_t sign;
-  char minus = ' ';
 
   tmp102_init();
 
   while(1) {
     etimer_set(&et, TMP102_READ_INTERVAL);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-
-    sign = 1;
-
-    PRINTFDEBUG("Reading Temp...\n");
-    raw = tmp102_read_temp_raw();
-    absraw = raw;
-    if(raw < 0) {		// Perform 2C's if sensor returned negative data
-      absraw = (raw ^ 0xFFFF) + 1;
-      sign = -1;
-    }
-    tempint = (absraw >> 8) * sign;
-    tempfrac = ((absraw >> 4) % 16) * 625;	// Info in 1/10000 of degree
-    minus = ((tempint == 0) & (sign == -1)) ? '-' : ' ';
-    PRINTF("Temp = %c%d.%04d\n", minus, tempint, tempfrac);
+    tempint = tmp102_read_temp_x100();
+    PRINTF("Temp = %d.%02dºC\n", tempint/100, tempint%100);
   }
   PROCESS_END();
 }

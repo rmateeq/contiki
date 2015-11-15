@@ -39,18 +39,14 @@
  *         Marcus Lundén, SICS <mlunden@sics.se>
  *         Enric M. Calvo, Zolertia <ecalvo@zolertia.com>
  */
-
+/*---------------------------------------------------------------------------*/
 #include <stdio.h>
 #include "contiki.h"
-#include "serial-shell.h"
-#include "shell-ps.h"
-#include "shell-file.h"
-#include "shell-text.h"
 #include "dev/adxl345.h"
-
-#define LED_INT_ONTIME        CLOCK_SECOND/2
-#define ACCM_READ_INTERVAL    CLOCK_SECOND
-
+/*---------------------------------------------------------------------------*/
+#define LED_INT_ONTIME        (CLOCK_SECOND/2)
+#define ACCM_READ_INTERVAL    (CLOCK_SECOND)
+/*---------------------------------------------------------------------------*/
 static process_event_t ledOff_event;
 /*---------------------------------------------------------------------------*/
 PROCESS(accel_process, "Test Accel process");
@@ -94,7 +90,6 @@ print_int(uint16_t reg){
   }
   printf("\n");
 }
-
 /*---------------------------------------------------------------------------*/
 /* accelerometer free fall detection callback */
 
@@ -138,39 +133,13 @@ PROCESS_THREAD(led_process, ev, data) {
   }
   PROCESS_END();
 }
-
 /*---------------------------------------------------------------------------*/
-/*  Returns a string with the argument byte written in binary.
-    Example usage:
-      printf("Port1: %s\n", char2bin(P1IN));
-*/    
-/*
-static uint8_t b[9];
-
-static uint8_t
-*char2bin(uint8_t x) {
-  uint8_t z;
-  b[8] = '\0';
-  for (z = 0; z < 8; z++) {
-    b[7-z] = (x & (1 << z)) ? '1' : '0';
-  }
-  return b;
-}
-*/
-/*---------------------------------------------------------------------------*/
-/* Main process, setups  */
-
 static struct etimer et;
-
+/*---------------------------------------------------------------------------*/
 PROCESS_THREAD(accel_process, ev, data) {
   PROCESS_BEGIN();
   {
     int16_t x, y, z;
-
-    serial_shell_init();
-    shell_ps_init();
-    shell_file_init();  // for printing out files
-    shell_text_init();  // for binprint
 
     /* Register the event used for lighting up an LED when interrupt strikes. */
     ledOff_event = process_alloc_event();

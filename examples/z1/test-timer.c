@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Zolertia(TM) is a trademark of Advancare,SL
+ * Copyright (c) 2015, Zolertia <http://www.zolertia.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,44 +29,32 @@
  * This file is part of the Contiki operating system.
  *
  */
-
 /**
  * \file
- *         Testing the internal MSP430 battery sensor on the Zolertia Z1 Platform.
+ *         A quick program for testing the event timer
  * \author
- *         Enric M. Calvo <ecalvo@zolertia.com>
+ *         Antonio Lignan <alinan@zolertia.com>
  */
-/*---------------------------------------------------------------------------*/
 #include "contiki.h"
-#include "dev/battery-sensor.h"
+#include "dev/leds.h"
+#include "dev/button-sensor.h"
 #include <stdio.h>
-/*---------------------------------------------------------------------------*/
-float
-floor(float x)
-{
-  if(x >= 0.0f) {
-    return (float) ((int) x);
-  } else {
-    return (float) ((int) x - 1);
-  }
-}
-/*---------------------------------------------------------------------------*/
-PROCESS(test_battery_process, "Battery Sensor Test");
-AUTOSTART_PROCESSES(&test_battery_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_battery_process, ev, data)
+#define  PERIOD    (CLOCK_SECONDS * 2)
+/*-------------------------------------------------*/
+PROCESS(test_etimer_process, "Test etimer example");
+AUTOSTART_PROCESSES(&test_etimer_process);
+/*-------------------------------------------------*/
+PROCESS_THREAD(test_etimer_process, ev, data)
 {
   PROCESS_BEGIN();
-
-  SENSORS_ACTIVATE(battery_sensor);
-
+  static struct etimer et;
   while(1) {
-    uint16_t bateria = battery_sensor.value(0);
-    float mv = (bateria * 2.500 * 2) / 4096;
-    printf("Battery: %i (%ld.%03d mV)\n", bateria, (long) mv,
-	   (unsigned) ((mv - floor(mv)) * 1000));
+    etimer_set(&et, PERIOD);
+    PROCESS_WAIT_EVENT();
+    if(etimer_expired(&et)) {
+      printf("Hello WALC 2015!\n");
+      etimer_reset(&et);
+    }
   }
-  SENSORS_DEACTIVATE(battery_sensor);
   PROCESS_END();
 }
-/*---------------------------------------------------------------------------*/

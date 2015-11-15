@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Zolertia(TM) is a trademark of Advancare,SL
+ * Copyright (c) 2015, Zolertia <http://www.zolertia.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,44 +29,40 @@
  * This file is part of the Contiki operating system.
  *
  */
-
 /**
  * \file
- *         Testing the internal MSP430 battery sensor on the Zolertia Z1 Platform.
+ *         A quick program for testing the Grove's light sensor
  * \author
- *         Enric M. Calvo <ecalvo@zolertia.com>
+ *         Antonio Lignan <alinan@zolertia.com>
  */
-/*---------------------------------------------------------------------------*/
-#include "contiki.h"
-#include "dev/battery-sensor.h"
 #include <stdio.h>
+#include "contiki.h"
+#include "dev/leds.h"
+#include "dev/button-sensor.h"
+#include "dev/z1-phidgets.h"
 /*---------------------------------------------------------------------------*/
-float
-floor(float x)
+#define PERIOD  (CLOCK_SECOND/2)
+/*---------------------------------------------------------------------------*/
+PROCESS(test_grove_light_process, "Test grove light sensor");
+AUTOSTART_PROCESSES(&test_grove_light_process);
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(test_grove_light_process, ev, data)
 {
-  if(x >= 0.0f) {
-    return (float) ((int) x);
-  } else {
-    return (float) ((int) x - 1);
-  }
-}
-/*---------------------------------------------------------------------------*/
-PROCESS(test_battery_process, "Battery Sensor Test");
-AUTOSTART_PROCESSES(&test_battery_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_battery_process, ev, data)
-{
+  static uint16_t light;
+  static struct etimer et;
   PROCESS_BEGIN();
-
-  SENSORS_ACTIVATE(battery_sensor);
+  SENSORS_ACTIVATE(phidgets);
 
   while(1) {
-    uint16_t bateria = battery_sensor.value(0);
-    float mv = (bateria * 2.500 * 2) / 4096;
-    printf("Battery: %i (%ld.%03d mV)\n", bateria, (long) mv,
-	   (unsigned) ((mv - floor(mv)) * 1000));
+    etimer_set(&et, PERIOD);
+    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+    light = phidgets.value(PHIDGET3V_2);
+    printf("Light reading (ADC):%u\n", light);
+
+    if(light < 300) {
+      leds_on(LEDS_GREEN);s
+    }
   }
-  SENSORS_DEACTIVATE(battery_sensor);
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

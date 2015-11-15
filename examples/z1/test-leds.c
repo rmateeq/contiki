@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Zolertia(TM) is a trademark of Advancare,SL
+ * Copyright (c) 2015, Zolertia <http://www.zolertia.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,44 +29,23 @@
  * This file is part of the Contiki operating system.
  *
  */
-
 /**
  * \file
- *         Testing the internal MSP430 battery sensor on the Zolertia Z1 Platform.
+ *         A quick program for testing the LEDs
  * \author
- *         Enric M. Calvo <ecalvo@zolertia.com>
+ *         Antonio Lignan <alinan@zolertia.com>
  */
-/*---------------------------------------------------------------------------*/
 #include "contiki.h"
-#include "dev/battery-sensor.h"
+#include "dev/leds.h"
 #include <stdio.h>
-/*---------------------------------------------------------------------------*/
-float
-floor(float x)
-{
-  if(x >= 0.0f) {
-    return (float) ((int) x);
-  } else {
-    return (float) ((int) x - 1);
-  }
-}
-/*---------------------------------------------------------------------------*/
-PROCESS(test_battery_process, "Battery Sensor Test");
-AUTOSTART_PROCESSES(&test_battery_process);
-/*---------------------------------------------------------------------------*/
-PROCESS_THREAD(test_battery_process, ev, data)
+/*-------------------------------------------------*/
+PROCESS(test_leds_process, "Test LEDs example");
+AUTOSTART_PROCESSES(&test_leds_process);
+/*-------------------------------------------------*/
+PROCESS_THREAD(test_leds_process, ev, data)
 {
   PROCESS_BEGIN();
-
-  SENSORS_ACTIVATE(battery_sensor);
-
-  while(1) {
-    uint16_t bateria = battery_sensor.value(0);
-    float mv = (bateria * 2.500 * 2) / 4096;
-    printf("Battery: %i (%ld.%03d mV)\n", bateria, (long) mv,
-	   (unsigned) ((mv - floor(mv)) * 1000));
-  }
-  SENSORS_DEACTIVATE(battery_sensor);
+  leds_on(LEDS_RED);
+  printf("The LED %u is %u\n", LEDS_RED, leds_get());
   PROCESS_END();
 }
-/*---------------------------------------------------------------------------*/

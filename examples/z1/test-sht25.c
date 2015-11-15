@@ -55,9 +55,9 @@ PROCESS_THREAD(test_sht25_process, ev, data)
     etimer_set(&et, CLOCK_SECOND);
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
     temperature = sht25.value(SHT25_VAL_TEMP);
-    printf("Temperature %d.%d ºC\n", temperature / 100, temperature % 100);
+    printf("Temperature %d.%02d ºC ", temperature / 100, temperature % 100);
     humidity = sht25.value(SHT25_VAL_HUM);
-    printf("Humidity %d.%d %RH\n", humidity / 100, humidity % 100);
+    printf("Humidity %d.%02d %RH\n", humidity / 100, humidity % 100);
   }
   PROCESS_END();
 }
