@@ -45,6 +45,7 @@
 #define UBIDOTS_CONF_REMOTE_HOST       "2607:f0d0:2101:39::2"
 #define UBIDOTS_DEMO_CONF_UPTIME       "XXX"
 #define UBIDOTS_DEMO_CONF_SEQUENCE     "XXX"
+#define UBIDOTS_DEMO_CONF_TMP102       "XXX"
 
 #undef NETSTACK_CONF_RDC
 #define NETSTACK_CONF_RDC     nullrdc_driver

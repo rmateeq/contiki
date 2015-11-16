@@ -44,6 +44,9 @@
 #include "dev/leds.h"
 #include "ubidots.h"
 
+#include "dev/i2cmaster.h"
+#include "dev/tmp102.h"
+
 #include <stdio.h>
 #include <string.h>
 /*---------------------------------------------------------------------------*/
@@ -58,7 +61,7 @@ PROCESS(ubidots_demo_process, "Ubidots demo process");
 AUTOSTART_PROCESSES(&ubidots_demo_process);
 /*---------------------------------------------------------------------------*/
 /* POST period */
-#define POST_PERIOD (CLOCK_SECOND * 30)
+#define POST_PERIOD (CLOCK_SECOND * 15)
 static struct etimer et;
 /*---------------------------------------------------------------------------*/
 #define VARIABLE_BUF_LEN 16
@@ -80,6 +83,7 @@ static const char *headers[] = {
  * primarily shows how to use the value argument depending on whether you
  * want to send a JSON string, number or boolean.
  */
+#if 0
 static void
 post_sequence_number(void)
 {
@@ -121,6 +125,7 @@ post_sequence_number(void)
     printf("post_variable: ubidots_post failed\n");
   }
 }
+#endif
 /*---------------------------------------------------------------------------*/
 /*
  * An example of how to post a collection: multiple different variables in
@@ -129,6 +134,8 @@ post_sequence_number(void)
 static void
 post_collection(void)
 {
+  static uint16_t temp;
+
   if(ubidots_prepare_post(NULL) == UBIDOTS_ERROR) {
     printf("post_collection: ubidots_prepare_post failed\n");
   }
@@ -147,6 +154,15 @@ post_collection(void)
   snprintf(variable_buffer, VARIABLE_BUF_LEN, "%u", sequence);
 
   if(ubidots_enqueue_value(UBIDOTS_DEMO_CONF_SEQUENCE, variable_buffer) == UBIDOTS_ERROR) {
+    printf("post_collection: ubidots_prepare_post failed\n");
+  }
+
+  /* Add the core temperature */
+  temp = tmp102_read_temp_x100();
+  memset(variable_buffer, 0, VARIABLE_BUF_LEN);
+  snprintf(variable_buffer, VARIABLE_BUF_LEN, "%u", temp);
+
+  if(ubidots_enqueue_value(UBIDOTS_DEMO_CONF_TMP102, variable_buffer) == UBIDOTS_ERROR) {
     printf("post_collection: ubidots_prepare_post failed\n");
   }
 
@@ -188,6 +204,8 @@ PROCESS_THREAD(ubidots_demo_process, ev, data)
 
   ubidots_init(&ubidots_demo_process, headers);
 
+  tmp102_init();
+
   sequence = 0;
 
   while(1) {
@@ -198,12 +216,8 @@ PROCESS_THREAD(ubidots_demo_process, ev, data)
        (ev == PROCESS_EVENT_TIMER && data == &et)) {
       leds_on(LEDS_GREEN);
       sequence++;
+      post_collection();
 
-      if(sequence & 1) {
-        post_sequence_number();
-      } else {
-        post_collection();
-      }
     } else if(ev == ubidots_event_post_sent) {
       leds_off(LEDS_GREEN);
       etimer_set(&et, POST_PERIOD);
