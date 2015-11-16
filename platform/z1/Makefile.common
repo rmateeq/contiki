@@ -1,5 +1,7 @@
 # Common Makefile between the Z1 and Z1SP
 
+WITH_RPI = 1
+
 ifdef GCC
 CFLAGS+=-Os -g
 endif
@@ -76,7 +78,11 @@ else
   # If we are not running under Mac, we assume Linux
     ifndef MOTELIST
       USBDEVPREFIX=
-      SERIALDUMP = $(CONTIKI)/tools/sky/serialdump-linux
+      ifeq ($(WITH_RPI), 1)
+        SERIALDUMP = $(CONTIKI)/tools/sky/serialdump-rpi
+      else
+        SERIALDUMP = $(CONTIKI)/tools/sky/serialdump-linux
+      endif
       MOTELIST = $(CONTIKI)/tools/z1/motelist-z1
       BSL = $(CONTIKI)/tools/z1/z1-bsl-nopic --z1
       BSL_FILETYPE = -I
