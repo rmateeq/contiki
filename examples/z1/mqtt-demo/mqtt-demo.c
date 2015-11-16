@@ -40,7 +40,8 @@
 #include "lib/sensors.h"
 #include "dev/button-sensor.h"
 #include "dev/leds.h"
-#include "dev/sht25.h"
+#include "dev/i2cmaster.h"
+#include "dev/tmp102.h"
 #include <string.h>
 /*---------------------------------------------------------------------------*/
 /*
@@ -104,7 +105,7 @@ static uint8_t state;
 #define NO_NET_LED_DURATION         (NET_CONNECT_PERIODIC >> 1)
 /*---------------------------------------------------------------------------*/
 /* Default configuration values */
-#define DEFAULT_TYPE_ID             "cc2538"
+#define DEFAULT_TYPE_ID             "z1"
 #define DEFAULT_AUTH_TOKEN          "AUTHZ"
 #define DEFAULT_EVENT_TYPE_ID       "status"
 #define DEFAULT_SUBSCRIBE_CMD_TYPE  "+"
@@ -463,18 +464,8 @@ publish(void)
   remaining -= len;
   buf_ptr += len;
 
-  value = sht25.value(SHT25_VAL_TEMP);
-  len = snprintf(buf_ptr, remaining, ",\"SHT25 Temp (mC)\":%d", value);
-
-  if(len < 0 || len >= remaining) {
-    printf("Buffer too short. Have %d, need %d + \\0\n", remaining, len);
-    return;
-  }
-  remaining -= len;
-  buf_ptr += len;
-
-  value = sht25.value(SHT25_VAL_HUM);
-  len = snprintf(buf_ptr, remaining, ",\"Humidity (RH)\":%d", value);
+  value = tmp102_read_temp_x100();
+  len = snprintf(buf_ptr, remaining, ",\"TMP102 Temp (mC)\":%d", value);
 
   if(len < 0 || len >= remaining) {
     printf("Buffer too short. Have %d, need %d + \\0\n", remaining, len);
@@ -671,7 +662,7 @@ PROCESS_THREAD(mqtt_demo_process, ev, data)
 
   update_config();
 
-  SENSORS_ACTIVATE(sht25);
+  tmp102_init();
 
   def_rt_rssi = 0x8000000;
   uip_icmp6_echo_reply_callback_add(&echo_reply_notification,

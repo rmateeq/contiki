@@ -29,25 +29,16 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*---------------------------------------------------------------------------*/
-/**
- * \addtogroup cc2538-mqtt-demo
- * @{
- *
- * \file
- * Project specific configuration defines for the MQTT demo
- */
-/*---------------------------------------------------------------------------*/
 #ifndef PROJECT_CONF_H_
 #define PROJECT_CONF_H_
 /*---------------------------------------------------------------------------*/
 /* User configuration */
 #define MQTT_DEMO_STATUS_LED      LEDS_GREEN
 #define MQTT_DEMO_PUBLISH_TRIGGER &button_right_sensor
-#define MQTT_DEMO_BROKER_IP_ADDR "aaaa::1"
-#define BOARD_STRING "Antonio"
+#define MQTT_DEMO_BROKER_IP_ADDR  "aaaa::1"
+#define BOARD_STRING              "WALC 2015"
 #undef NETSTACK_CONF_RDC
-#define NETSTACK_CONF_RDC     nullrdc_driver
+#define NETSTACK_CONF_RDC         nullrdc_driver
 /*---------------------------------------------------------------------------*/
 #endif /* PROJECT_CONF_H_ */
 /*---------------------------------------------------------------------------*/
-/** @} */
