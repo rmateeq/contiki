@@ -42,7 +42,7 @@
 /*---------------------------------------------------------------------------*/
 /* User configuration */
 #define UBIDOTS_CONF_IN_BUFFER_SIZE    64
-#define UBIDOTS_CONF_REMOTE_HOST       "64:ff9b::3217:7c44"
+#define UBIDOTS_CONF_REMOTE_HOST       "2607:f0d0:2101:39::2"
 #define UBIDOTS_DEMO_CONF_UPTIME       "XXX"
 #define UBIDOTS_DEMO_CONF_SEQUENCE     "XXX"
 

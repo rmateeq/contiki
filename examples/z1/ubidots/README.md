@@ -20,7 +20,9 @@ This example was developed, tested and should always work for the following
 platforms:
 
 * cc2538dk
-* srf06-cc26xx 
+* srf06-cc26xx
+* z1
+* Zoul (RE-Mote and Firefly)
 
 It is intentionally left entirely platform-independent, so more platforms
 should work.
