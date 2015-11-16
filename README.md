@@ -26,6 +26,51 @@ WALC 2015
 For the [WALC 2015](http://eslared.net/walc2015/?page_id=2&lang=es_ES) a week-workshop has been prepared, heavily based on
 Contiki and Zolertia platforms.  This years edition takes place in Costa Rica, hosted by the [TEC (Tecnologico de Costa Rica)](http://www.tec.ac.cr/Paginas/index.html)
 
+Agenda (Track 6 Internet of Things)
+---------------------------
+
+* Monday
+  - 11:00–12:00: Intro to IoT (Marco Zennaro)
+  - 12:00–12:30: Intro to the Lab (Alvaro Vives and Antonio Lignan)
+    - Intro to RPi and Zolertia motes
+    - Intro to IoT book
+    - Objective of the track and project introduction
+  -  Lunch
+  - 1:30–3:30: Intro to IPv6 (Alvaro Vives)
+  - 4:00–6:30: IPv6 Lab with Raspberry Pi (Alvaro Vives)
+    
+* Tuesday
+  - 8–10: IPv6 Advanced (Alvaro Vives)
+  - 10:30–12:00: IPv6 Lab and Wireshark (Alvaro Vives)
+  - Lunch
+  - 1:30–6:30: Product Canvas and Contiki Introduction: basics and sensors (Antonio Lignan)
+    - Preparing the workshop project
+    - Introduction to Contiki
+    - Working with sensors in Contiki and basic examples
+
+* Wednesday
+  - 8-12: Wireless with Contiki (IPv6 and UDP over RPL) (Antonio Lignan)
+  - Lunch
+  - 1:30-2:30: IoT and Entrepreneurship + Demo (Agustín Pelaez)
+  - 2-30-4:00: Wireless Technologies for IoT (Ermanno Pietrosemoli)
+  - 4:00-5:00: IoT simulation with Cooja (Antonio Lignan)
+  - 5:00-6:30: Work in teams: Work on the project!
+
+* Thursday
+  - 8-10: IoT Architectures
+  - 10-12: IoT Protocols (RESTFull HTTP, COAP, MQTT) (Antonio Lignan)
+  - Lunch
+  - 1:30-2:30: Interacting with the Ubidots Cloud Platform (Agustin Pelaez)
+  - 2:30-4:30: Send data to a real IoT cloud platform (Antonio Lignan)
+  - 4:30-6:00: Work in teams: Work on the project!
+
+* Friday
+  - 8-10: Energy Considerations (Ermanno)
+  - 10:00-12:00: Work in teams: Work on the project!
+  - Lunch
+  - 1:30-5:00: From the Lab to the field: deployments and presentations
+
+
 Material
 ---------------------------
 
