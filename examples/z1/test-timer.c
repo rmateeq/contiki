@@ -39,7 +39,7 @@
 #include "dev/leds.h"
 #include "dev/button-sensor.h"
 #include <stdio.h>
-#define  PERIOD    (CLOCK_SECONDS * 2)
+#define  PERIOD    (CLOCK_SECOND * 2)
 /*-------------------------------------------------*/
 PROCESS(test_etimer_process, "Test etimer example");
 AUTOSTART_PROCESSES(&test_etimer_process);
