@@ -21,7 +21,7 @@ For more information, see the Contiki website:
 WALC 2015
 ===========================
 
-[WALC 2015](http://tecdigital.tec.ac.cr/servicios/hoyeneltec/sites/default/files/field/image/act-101.png "WALC 2015")
+![WALC 2015](http://tecdigital.tec.ac.cr/servicios/hoyeneltec/sites/default/files/field/image/act-101.png "WALC 2015")
 
 For the [WALC 2015](http://eslared.net/walc2015/?page_id=2&lang=es_ES) a week-workshop has been prepared, heavily based on
 Contiki and Zolertia platforms.  This years edition takes place in Costa Rica, hosted by the [TEC (Tecnologico de Costa Rica)](http://www.tec.ac.cr/Paginas/index.html)
