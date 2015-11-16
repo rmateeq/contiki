@@ -26,6 +26,15 @@ WALC 2015
 For the [WALC 2015](http://eslared.net/walc2015/?page_id=2&lang=es_ES) a week-workshop has been prepared, heavily based on
 Contiki and Zolertia platforms.  This years edition takes place in Costa Rica, hosted by the [TEC (Tecnologico de Costa Rica)](http://www.tec.ac.cr/Paginas/index.html)
 
+Track 6 instructors
+---------------------------
+
+* Marco Zennaro, ICTP (Coordinator)
+* Antonio Lignan, Zolertia
+* Alvaro Vives, Nodo6
+* Agustín Pelaez, Ubidots
+* Ermanno Pietrosemoli, ICTP
+
 Agenda (Track 6 Internet of Things)
 ---------------------------
 
@@ -70,6 +79,11 @@ Agenda (Track 6 Internet of Things)
   - Lunch
   - 1:30-5:00: From the Lab to the field: deployments and presentations
 
+Recommended lectures
+---------------------------
+
+* [IoT in 5 days (Internet de las Cosas en 5 días - Spanish)](http://wireless.ictp.it/Papers/InternetdelasCosas.pdf)
+* [IoT in 5 days (sources - English)](https://github.com/marcozennaro/IPv6-WSN-book)
 
 Material
 ---------------------------
@@ -92,4 +106,25 @@ The workshop has available the following material:
     * [Precision light sensor](http://www.phidgets.com/products.php?product_id=1127)
 * [Zolertia Temperature and Humidity sensor](http://www.sensirion.com/en/products/humidity-temperature/humidity-temperature-sensor-sht2x/)
 
+And the following slides:
 
+* Day 1:
+    * Pending to add
+* Day 2:
+    * Pending to add
+* Day 3:
+    * Pending to add
+* Day 4:
+    * Pending to add
+* Day 5:
+    * Pending to add
+
+And [Etherpad](http://etherpad.org/) as our colaborative document placeholder
+
+[https://public.etherpad-mozilla.org/p/WALC2015-IoT](https://public.etherpad-mozilla.org/p/WALC2015-IoT)
+
+
+Acknowledgments
+---------------------------
+
+To-Do
