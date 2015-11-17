@@ -117,6 +117,7 @@ And the following slides:
     * [IPv6 y el IoT](https://drive.google.com/file/d/0B1xz6K9Dqu_CdV81RG53Qlphb3c/view?usp=sharing)
     * [Laboratorio IPv6 II](https://drive.google.com/file/d/0B1xz6K9Dqu_CVm8wSUZCcVJ2a00/view?usp=sharing)
     * [Preparacion del proyecto](http://www.slideshare.net/alignan/walc15-day-2-preparacion-del-proyecto)
+    * [Introducción a Contiki y sensores](http://www.slideshare.net/alignan/walc15-day-2-introduccion-a-contiki-y-sensores)
 * Day 3:
     * Pending to add
 * Day 4:
