@@ -112,10 +112,11 @@ And the following slides:
     * [The Internet of Things](https://drive.google.com/file/d/0B1xz6K9Dqu_CR2U0SjJ0Z19KSFVuZzdRcDExZWZ1LWFZZnhn/view?usp=sharing)
     * [Introduccion a IPv6](https://drive.google.com/file/d/0B1xz6K9Dqu_CNE8tcFZKTW91LXc/view?usp=sharing)
     * [Laboratorio IPv6 I](https://drive.google.com/file/d/0B1xz6K9Dqu_CbTdoV2F4eFNIdkE/view?usp=sharing)
-    * [IoT brainstorming: ideas y proyectos](http://www.slideshare.net/alignan/walc15-day-1-iot-and-workshop-introduction)
+    * [IoT brainstorming e introducción al workshop](http://www.slideshare.net/alignan/walc15-day-1-iot-and-workshop-introduction)
 * Day 2:
     * [IPv6 y el IoT](https://drive.google.com/file/d/0B1xz6K9Dqu_CdV81RG53Qlphb3c/view?usp=sharing)
     * [Laboratorio IPv6 II](https://drive.google.com/file/d/0B1xz6K9Dqu_CVm8wSUZCcVJ2a00/view?usp=sharing)
+    * [Preparacion del proyecto](http://www.slideshare.net/alignan/walc15-day-2-preparacion-del-proyecto)
 * Day 3:
     * Pending to add
 * Day 4:
