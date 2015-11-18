@@ -14,10 +14,10 @@ from socket import error
 from time import sleep
 from ubidots import ApiClient
 
-PORT        = 5678
-BUFSIZE     = 1024
-UBIDOTS_KEY = "XXX"
-UBIDOTS_VAR = "XXX"
+PORT           = 5678
+BUFSIZE        = 1024
+UBIDOTS_TOKEN  = "W4gUyMZrMrmm7L6dW5PPVj9SZmikKa"
+UBIDOTS_VAR    = "564ca55c76254243efd65440"
 
 #------------------------------------------------------------#
 # UDP server to forward data to Ubidots
@@ -55,7 +55,7 @@ def server():
 
     # Create a Ubidots client and get a pointer to the variable
     try:
-      client = ApiClient(UBIDOTS_KEY)
+      client = ApiClient(token=UBIDOTS_TOKEN)
     except Exception, e:
       print "Ubidots error: %s" % e
       return
