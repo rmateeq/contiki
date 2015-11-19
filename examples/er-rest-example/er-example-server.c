@@ -42,12 +42,19 @@
 #include "contiki.h"
 #include "contiki-net.h"
 #include "rest-engine.h"
-
-#if PLATFORM_HAS_BUTTON
 #include "dev/button-sensor.h"
-#endif
 
-#define DEBUG 0
+#define REST_RES_HELLO 1
+#define REST_RES_SEPARATE 1
+#define REST_RES_PUSHING 1
+#define REST_RES_EVENT 1
+#define REST_RES_SUB 1
+#define REST_RES_LEDS 1
+#define REST_RES_TOGGLE 1
+#define REST_RES_BATTERY 1
+#define REST_RES_RADIO 1
+
+#define DEBUG 1
 #if DEBUG
 #include <stdio.h>
 #define PRINTF(...) printf(__VA_ARGS__)
@@ -75,30 +82,14 @@ extern resource_t
 #if PLATFORM_HAS_LEDS
 extern resource_t res_leds, res_toggle;
 #endif
-#if PLATFORM_HAS_LIGHT
-#include "dev/light-sensor.h"
-extern resource_t res_light;
-#endif
+
 #if PLATFORM_HAS_BATTERY
 #include "dev/battery-sensor.h"
 extern resource_t res_battery;
 #endif
-#if PLATFORM_HAS_TEMPERATURE
-#include "dev/temperature-sensor.h"
-extern resource_t res_temperature;
-#endif
-/*
-extern resource_t res_battery;
-#endif
-#if PLATFORM_HAS_RADIO
+
 #include "dev/radio-sensor.h"
 extern resource_t res_radio;
-#endif
-#if PLATFORM_HAS_SHT25
-#include "dev/sht25.h"
-extern resource_t res_sht25;
-#endif
-*/
 
 PROCESS(er_example_server, "Erbium Example Server");
 AUTOSTART_PROCESSES(&er_example_server);
@@ -118,11 +109,6 @@ PROCESS_THREAD(er_example_server, ev, data)
   PRINTF("PAN ID: 0x%04X\n", IEEE802154_PANID);
 #endif
 
-  PRINTF("uIP buffer: %u\n", UIP_BUFSIZE);
-  PRINTF("LL header: %u\n", UIP_LLH_LEN);
-  PRINTF("IP+UDP header: %u\n", UIP_IPUDPH_LEN);
-  PRINTF("REST max chunk: %u\n", REST_MAX_CHUNK_SIZE);
-
   /* Initialize the REST engine. */
   rest_init_engine();
 
@@ -132,46 +118,27 @@ PROCESS_THREAD(er_example_server, ev, data)
    * All static variables are the same for each URI path.
    */
   rest_activate_resource(&res_hello, "test/hello");
-/*  rest_activate_resource(&res_mirror, "debug/mirror"); */
-/*  rest_activate_resource(&res_chunks, "test/chunks"); */
-/*  rest_activate_resource(&res_separate, "test/separate"); */
+  rest_activate_resource(&res_mirror, "debug/mirror");
+  rest_activate_resource(&res_chunks, "test/chunks");
+  rest_activate_resource(&res_separate, "test/separate");
   rest_activate_resource(&res_push, "test/push");
-/*  rest_activate_resource(&res_event, "sensors/button"); */
-/*  rest_activate_resource(&res_sub, "test/sub"); */
-/*  rest_activate_resource(&res_b1_sep_b2, "test/b1sepb2"); */
-#if PLATFORM_HAS_LEDS
+  rest_activate_resource(&res_event, "sensors/button");
+  rest_activate_resource(&res_sub, "test/sub");
+  rest_activate_resource(&res_b1_sep_b2, "test/b1sepb2");
   rest_activate_resource(&res_leds, "actuators/leds");
   rest_activate_resource(&res_toggle, "actuators/toggle");
-#endif
-#if PLATFORM_HAS_LIGHT
-  rest_activate_resource(&res_light, "sensors/light"); 
-  SENSORS_ACTIVATE(light_sensor);  
-#endif
-#if PLATFORM_HAS_BATTERY
   rest_activate_resource(&res_battery, "sensors/battery");  
   SENSORS_ACTIVATE(battery_sensor);  
-#endif
-#if PLATFORM_HAS_TEMPERATURE
-  rest_activate_resource(&res_temperature, "sensors/temperature");  
-  SENSORS_ACTIVATE(temperature_sensor);  
-#endif
-/*
-#if PLATFORM_HAS_RADIO
+  SENSORS_ACTIVATE(button_sensor);
   rest_activate_resource(&res_radio, "sensors/radio");  
   SENSORS_ACTIVATE(radio_sensor);  
-#endif
-#if PLATFORM_HAS_SHT25
-  rest_activate_resource(&res_sht25, "sensors/sht25");  
-  SENSORS_ACTIVATE(sht25);  
-#endif
-*/
 
   /* Define application-specific events here. */
   while(1) {
     PROCESS_WAIT_EVENT();
-#if PLATFORM_HAS_BUTTON
+
     if(ev == sensors_event && data == &button_sensor) {
-      PRINTF("*******BUTTON*******\n");
+      printf("*******BUTTON*******\n");
 
       /* Call the event_handler for this application-specific event. */
       res_event.trigger();
@@ -179,7 +146,6 @@ PROCESS_THREAD(er_example_server, ev, data)
       /* Also call the separate response example handler. */
       res_separate.resume();
     }
-#endif /* PLATFORM_HAS_BUTTON */
   }                             /* while (1) */
 
   PROCESS_END();
