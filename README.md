@@ -61,8 +61,7 @@ Agenda (Track 6 Internet of Things)
   - 8-12: Wireless with Contiki (IPv6 and UDP over RPL) (Antonio Lignan)
   - Lunch
   - 1:30-2:30: IoT and Entrepreneurship + Demo (Agustín Pelaez)
-  - 2-30-4:00: Wireless Technologies for IoT (Ermanno Pietrosemoli)
-  - 4:00-5:00: IoT simulation with Cooja (Antonio Lignan)
+  - 2-30-5:00: Wireless field tests and RF basics (Ermanno Pietrosemoli and Antonio Lignan)
   - 5:00-6:30: Work in teams: Work on the project!
 
 * Thursday
@@ -74,10 +73,13 @@ Agenda (Track 6 Internet of Things)
   - 4:30-6:00: Work in teams: Work on the project!
 
 * Friday
-  - 8-10: Energy Considerations (Ermanno)
+  - 8:00-10:00: IoT simulation with Cooja (Antonio Lignan)
   - 10:00-12:00: Work in teams: Work on the project!
   - Lunch
-  - 1:30-5:00: From the Lab to the field: deployments and presentations
+  - 1:30-3:30: Deployment and demo preparation
+  - 4:00-5:30: Projects presentation
+  - 5:30: end of the track
+
 
 Recommended lectures
 ---------------------------
