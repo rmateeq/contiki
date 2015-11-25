@@ -1,2 +1,3 @@
 MOTELIST_ZOLERTIA = firefly
-BOARD_SOURCEFILES += board.c
+BOARD_SOURCEFILES += board.c zoul-sensors.c leds-arch.c
+BOARD_SOURCEFILES += cc1200-zoul-arch.c  adc-sensors.c

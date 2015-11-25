@@ -43,6 +43,7 @@
 #include "dev/nvic.h"
 #include "dev/ioc.h"
 #include "dev/gpio.h"
+#include "dev/sys-ctrl.h"
 #include "dev/button-sensor.h"
 #include "sys/timer.h"
 #include "sys/ctimer.h"
@@ -68,6 +69,14 @@ static void
 duration_exceeded_callback(void *data)
 {
   press_event_counter++;
+
+#if BUTTON_SENSOR_RESET_INTERVALS
+  if(press_event_counter > BUTTON_SENSOR_RESET_INTERVALS) {
+    sys_ctrl_reset();
+    return;
+  }
+#endif
+
   process_post(PROCESS_BROADCAST, button_press_duration_exceeded,
                &press_event_counter);
   ctimer_set(&press_counter, press_duration, duration_exceeded_callback,
