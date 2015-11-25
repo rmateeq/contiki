@@ -213,7 +213,9 @@ main(void)
 
   process_start(&sensors_process, NULL);
 
+#if PLATFORM_HAS_BUTTON
   SENSORS_ACTIVATE(button_sensor);
+#endif
 
   energest_init();
   ENERGEST_ON(ENERGEST_TYPE_CPU);
