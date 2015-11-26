@@ -3,6 +3,8 @@ CONTIKI_PROJECT = demo-stand
 
 all: $(CONTIKI_PROJECT)
 
+TARGET = zoul
+
 ifdef TX
 CFLAGS+=-DTX_NODE=1
 endif
