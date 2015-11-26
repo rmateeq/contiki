@@ -69,7 +69,7 @@ broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from)
 
   recv_rssi = packetbuf_attr(PACKETBUF_ATTR_RSSI);
   recv_addr = (uint16_t)(from->u8[1] << 8) + from->u8[0];
-  snprintf(buf_ptr, 32, "ID:0x%04X,RSSI:%d,DATA:%05u",
+  snprintf(buf_ptr, 34, "ID:0x%04X,RSSI:%04d,DATA:%05u",
                          recv_addr, recv_rssi,
                          *(uint16_t *)packetbuf_dataptr());
   printf("%s\n", buf_ptr);
