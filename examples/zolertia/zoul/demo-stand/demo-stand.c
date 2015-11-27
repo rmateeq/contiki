@@ -45,6 +45,7 @@
 #include "dev/serial-line.h"
 #include "dev/sys-ctrl.h"
 #include "net/rime/broadcast.h"
+#include "dev/button-sensor.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -53,7 +54,15 @@
 #define LOOP_INTERVAL       (CLOCK_SECOND * LOOP_PERIOD)
 #define LEDS_RADIO_RX       LEDS_BLUE
 #define LEDS_PERIODIC       LEDS_GREEN
+#define BUTTON_PRESS_EVENT_INTERVAL (CLOCK_SECOND) 
 #define BROADCAST_CHANNEL   108
+#define TX_NODE             1
+/*---------------------------------------------------------------------------*/
+
+#define MS320LP_INT_PORT        GPIO_A_NUM
+#define MS320LP_INT_PIN         5
+#define MS320LP_INT_PORT_BASE   GPIO_PORT_TO_BASE(MS320LP_INT_PORT)
+#define MS320LP_INT_PIN_MASK    GPIO_PIN_MASK(MS320LP_INT_PIN)
 /*---------------------------------------------------------------------------*/
 static struct etimer et;
 /*---------------------------------------------------------------------------*/
@@ -87,22 +96,75 @@ PROCESS_THREAD(stand_demo_process, ev, data)
 
 #if TX_NODE
   static uint16_t counter;
+  GPIO_SOFTWARE_CONTROL(MS320LP_INT_PORT_BASE, MS320LP_INT_PIN_MASK);
+  GPIO_SET_INPUT(MS320LP_INT_PORT_BASE, MS320LP_INT_PIN_MASK);
+  button_sensor.configure(BUTTON_SENSOR_CONFIG_TYPE_INTERVAL,
+                          BUTTON_PRESS_EVENT_INTERVAL);
 #endif
 
   broadcast_open(&bc, BROADCAST_CHANNEL, &bc_rx);
-
-  while(1) {
-
-    etimer_set(&et, LOOP_INTERVAL);
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
+  etimer_set(&et, LOOP_INTERVAL);
+  PROCESS_YIELD();
 #if TX_NODE
-    counter++;
-    packetbuf_copyfrom(&counter, sizeof(counter));
-    broadcast_send(&bc);
-    leds_toggle(LEDS_PERIODIC);
-#endif
+  while(1){
+    PROCESS_YIELD();
+    if(ev == sensors_event) {
+      if(data == &button_sensor) {
+        if(button_sensor.value(BUTTON_SENSOR_VALUE_TYPE_LEVEL) ==
+           BUTTON_SENSOR_PRESSED_LEVEL) {
+          while (1){
+            PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et)); 
+            if (GPIO_READ_PIN(MS320LP_INT_PORT_BASE, MS320LP_INT_PIN_MASK) == 0){
+              printf("PIR detected\n");
+              printf("Send broadcast\n");
+              counter++;
+              packetbuf_copyfrom(&counter, sizeof(counter));
+              broadcast_send(&bc);
+              etimer_set(&et, CLOCK_SECOND * 30); 
+              leds_off(LEDS_GREEN);
+              leds_on(LEDS_BLUE);
+              } else {
+              etimer_set(&et, LOOP_INTERVAL);
+              leds_toggle(LEDS_PERIODIC);
+              leds_off(LEDS_BLUE);
+              }
+            printf("Waiting PIR\n");  
+
+          }
+        }
+      }
+    }
   }
 
+   /* if(ev == sensors_event) {
+      if(data == &button_sensor) {
+         if(button_sensor.value(BUTTON_SENSOR_VALUE_TYPE_LEVEL) ==
+           BUTTON_SENSOR_PRESSED_LEVEL) {
+          printf("presed\n");
+          while(1) {
+            PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et)); 
+            if (GPIO_READ_PIN(MS320LP_INT_PORT_BASE, MS320LP_INT_PIN_MASK) == 0){
+              printf("PIR detected\n");
+              printf("Send broadcast\n");
+              counter++;
+              packetbuf_copyfrom(&counter, sizeof(counter));
+              broadcast_send(&bc);
+              etimer_set(&et, CLOCK_SECOND * 30); 
+              leds_off(LEDS_GREEN);
+              leds_on(LEDS_BLUE);
+              } else {
+              etimer_set(&et, LOOP_INTERVAL);
+              leds_toggle(LEDS_PERIODIC);
+              leds_off(LEDS_BLUE);
+              }
+            printf("Waiting PIR\n");  
+          }
+        }
+      }
+    }*/
+#endif
+    
+  
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
