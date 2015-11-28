@@ -29,10 +29,10 @@ Contiki and Zolertia platforms.  This years edition takes place in Costa Rica, h
 Track 6 instructors
 ---------------------------
 
-* Marco Zennaro, ICTP (Coordinator)
-* Antonio Lignan, Zolertia
-* Alvaro Vives, Nodo6
-* Agustín Pelaez, Ubidots
+* [Marco Zennaro, ICTP (Coordinator)](http://www.marcozennaro.info/)
+* [Antonio Lignan, Zolertia](https://about.me/antoniolignan)
+* [Alvaro Vives, Nodo6](http://nodo6.com/nodo6.html)
+* [Agustín Pelaez, Ubidots](http://www.theinternetofthings.eu/agust%C3%ADn-pel%C3%A1ez)
 * Ermanno Pietrosemoli, ICTP
 
 Agenda (Track 6 Internet of Things)
