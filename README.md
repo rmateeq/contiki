@@ -122,7 +122,7 @@ And the following slides:
     * [Preparacion del proyecto](http://www.slideshare.net/alignan/walc15-day-2-preparacion-del-proyecto)
     * [Introducción a Contiki y sensores](http://www.slideshare.net/alignan/walc15-day-2-introduccion-a-contiki-y-sensores)
 * Day 3:
-    * Pending to add
+    * [Enlaces inalambricos y pruebas de campo](http://www.slideshare.net/alignan/walc15-day-3-enlaces-inalambricos-y-pruebas-de-campo)
 * Day 4:
     * Pending to add
 * Day 5:
