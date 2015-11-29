@@ -126,7 +126,7 @@ And the following slides:
 * Day 4:
     * Pending to add
 * Day 5:
-    * Pending to add
+    * [Demo day! resumen de las presentaciones](http://www.slideshare.net/alignan/walc15-day-5-demo-day)
 
 And [Etherpad](http://etherpad.org/) as our colaborative document placeholder
 
