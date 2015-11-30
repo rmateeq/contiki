@@ -123,8 +123,9 @@ And the following slides:
     * [Introducción a Contiki y sensores](http://www.slideshare.net/alignan/walc15-day-2-introduccion-a-contiki-y-sensores)
 * Day 3:
     * [Enlaces inalambricos y pruebas de campo](http://www.slideshare.net/alignan/walc15-day-3-enlaces-inalambricos-y-pruebas-de-campo)
+	* [Start-up lessons from an Entreprenour in progress](https://www.dropbox.com/s/e743mc17o9os3n2/Ubidots_WALC_Agustin_2015_startups.pdf?dl=0)
 * Day 4:
-    * Pending to add
+    * [Ubidots Cloud platform](https://www.dropbox.com/s/x51t5qwzex44ddi/Ubidots_WALC_Agustin_2015.pdf?dl=0)
 * Day 5:
     * [Demo day! resumen de las presentaciones](http://www.slideshare.net/alignan/walc15-day-5-demo-day)
 
