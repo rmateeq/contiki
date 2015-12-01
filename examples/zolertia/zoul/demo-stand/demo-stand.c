@@ -56,7 +56,6 @@
 #define LEDS_PERIODIC       LEDS_GREEN
 #define BUTTON_PRESS_EVENT_INTERVAL (CLOCK_SECOND) 
 #define BROADCAST_CHANNEL   108
-#define TX_NODE             1
 /*---------------------------------------------------------------------------*/
 
 #define MS320LP_INT_PORT        GPIO_A_NUM
@@ -136,32 +135,6 @@ PROCESS_THREAD(stand_demo_process, ev, data)
     }
   }
 
-   /* if(ev == sensors_event) {
-      if(data == &button_sensor) {
-         if(button_sensor.value(BUTTON_SENSOR_VALUE_TYPE_LEVEL) ==
-           BUTTON_SENSOR_PRESSED_LEVEL) {
-          printf("presed\n");
-          while(1) {
-            PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et)); 
-            if (GPIO_READ_PIN(MS320LP_INT_PORT_BASE, MS320LP_INT_PIN_MASK) == 0){
-              printf("PIR detected\n");
-              printf("Send broadcast\n");
-              counter++;
-              packetbuf_copyfrom(&counter, sizeof(counter));
-              broadcast_send(&bc);
-              etimer_set(&et, CLOCK_SECOND * 30); 
-              leds_off(LEDS_GREEN);
-              leds_on(LEDS_BLUE);
-              } else {
-              etimer_set(&et, LOOP_INTERVAL);
-              leds_toggle(LEDS_PERIODIC);
-              leds_off(LEDS_BLUE);
-              }
-            printf("Waiting PIR\n");  
-          }
-        }
-      }
-    }*/
 #endif
     
   
