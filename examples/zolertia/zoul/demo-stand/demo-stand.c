@@ -120,7 +120,7 @@ PROCESS_THREAD(stand_demo_process, ev, data)
               counter++;
               packetbuf_copyfrom(&counter, sizeof(counter));
               broadcast_send(&bc);
-              etimer_set(&et, CLOCK_SECOND * 30); 
+              etimer_set(&et, CLOCK_SECOND * 20); 
               leds_off(LEDS_GREEN);
               leds_on(LEDS_BLUE);
               } else {
