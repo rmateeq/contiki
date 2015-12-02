@@ -16,7 +16,7 @@ EMAIL_DIR        = "YOUR_GMAIL"
 EMAIL_PSW        = "YOUR_PASSWORD"
 
 #pySerial port
-PORT_USB = "/dev/ZOUL010"
+PORT_USB = "/dev/ZONGLE"
 
 #pyCamera save photo folder 
 PICS_PATH    = "/home/pi/pics/"
