@@ -29,10 +29,10 @@ Contiki and Zolertia platforms.  This years edition takes place in Costa Rica, h
 Track 6 instructors
 ---------------------------
 
-* Marco Zennaro, ICTP (Coordinator)
-* Antonio Lignan, Zolertia
-* Alvaro Vives, Nodo6
-* Agustín Pelaez, Ubidots
+* [Marco Zennaro, ICTP (Coordinator)](http://www.marcozennaro.info/)
+* [Antonio Lignan, Zolertia](https://about.me/antoniolignan)
+* [Alvaro Vives, Nodo6](http://nodo6.com/nodo6.html)
+* [Agustín Pelaez, Ubidots](http://www.theinternetofthings.eu/agust%C3%ADn-pel%C3%A1ez)
 * Ermanno Pietrosemoli, ICTP
 
 Agenda (Track 6 Internet of Things)
@@ -107,6 +107,7 @@ The workshop has available the following material:
     * [Sound Sensor](http://www.phidgets.com/products.php?product_id=1133)
     * [Precision light sensor](http://www.phidgets.com/products.php?product_id=1127)
 * [Zolertia Temperature and Humidity sensor](http://www.sensirion.com/en/products/humidity-temperature/humidity-temperature-sensor-sht2x/)
+* [Raspberry Pi image with Z1 toolchain and Wireshark (walc15-rpi-slim.img)](http://sourceforge.net/projects/zolertia/files/VM/)
 
 And the following slides:
 
@@ -121,25 +122,14 @@ And the following slides:
     * [Preparacion del proyecto](http://www.slideshare.net/alignan/walc15-day-2-preparacion-del-proyecto)
     * [Introducción a Contiki y sensores](http://www.slideshare.net/alignan/walc15-day-2-introduccion-a-contiki-y-sensores)
 * Day 3:
-    * Pending to add
+    * [Enlaces inalambricos y pruebas de campo](http://www.slideshare.net/alignan/walc15-day-3-enlaces-inalambricos-y-pruebas-de-campo)
+	* [Start-up lessons from an Entreprenour in progress](https://www.dropbox.com/s/e743mc17o9os3n2/Ubidots_WALC_Agustin_2015_startups.pdf?dl=0)
 * Day 4:
-    * Pending to add
+    * [Ubidots Cloud platform](https://www.dropbox.com/s/x51t5qwzex44ddi/Ubidots_WALC_Agustin_2015.pdf?dl=0)
 * Day 5:
-    * Pending to add
+    * [Demo day! resumen de las presentaciones](http://www.slideshare.net/alignan/walc15-day-5-demo-day)
 
 And [Etherpad](http://etherpad.org/) as our colaborative document placeholder
 
 [https://public.etherpad-mozilla.org/p/WALC2015-IoT](https://public.etherpad-mozilla.org/p/WALC2015-IoT)
 
-Feedback
----------------------------
-
-<a class="typeform-share button" href="https://alinanco.typeform.com/to/rAz3VZ" data-mode="1" target="_blank">Share your comments with us and help us improve!</a>
-<script>(function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id='typef_orm',b='https://s3-eu-west-1.amazonaws.com/share.typeform.com/';if(!gi.call(d,id)){js=ce.call(d,'script');js.id=id;js.src=b+'share.js';q=gt.call(d,'script')[0];q.parentNode.insertBefore(js,q)}id=id+'_';if(!gi.call(d,id)){qs=ce.call(d,'link');qs.rel='stylesheet';qs.id=id;qs.href=b+'share-button.css';s=gt.call(d,'head')[0];s.appendChild(qs,s)}})()</script>
-
-
-
-Acknowledgments
----------------------------
-
-To-Do
