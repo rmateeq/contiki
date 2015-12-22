@@ -43,13 +43,15 @@
 #include "sys/etimer.h"
 #include "dev/leds.h"
 #include "ubidots.h"
+#include "dev/i2cmaster.h"
+#include "dev/tmp102.h"
 
 #include <stdio.h>
 #include <string.h>
 /*---------------------------------------------------------------------------*/
 /* Sanity check */
-#if !defined(UBIDOTS_DEMO_CONF_UPTIME) || !defined(UBIDOTS_DEMO_CONF_SEQUENCE)
-#error "UBIDOTS_DEMO_CONF_UPTIME or UBIDOTS_DEMO_CONF_SEQUENCE undefined."
+#if !defined(UBIDOTS_DEMO_CONF_TEMPERATURE) || !defined(UBIDOTS_DEMO_CONF_SEQUENCE)
+#error "UBIDOTS_DEMO_CONF_TEMPERATURE or UBIDOTS_DEMO_CONF_SEQUENCE undefined."
 #error "Make sure you have followed the steps in the README"
 #endif
 /*---------------------------------------------------------------------------*/
@@ -129,16 +131,17 @@ post_sequence_number(void)
 static void
 post_collection(void)
 {
+  uint16_t temp;
   if(ubidots_prepare_post(NULL) == UBIDOTS_ERROR) {
     printf("post_collection: ubidots_prepare_post failed\n");
   }
 
   /* Encode and enqueue the uptime as a JSON number */
   memset(variable_buffer, 0, VARIABLE_BUF_LEN);
-  snprintf(variable_buffer, VARIABLE_BUF_LEN, "%lu",
-           (unsigned long)clock_seconds());
+  temp = tmp102_read_temp_x100();  
+  snprintf(variable_buffer, VARIABLE_BUF_LEN, "%u", temp);
 
-  if(ubidots_enqueue_value(UBIDOTS_DEMO_CONF_UPTIME, variable_buffer) == UBIDOTS_ERROR) {
+  if(ubidots_enqueue_value(UBIDOTS_DEMO_CONF_TEMPERATURE, variable_buffer) == UBIDOTS_ERROR) {
     printf("post_collection: ubidots_prepare_post failed\n");
   }
 
@@ -186,6 +189,7 @@ PROCESS_THREAD(ubidots_demo_process, ev, data)
 {
   PROCESS_BEGIN();
 
+  tmp102_init();
   ubidots_init(&ubidots_demo_process, headers);
 
   sequence = 0;

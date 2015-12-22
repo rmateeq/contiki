@@ -41,7 +41,12 @@
 #define PROJECT_CONF_H_
 /*---------------------------------------------------------------------------*/
 /* User configuration */
+#define UBIDOTS_DEMO_CONF_TEMPERATURE  "XXX"
+#define UBIDOTS_DEMO_CONF_SEQUENCE     "XXX"
 #define UBIDOTS_CONF_IN_BUFFER_SIZE    64
+/*---------------------------------------------------------------------------*/
+#undef NETSTACK_CONF_RDC
+#define NETSTACK_CONF_RDC              nullrdc_driver
 /*---------------------------------------------------------------------------*/
 #endif /* PROJECT_CONF_H_ */
 /*---------------------------------------------------------------------------*/
