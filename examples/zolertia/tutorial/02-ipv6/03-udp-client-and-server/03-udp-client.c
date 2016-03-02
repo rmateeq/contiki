@@ -45,13 +45,14 @@
 #include "dev/battery-sensor.h"
 #include "dev/i2cmaster.h"
 #include "dev/tmp102.h"
+#include "dev/button-sensor.h"
 /*---------------------------------------------------------------------------*/
 /* Enables printing debug output from the IP/IPv6 libraries */
 #define DEBUG DEBUG_PRINT
 #include "net/ip/uip-debug.h"
 /*---------------------------------------------------------------------------*/
-#define SEND_INTERVAL		(15 * CLOCK_SECOND)
-#define SEND_TIME		    (random_rand() % (SEND_INTERVAL))
+#define SEND_INTERVAL		(300 * CLOCK_SECOND)
+#define SEND_TIME		(random_rand() % (SEND_INTERVAL))
 /*---------------------------------------------------------------------------*/
 /* The structure used in the Simple UDP library to create an UDP connection */
 static struct uip_udp_conn *client_conn;
@@ -198,6 +199,7 @@ PROCESS_THREAD(udp_client_process, ev, data)
   SENSORS_ACTIVATE(adxl345);
   SENSORS_ACTIVATE(tmp102);
   SENSORS_ACTIVATE(battery_sensor);
+  SENSORS_ACTIVATE(button_sensor);
 
   /* Create a new connection with remote host.  When a connection is created
    * with udp_new(), it gets a local port number assigned automatically.
@@ -230,10 +232,11 @@ PROCESS_THREAD(udp_client_process, ev, data)
       tcpip_handler();
     }
 
-    /* Send data to the server */    
-    if(etimer_expired(&periodic)) {
-      etimer_reset(&periodic);
+    /* Send data to the server */
+    if((ev == sensors_event && data == &button_sensor) ||
+      (etimer_expired(&periodic))) {
       ctimer_set(&backoff_timer, SEND_TIME, send_packet, NULL);
+      etimer_reset(&periodic);
     }
   }
 
