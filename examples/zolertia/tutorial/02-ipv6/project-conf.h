@@ -35,6 +35,15 @@
 #undef NETSTACK_CONF_RDC
 #define NETSTACK_CONF_RDC          nullrdc_driver
 
+#undef RF_CHANNEL
+#define RF_CHANNEL	           26
+
+#undef CC2420_CONF_CHANNEL
+#define CC2420_CONF_CHANNEL        26
+
+#undef IEEE802154_CONF_PANID
+#define IEEE802154_CONF_PANID      0xABCD
+
 #ifndef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM          4
 #endif
