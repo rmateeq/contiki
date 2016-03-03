@@ -52,7 +52,6 @@
 #include "net/ip/uip-debug.h"
 /*---------------------------------------------------------------------------*/
 #define SEND_INTERVAL		(300 * CLOCK_SECOND)
-#define SEND_TIME		(random_rand() % (SEND_INTERVAL))
 /*---------------------------------------------------------------------------*/
 /* The structure used in the Simple UDP library to create an UDP connection */
 static struct uip_udp_conn *client_conn;
@@ -87,7 +86,7 @@ tcpip_handler(void)
 }
 /*---------------------------------------------------------------------------*/
 static void
-send_packet(void *ptr)
+send_packet(void)
 {
   uint32_t aux;
   counter++;
@@ -171,7 +170,6 @@ set_global_address(void)
 PROCESS_THREAD(udp_client_process, ev, data)
 {
   static struct etimer periodic;
-  static struct ctimer backoff_timer;
 
   PROCESS_BEGIN();
 
@@ -235,8 +233,8 @@ PROCESS_THREAD(udp_client_process, ev, data)
     /* Send data to the server */
     if((ev == sensors_event && data == &button_sensor) ||
       (etimer_expired(&periodic))) {
-      ctimer_set(&backoff_timer, SEND_TIME, send_packet, NULL);
       etimer_reset(&periodic);
+      send_packet();
     }
   }
 
