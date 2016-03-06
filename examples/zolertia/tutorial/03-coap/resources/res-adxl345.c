@@ -48,7 +48,7 @@ uint16_t preferred_size, int32_t *offset);
 /*---------------------------------------------------------------------------*/
 /* GET method */
 RESOURCE(res_adxl345,
-         "title=\"Temperature sensor\";rt=\"tmp102\"",
+         "title=\"Accelerometer 3-axis\";rt=\"adxl345\"",
          res_get_handler,
          NULL,
          NULL,
