@@ -41,9 +41,14 @@
 #include "sys/etimer.h"
 
 /* These library allows to use the on-board sensors */
+#if CONTIKI_TARGET_ZOUL
+#include "dev/adc-zoul.h"
+#include "dev/zoul-sensors.h"
+#else /* Assumes the Z1 mote */
 #include "dev/tmp102.h"
 #include "dev/adxl345.h"
 #include "dev/battery-sensor.h"
+#endif
 /*---------------------------------------------------------------------------*/
 static struct etimer et;
 /*---------------------------------------------------------------------------*/
@@ -54,11 +59,15 @@ PROCESS_THREAD(test_onboard_sensors_process, ev, data)
 {
   PROCESS_BEGIN();
 
+  static uint16_t temp;
+  static uint32_t batt;
+
+#if CONTIKI_TARGET_ZOUL
+  /*  The sensors are already started at boot */
+#else
   static int8_t x_axis;
   static int8_t y_axis;
   static int8_t z_axis;
-  static uint16_t temp;
-  static uint32_t batt;
 
   /* Initialize the sensors, the SENSORS_ACTIVATE(...) macro invokes the
    * configure(...) method of Contiki's sensor API
@@ -66,6 +75,7 @@ PROCESS_THREAD(test_onboard_sensors_process, ev, data)
   SENSORS_ACTIVATE(adxl345);
   SENSORS_ACTIVATE(tmp102);
   SENSORS_ACTIVATE(battery_sensor);
+#endif
 
   /* Spin the timer */
   etimer_set(&et, CLOCK_SECOND);
@@ -75,6 +85,14 @@ PROCESS_THREAD(test_onboard_sensors_process, ev, data)
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
     /* Read the sensors */
+#if CONTIKI_TARGET_ZOUL
+    batt = vdd3_sensor.value(CC2538_SENSORS_VALUE_TYPE_CONVERTED);
+    printf("VDD = %u mV\n", (uint16_t)batt);
+
+    temp = cc2538_temp_sensor.value(CC2538_SENSORS_VALUE_TYPE_CONVERTED);
+    printf("Core temperature = %d.%u C\n", temp / 1000, temp % 1000);
+
+#else /* Assumes Z1 mote */
     x_axis = adxl345.value(X_AXIS);
     y_axis = adxl345.value(Y_AXIS);
     z_axis = adxl345.value(Z_AXIS);
@@ -83,12 +101,13 @@ PROCESS_THREAD(test_onboard_sensors_process, ev, data)
 
     /* Print the readings */
     printf("Acceleration: X %d Y %d Z %d\n", x_axis, y_axis, z_axis);
-    printf("Temperature: %d.%u\n", temp / 100, temp % 100);
+    printf("Temperature: %d.%u C\n", temp / 100, temp % 100);
 
     /* Convert the ADC readings to mV */
     batt *= 5000;
     batt /= 4095;
     printf("Battery: %u\n\n", (uint16_t)batt);
+#endif
 
     etimer_reset(&et);
   }
