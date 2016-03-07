@@ -40,8 +40,13 @@
 #include <stdio.h>
 #include "contiki.h"
 #include "dev/leds.h"
-#include "dev/z1-phidgets.h"
 #include "lib/sensors.h"
+#if CONTIKI_TARGET_ZOUL
+#include "dev/adc-zoul.h"
+#include "dev/zoul-sensors.h"
+#else /* Assumes Z1 mote */
+#include "dev/z1-phidgets.h"
+#endif
 /*---------------------------------------------------------------------------*/
 PROCESS(test_adc_process, "Test ADC");
 AUTOSTART_PROCESSES(&test_adc_process);
@@ -52,11 +57,19 @@ PROCESS_THREAD(test_adc_process, ev, data)
 {
   PROCESS_BEGIN();
 
+#if CONTIKI_TARGET_ZOUL
+  /* The ADC zoul library configures the on-board enabled ADC channels, more
+   * information is provided in the board.h file of the platform
+   */
+  adc_zoul.configure(SENSORS_HW_INIT, ZOUL_SENSORS_ADC_ALL);
+
+#else /* Assumes Z1 mote */
   /* The phidget library is a wrapper that configures the 4 x ADC exposed in the
    * 3-pin connectors of the Z1 mote.  Two are for 3.3V powered sensors, the
    * remaining two are for 5V ones
    */
   SENSORS_ACTIVATE(phidgets);
+#endif
 
   /* Connect an analogue sensor and measure its value! */
 
@@ -68,10 +81,15 @@ PROCESS_THREAD(test_adc_process, ev, data)
 
     leds_toggle(LEDS_GREEN);
 
+#if CONTIKI_TARGET_ZOUL
+    printf("ADC1 = %u mV\n", adc_zoul.value(ZOUL_SENSORS_ADC1));
+    printf("ADC3 = %u mV\n", adc_zoul.value(ZOUL_SENSORS_ADC3));
+#else
     printf("Phidget 5V 1:%d\n", phidgets.value(PHIDGET5V_1));
     printf("Phidget 5V 2:%d\n", phidgets.value(PHIDGET5V_2));
     printf("Phidget 3V 1:%d\n", phidgets.value(PHIDGET3V_1));
     printf("Phidget 3V 2:%d\n\n", phidgets.value(PHIDGET3V_2));
+#endif
 
     etimer_reset(&et);
   }
