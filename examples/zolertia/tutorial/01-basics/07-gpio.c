@@ -39,6 +39,9 @@
 #include <stdio.h>
 #include "dev/leds.h"
 #include "sys/etimer.h"
+#if CONTIKI_TARGET_ZOUL
+#include "dev/gpio.h"
+#endif
 /*---------------------------------------------------------------------------*/
 PROCESS(test_gpio_process, "Test GPIO");
 AUTOSTART_PROCESSES(&test_gpio_process);
@@ -54,6 +57,19 @@ PROCESS_THREAD(test_gpio_process, ev, data)
    * the number 2 then the mask value would be 4
    */
 
+#if CONTIKI_TARGET_ZOUL
+  /* The masks below converts the Port number and Pin number to base and mask values */
+  #define EXAMPLE_PORT_BASE  GPIO_PORT_TO_BASE(GPIO_A_NUM)
+  #define EXAMPLE_PIN_MASK   GPIO_PIN_MASK(5)
+
+  /* We tell the system the application will drive the pin */
+  GPIO_SOFTWARE_CONTROL(EXAMPLE_PORT_BASE, EXAMPLE_PIN_MASK);
+
+  /* And set as output, starting low */
+  GPIO_SET_OUTPUT(EXAMPLE_PORT_BASE, EXAMPLE_PIN_MASK);
+  GPIO_SET_PIN(EXAMPLE_PORT_BASE, EXAMPLE_PIN_MASK);
+
+#else /* Assume Z1 mote */
   #define EXAMPLE_PIN_MASK  (1<<2)
 
   /* The MSP430 MCU names the pins as a tupple of PORT + PIN, thus P6.1 refers
@@ -72,6 +88,8 @@ PROCESS_THREAD(test_gpio_process, ev, data)
    */
   P4DIR |= EXAMPLE_PIN_MASK;
 
+#endif
+
   /* Spin the timer */
 
   etimer_set(&et, CLOCK_SECOND * 5);
@@ -79,14 +97,21 @@ PROCESS_THREAD(test_gpio_process, ev, data)
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 
+#if CONTIKI_TARGET_ZOUL
+    if(GPIO_READ_PIN(EXAMPLE_PORT_BASE, EXAMPLE_PIN_MASK)) {
+      GPIO_CLR_PIN(EXAMPLE_PORT_BASE, EXAMPLE_PIN_MASK);
+    } else {
+      GPIO_SET_PIN(EXAMPLE_PORT_BASE, EXAMPLE_PIN_MASK);
+    }
+#else
     /* This toggles the pin, if low then sets the pin high, and viceversa.
      * Alternatively to set the pin high, use P4OUT |= EXAMPLE_PIN_MASK, and to
      * drive low use P4OUT &= ~EXAMPLE_PIN_MASK
      */
     P4OUT ^= EXAMPLE_PIN_MASK;
+#endif
 
     leds_toggle(LEDS_GREEN);
-
     etimer_reset(&et);
   }
 
