@@ -8,16 +8,25 @@ import paho.mqtt.client as mqtt
 #-----------------------------------------------------------------------------#
 MQTT_URL              = "mqtt.thethings.io"
 #-----------------------------------------------------------------------------#
-CMD_PUB_STRING_LEDS   = {"key":"leds_toggle","value":"0"}
-CMD_PUB_STRING_REBOOT = {"key":"reboot","value":"0"}
-CMD_PUB_STRING_SENSOR = {"key":"enable_sensor","value":"1"}
-CMD_PUB_STRING_PERIOD = {"key":"update_period","value":"45"}
+# Default mqtt client commands
+CMD_PUB_STRING_LEDS        = {"key":"leds_toggle","value":"0"}
+CMD_PUB_STRING_REBOOT      = {"key":"reboot","value":"0"}
+CMD_PUB_STRING_SENSOR      = {"key":"enable_sensor","value":"1"}
+CMD_PUB_STRING_PERIOD      = {"key":"update_period","value":"45"}
+
+# Specific application commands
+CMD_PUB_STRING_TEMP_THRES  = {"key":"temperature_thresh","value":"300"}
+CMD_PUB_STRING_HUMD_THRES  = {"key":"humidity_thresh","value":"800"}
+CMD_PUB_STRING_LIGHT_THRES = {"key":"light_thresh","value":"1000"}
 
 CMD_PUB_STRING = {"values":[
                               CMD_PUB_STRING_LEDS,
                               CMD_PUB_STRING_REBOOT,
                               CMD_PUB_STRING_SENSOR,
-                              CMD_PUB_STRING_PERIOD
+                              CMD_PUB_STRING_PERIOD,
+                              CMD_PUB_STRING_TEMP_THRES,
+                              CMD_PUB_STRING_HUMD_THRES,
+                              CMD_PUB_STRING_LIGHT_THRES
                            ]}
 
 data_token = ""

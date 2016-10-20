@@ -3,10 +3,10 @@ DEFINES+=PROJECT_CONF_H=\"project-conf.h\"
 all: mqtt-client
 
 # Platform options: relayr, thingsio, bluemix, ubidots
-MQTT_PLATFORM ?= bluemix
+MQTT_PLATFORM ?= thingsio
 
 # Sensor options: fridge, agriculture, remote, irrigation, coldchain
-MQTT_SENSORS  ?= remote
+MQTT_SENSORS  ?= coldchain
 
 # -----------------------------------------------------------------------------#
 # Don't touch anything below if you don't know what you are doing
@@ -71,7 +71,7 @@ ifeq ($(MQTT_SENSORS), remote)
   CFLAGS += -DDEFAULT_SENSORS_NUM=5
 endif
 
-WITH_LLSEC ?= 0
+WITH_LLSEC ?= 1
 CFLAGS += -DWITH_LLSEC_ENABLED=$(WITH_LLSEC)
 
 WITH_IP64 = 1
