@@ -321,26 +321,6 @@ typedef uint32_t rtimer_clock_t;
 #define NETSTACK_CONF_RDC     contikimac_driver
 #endif
 
-/* Configure NullRDC for when it's selected */
-#define NULLRDC_CONF_802154_AUTOACK             1
-#define NULLRDC_CONF_802154_AUTOACK_HW			    1
-
-/* Configure ContikiMAC for when it's selected */
-#define CONTIKIMAC_CONF_WITH_PHASE_OPTIMIZATION 0
-#define WITH_FAST_SLEEP                         1
-
-#ifndef NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE
-#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE    8
-#endif
-
-#ifndef NETSTACK_CONF_FRAMER
-#if NETSTACK_CONF_WITH_IPV6
-#define NETSTACK_CONF_FRAMER  framer_802154
-#else /* NETSTACK_CONF_WITH_IPV6 */
-#define NETSTACK_CONF_FRAMER  contikimac_framer
-#endif /* NETSTACK_CONF_WITH_IPV6 */
-#endif /* NETSTACK_CONF_FRAMER */
-
 #if CC1200_CONF_SUBGHZ_50KBPS_MODE
 #define NETSTACK_CONF_RADIO                                 cc1200_driver
 #define CC1200_CONF_RF_CFG                                  cc1200_802154g_863_870_fsk_50kbps
@@ -360,6 +340,31 @@ typedef uint32_t rtimer_clock_t;
 #define CONTIKIMAC_CONF_AFTER_ACK_DETECTED_WAIT_TIME        (RTIMER_SECOND / 300)
 #define CONTIKIMAC_CONF_INTER_PACKET_INTERVAL               (RTIMER_SECOND / 200)
 #endif
+
+/* Configure NullRDC for when it's selected */
+#ifndef NULLRDC_CONF_802154_AUTOACK
+#define NULLRDC_CONF_802154_AUTOACK             1
+#endif
+
+#ifndef NULLRDC_CONF_802154_AUTOACK_HW
+#define NULLRDC_CONF_802154_AUTOACK_HW			1
+#endif
+
+/* Configure ContikiMAC for when it's selected */
+#define CONTIKIMAC_CONF_WITH_PHASE_OPTIMIZATION 0
+#define WITH_FAST_SLEEP                         1
+
+#ifndef NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE
+#define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE    8
+#endif
+
+#ifndef NETSTACK_CONF_FRAMER
+#if NETSTACK_CONF_WITH_IPV6
+#define NETSTACK_CONF_FRAMER  framer_802154
+#else /* NETSTACK_CONF_WITH_IPV6 */
+#define NETSTACK_CONF_FRAMER  contikimac_framer
+#endif /* NETSTACK_CONF_WITH_IPV6 */
+#endif /* NETSTACK_CONF_FRAMER */
 
 /* This can be overriden to use the cc1200_driver instead */
 #ifndef NETSTACK_CONF_RADIO
