@@ -133,7 +133,7 @@ print_local_addresses(void)
   }
 	PRINTF("Server Address: ");
 	PRINT6ADDR(&server_ipaddr);
-	PRINTF("\n")
+	PRINTF("\n");
 }
 /*---------------------------------------------------------------------------*/
 static void
