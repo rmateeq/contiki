@@ -69,10 +69,10 @@ print_local_addresses(void)
   uip_netif_state state;
 
   PRINTF("Server IPv6 addresses: \n");
-  for(i = 0; i < UIP_CONF_NETIF_MAX_ADDRESSES; i++) {
-    state = uip_netif_physical_if.addresses[i].state;
+  for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
+    state = uip_ds6_if.addr_list[i].state;
     if(state == TENTATIVE || state == PREFERRED) {
-      PRINT6ADDR(&uip_netif_physical_if.addresses[i].ipaddr);
+      PRINT6ADDR(&uip_ds6_if.addr_list[i].ipaddr);
       PRINTF("\n");
     }
   }
