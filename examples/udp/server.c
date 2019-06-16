@@ -66,7 +66,7 @@ static void
 print_local_addresses(void)
 {
   int i;
-  uip_netif_state state;
+  uint8_state state;
 
   PRINTF("Server IPv6 addresses: \n");
   for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
