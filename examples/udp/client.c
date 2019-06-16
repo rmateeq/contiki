@@ -81,7 +81,8 @@ static void
 set_connection_address(uip_ipaddr_t *ipaddr)
 {
   // change this IP address depending on the node that runs the server!
-  uip_ip6addr(ipaddr, 0xfe80,0x0000,0x0000, 0x0000, 0xfb00, 0x0012, 0x91b7, 0x9001);
+  //uip_ip6addr(ipaddr, 0xfe80,0x0000,0x0000, 0x0000, 0xfb00, 0x0012, 0x91b7, 0x9001);
+  uip_ip6addr(ipaddr, 0xfe80,0x0000,0x0000, 0x0000, 0xbaae, 0xedff, 0xfe75, 0xb97b);
 }
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(udp_client_process, ev, data)
