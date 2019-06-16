@@ -47,7 +47,7 @@ print_ipv6_addr(const uip_ipaddr_t *ip_addr) {
 PROCESS_THREAD(broadcast_example_process, ev, data)
 {
   /*******PRINTF**********/
-  print("I am server");
+  printf("I am server");
            
   static struct etimer periodic_timer;
   static struct etimer send_timer;
