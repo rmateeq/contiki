@@ -71,7 +71,7 @@ print_local_addresses(void)
   PRINTF("Server IPv6 addresses: \n");
   for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
     state = uip_ds6_if.addr_list[i].state;
-    if(state == TENTATIVE || state == PREFERRED) {
+    if(state == ADDR_TENTATIVE || state == ADDR_PREFERRED) {
       PRINT6ADDR(&uip_ds6_if.addr_list[i].ipaddr);
       PRINTF("\n");
     }
