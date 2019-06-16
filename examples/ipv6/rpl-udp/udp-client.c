@@ -1,32 +1,3 @@
-/*
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. Neither the name of the Institute nor the names of its contributors
- *    may be used to endorse or promote products derived from this software
- *    without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE INSTITUTE AND CONTRIBUTORS ``AS IS'' AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE INSTITUTE OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *
- * This file is part of the Contiki operating system.
- *
- */
-
 #include "contiki.h"
 #include "lib/random.h"
 #include "sys/ctimer.h"
@@ -54,8 +25,8 @@
 #ifndef PERIOD
 #define PERIOD 60
 #endif
-
-#define START_INTERVAL		(15 * CLOCK_SECOND)
+/************set 5 instead of 15************/
+#define START_INTERVAL		(5 * CLOCK_SECOND)
 #define SEND_INTERVAL		(PERIOD * CLOCK_SECOND)
 #define SEND_TIME		(random_rand() % (SEND_INTERVAL))
 #define MAX_PAYLOAD_LEN		30
@@ -82,6 +53,20 @@ tcpip_handler(void)
     printf("DATA recv '%s' (s:%d, r:%d)\n", str, seq_id, reply);
   }
 }
+/*************print parents: not called************/
+void print_parents(const uip_ds6_nbr_t *nbr)
+ {
+
+   //uip_ds6_nbr_t *nbr;
+
+   for(nbr = nbr_table_head(ds6_neighbors); nbr != NULL; nbr =
+nbr_table_next(ds6_neighbors, nbr)) {
+
+       uip_debug_ipaddr_print(&nbr->ipaddr);
+
+     }
+ }
+
 /*---------------------------------------------------------------------------*/
 static void
 send_packet(void *ptr)
@@ -91,7 +76,7 @@ send_packet(void *ptr)
 #ifdef SERVER_REPLY
   uint8_t num_used = 0;
   uip_ds6_nbr_t *nbr;
-
+  
   nbr = nbr_table_head(ds6_neighbors);
   while(nbr != NULL) {
     nbr = nbr_table_next(ds6_neighbors, nbr);
@@ -136,12 +121,23 @@ print_local_addresses(void)
 	PRINTF("\n");
 }
 /*---------------------------------------------------------------------------*/
+/*******print address**********/
+static void
+print_ipv6_addr(const uip_ipaddr_t *ip_addr) {
+    int i;
+    for (i = 0; i < 16; i++) {
+        printf("%02x", ip_addr->u8[i]);
+    }
+}
+
 static void
 set_global_address(void)
 {
   uip_ipaddr_t ipaddr;
 
   uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 1);
+	/**********print*******/
+print_ipv6_addr(ipaddr);
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
@@ -164,12 +160,20 @@ set_global_address(void)
 #if 0
 /* Mode 1 - 64 bits inline */
    uip_ip6addr(&server_ipaddr, UIP_DS6_DEFAULT_PREFIX, 0, 0, 0, 0, 0, 0, 1);
+	/***************print************/
+	print_ipv6_addr(server_ipaddr);
 #elif 1
 /* Mode 2 - 16 bits inline */
   uip_ip6addr(&server_ipaddr, UIP_DS6_DEFAULT_PREFIX, 0, 0, 0, 0, 0x00ff, 0xfe00, 1);
+	/***************print************/
+	print_ipv6_addr(server_ipaddr);
+
 #else
 /* Mode 3 - derived from server link-local (MAC) address */
   uip_ip6addr(&server_ipaddr, UIP_DS6_DEFAULT_PREFIX, 0, 0, 0, 0x0250, 0xc2ff, 0xfea8, 0xcd1a); //redbee-econotag
+		/***************print************/
+	print_ipv6_addr(server_ipaddr);
+
 #endif
 }
 /*---------------------------------------------------------------------------*/
@@ -190,7 +194,8 @@ PROCESS_THREAD(udp_client_process, ev, data)
   PRINTF("UDP client process started nbr:%d routes:%d\n",
          NBR_TABLE_CONF_MAX_NEIGHBORS, UIP_CONF_MAX_ROUTES);
 
-  print_local_addresses();
+print("printing local addresses\n");
+print_local_addresses();
 
   /* new connection with remote host */
   client_conn = udp_new(NULL, UIP_HTONS(UDP_SERVER_PORT), NULL); 
