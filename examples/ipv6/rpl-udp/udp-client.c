@@ -54,7 +54,7 @@ tcpip_handler(void)
   }
 }
 /*************print parents: not called************/
-void print_parents(const uip_ds6_nbr_t *nbr)
+void print_parents(uip_ds6_nbr_t *nbr)
  {
 
    //uip_ds6_nbr_t *nbr;
@@ -137,7 +137,7 @@ set_global_address(void)
 
   uip_ip6addr(&ipaddr, 0xaaaa, 0, 0, 0, 0, 0, 0, 1);
 	/**********print*******/
-print_ipv6_addr(ipaddr);
+print_ipv6_addr(&ipaddr);
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
   uip_ds6_addr_add(&ipaddr, 0, ADDR_AUTOCONF);
 
@@ -193,8 +193,8 @@ PROCESS_THREAD(udp_client_process, ev, data)
 
   PRINTF("UDP client process started nbr:%d routes:%d\n",
          NBR_TABLE_CONF_MAX_NEIGHBORS, UIP_CONF_MAX_ROUTES);
-
-print("printing local addresses\n");
+/************************/
+printf("printing local addresses\n");
 print_local_addresses();
 
   /* new connection with remote host */
