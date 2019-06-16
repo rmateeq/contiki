@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define UDP_PORT 1234
+#define UDP_PORT 5678
 /*******set 10 instead of 20**********/
 #define SEND_INTERVAL		(10 * CLOCK_SECOND)
 #define SEND_TIME		(random_rand() % (SEND_INTERVAL))
