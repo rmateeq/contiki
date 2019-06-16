@@ -2,6 +2,18 @@
 #include "contiki-lib.h"
 #include "contiki-net.h"
 
+#include "net/ip/uip.h"
+#include "net/rpl/rpl.h"
+
+#include "net/netstack.h"
+#include "dev/button-sensor.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define DEBUG DEBUG_PRINT
+#include "net/ip/uip-debug.h"
 #include <string.h>
 
 #define DEBUG 1
