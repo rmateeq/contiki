@@ -134,8 +134,8 @@ static void
 set_global_address(void)
 {
   uip_ipaddr_t ipaddr;
-
-  uip_ip6addr(&ipaddr, 0xfe80, 0, 0, 0, 0xc23f, 0xd5ff, 0xfe68, 0x5008);
+/***************************************/
+  uip_ip6addr(&ipaddr, 0x2001, 0x6a8, 0x2011, 0x2011, 0xc23f, 0xd5ff, 0xfe68, 0x5008);
 	/**********print*******/
 print_ipv6_addr(&ipaddr);
   uip_ds6_set_addr_iid(&ipaddr, &uip_lladdr);
