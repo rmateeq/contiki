@@ -82,10 +82,10 @@ PROCESS_THREAD(udp_server_process, ev, data)
   print_local_addresses();
 
   // set NULL and 0 as IP address and port to accept packet from any node and any srcport.
-  server_conn = udp_new(NULL, HTONS(0), NULL);
-  udp_bind(server_conn, HTONS(3000));
+  server_conn = udp_new(NULL, UIP_HTONS(0), NULL);
+  udp_bind(server_conn, UIP_HTONS(3000));
 
-  PRINTF("Server listening on UDP port %u\n", HTONS(server_conn->lport));
+  PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
 
   while(1) {
     PROCESS_YIELD();
