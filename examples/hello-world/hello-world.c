@@ -38,8 +38,6 @@
  */
 
 #include "contiki.h"
-//#define DEBUG DEBUG_FULL
-#include "net/ip/uip-debug.h"
 #include <stdio.h> /* For printf() */
 /*---------------------------------------------------------------------------*/
 PROCESS(hello_world_process, "Hello world process");
