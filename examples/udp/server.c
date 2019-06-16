@@ -84,6 +84,7 @@ PROCESS_THREAD(udp_server_process, ev, data)
   
   PROCESS_BEGIN();
   PRINTF("UDP server started\n");
+  print("UDP server started\n");
   
   // wait 3 second, in order to have the IP addresses well configured
   etimer_set(&timer, CLOCK_CONF_SECOND*5);
