@@ -2,19 +2,31 @@
 #include "contiki-lib.h"
 #include "contiki-net.h"
 
+#include "net/ip/uip.h"
+#include "net/rpl/rpl.h"
+
+#include "net/netstack.h"
+#include "dev/button-sensor.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define DEBUG DEBUG_PRINT
+#include "net/ip/uip-debug.h"
 #include <string.h>
 
-#define DEBUG 1
-#if DEBUG
+//#define DEBUG 1
+//#if DEBUG
 #include <stdio.h>
-#define PRINTF(...) printf(__VA_ARGS__)
-#define PRINT6ADDR(addr) PRINTF(" %02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x ", ((u8_t *)addr)[0], ((u8_t *)addr)[1], ((u8_t *)addr)[2], ((u8_t *)addr)[3], ((u8_t *)addr)[4], ((u8_t *)addr)[5], ((u8_t *)addr)[6], ((u8_t *)addr)[7], ((u8_t *)addr)[8], ((u8_t *)addr)[9], ((u8_t *)addr)[10], ((u8_t *)addr)[11], ((u8_t *)addr)[12], ((u8_t *)addr)[13], ((u8_t *)addr)[14], ((u8_t *)addr)[15])
-#define PRINTLLADDR(lladdr) PRINTF(" %02x:%02x:%02x:%02x:%02x:%02x ",(lladdr)->addr[0], (lladdr)->addr[1], (lladdr)->addr[2], (lladdr)->addr[3],(lladdr)->addr[4], (lladdr)->addr[5])
-#else
-#define PRINTF(...)
-#define PRINT6ADDR(addr)
-#define PRINTLLADDR(addr)
-#endif
+//#define PRINTF(...) printf(__VA_ARGS__)
+//#define PRINT6ADDR(addr) PRINTF(" %02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x ", ((u8_t *)addr)[0], ((u8_t *)addr)[1], ((u8_t *)addr)[2], ((u8_t *)addr)[3], ((u8_t *)addr)[4], ((u8_t *)addr)[5], ((u8_t *)addr)[6], ((u8_t *)addr)[7], ((u8_t *)addr)[8], ((u8_t *)addr)[9], ((u8_t *)addr)[10], ((u8_t *)addr)[11], ((u8_t *)addr)[12], ((u8_t *)addr)[13], ((u8_t *)addr)[14], ((u8_t *)addr)[15])
+//#define PRINTLLADDR(lladdr) PRINTF(" %02x:%02x:%02x:%02x:%02x:%02x ",(lladdr)->addr[0], (lladdr)->addr[1], (lladdr)->addr[2], (lladdr)->addr[3],(lladdr)->addr[4], (lladdr)->addr[5])
+//#else
+//#define PRINTF(...)
+//#define PRINT6ADDR(addr)
+//#define PRINTLLADDR(addr)
+//#endif
 
 #define SEND_INTERVAL		3 * CLOCK_SECOND
 #define MAX_PAYLOAD_LEN		40
@@ -53,13 +65,13 @@ static void
 print_local_addresses(void)
 {
   int i;
-  uip_netif_state state;
+  uint8_t state;
 
   PRINTF("Client IPv6 addresses: ");
-  for(i = 0; i < UIP_CONF_NETIF_MAX_ADDRESSES; i++) {
-    state = uip_netif_physical_if.addresses[i].state;
-    if(state == TENTATIVE || state == PREFERRED) {
-      PRINT6ADDR(&uip_netif_physical_if.addresses[i].ipaddr);
+  for(i = 0; i < UIP_DS6_ADDR_NB; i++) {
+    state = uip_ds6_if.addr_list[i].state;
+    if(state == ADDR_TENTATIVE || state == ADDR_PREFERRED) {
+      PRINT6ADDR(&uip_ds6_if.addr_list[i].ipaddr);
       PRINTF("\n");
     }
   }
@@ -90,12 +102,12 @@ PROCESS_THREAD(udp_client_process, ev, data)
   set_connection_address(&ipaddr);
 
   /* new connection with remote host */
-  client_conn = udp_new(&ipaddr, HTONS(3000), NULL);
+  client_conn = udp_new(&ipaddr, UIP_HTONS(3000), NULL);
 
   PRINTF("Created a connection with the server ");
   PRINT6ADDR(&client_conn->ripaddr);
   PRINTF("local/remote port %u/%u\n",
-	HTONS(client_conn->lport), HTONS(client_conn->rport));
+	UIP_HTONS(client_conn->lport), UIP_HTONS(client_conn->rport));
 
   etimer_set(&et, SEND_INTERVAL);
   while(1) {
