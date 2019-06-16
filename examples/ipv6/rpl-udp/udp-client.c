@@ -161,12 +161,12 @@ print_ipv6_addr(&ipaddr);
 /* Mode 1 - 64 bits inline */
    uip_ip6addr(&server_ipaddr, UIP_DS6_DEFAULT_PREFIX, 0, 0, 0, 0, 0, 0, 1);
 	/***************print************/
-	print_ipv6_addr(server_ipaddr);
+	print_ipv6_addr(&server_ipaddr);
 #elif 1
 /* Mode 2 - 16 bits inline */
   uip_ip6addr(&server_ipaddr, UIP_DS6_DEFAULT_PREFIX, 0, 0, 0, 0, 0x00ff, 0xfe00, 1);
 	/***************print************/
-	print_ipv6_addr(server_ipaddr);
+	print_ipv6_addr(&server_ipaddr);
 
 #else
 /* Mode 3 - derived from server link-local (MAC) address */
