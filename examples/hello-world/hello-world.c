@@ -38,7 +38,7 @@
  */
 
 #include "contiki.h"
-#define DEBUG DEBUG_FULL
+//#define DEBUG DEBUG_FULL
 #include "net/ip/uip-debug.h"
 #include <stdio.h> /* For printf() */
 /*---------------------------------------------------------------------------*/
