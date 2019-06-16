@@ -1,4 +1,4 @@
-all: udp-client udp-server
+all: client server
 
 UIP_CONF_IPV6=1
 
