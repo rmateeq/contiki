@@ -59,8 +59,7 @@ PROCESS_THREAD(broadcast_example_process, ev, data)
                       NULL, UDP_PORT,
                       receiver);
 /*******printf**********/
-  printf("server port: %d. sender port %d.\n",
-         receiver_port, sender_port);
+  printf("UDP port: %d\n",UDP_PORT);
   etimer_set(&periodic_timer, SEND_INTERVAL);
   while(1) {
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&periodic_timer));
