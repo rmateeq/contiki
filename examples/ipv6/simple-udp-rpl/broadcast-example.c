@@ -69,7 +69,7 @@ PROCESS_THREAD(broadcast_example_process, ev, data)
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&send_timer));
     printf("Sending broadcast\n");
    /**********print function***********/
-    print_ipv6_addr(addr);
+    print_ipv6_addr(&addr);
     uip_create_linklocal_allnodes_mcast(&addr);
     simple_udp_sendto(&broadcast_connection, "Test", 4, &addr);
   }
