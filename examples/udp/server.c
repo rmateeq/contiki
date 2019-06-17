@@ -84,7 +84,6 @@ print_addr(const uip_ipaddr_t *ip_addr) {
         printf("%04x ", ip_addr->u16[i]);
     }
 }
-}
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(udp_server_process, ev, data)
 {
