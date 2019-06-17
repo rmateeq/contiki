@@ -124,14 +124,14 @@ PROCESS_THREAD(udp_server_process, ev, data)
  //     printf("2nd");
   udp_bind(server_conn, UIP_HTONS(3000));
 
-  printf("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
-etimer_reset(&timer);
-  }
+  PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
   while(1) {
     PROCESS_YIELD();
     if(ev == tcpip_event) {
       tcpip_handler();
     }
+  }
+etimer_reset(&timer);
   }
 
   PROCESS_END();
