@@ -45,7 +45,7 @@ tcpip_handler(void)
 
   if(uip_newdata()) {
     ((char *)uip_appdata)[uip_datalen()] = 0;
-    PRINTF("Server received: '%s' from ", (char *)uip_appdata);
+    printf("Server received: '%s' from ", (char *)uip_appdata);
     PRINT6ADDR(&UDP_IP_BUF->srcipaddr);
     PRINTF("\n");
 
