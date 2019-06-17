@@ -128,6 +128,7 @@ PROCESS_THREAD(udp_server_process, ev, data)
   while(1) {
     PROCESS_YIELD();
     if(ev == tcpip_event) {
+      printf("inside if..");
       tcpip_handler();
     }
   }
