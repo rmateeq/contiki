@@ -87,7 +87,7 @@ print_addr2(const uip_ipaddr_t *ip_addr) {
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(udp_server_process, ev, data)
 {
-  uip_ipaddr_t saddr;
+  uip_ipaddr_t *saddr;
   static struct etimer timer;
   PRINTF("UDP server started\n");
   printf("UDP server started\n");
@@ -96,7 +96,7 @@ PROCESS_THREAD(udp_server_process, ev, data)
   etimer_set(&timer, CLOCK_SECOND * 5);
   uip_ip6addr(saddr, 0xcccc,0,0,0,0x0212,0x4b00,0x09df,0x1bc6);
     //uip_gethostaddr(saddr);
-  print_addr2(saddr);
+  print_addr2(&saddr);
   PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
     etimer_reset(&timer);
   }
