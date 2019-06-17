@@ -12,7 +12,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#define DEBUG DEBUG_PRINT
+//#define DEBUG DEBUG_PRINT
 #include "net/ip/uip-debug.h"
 #include <string.h>
 
