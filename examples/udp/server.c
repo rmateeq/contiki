@@ -126,7 +126,9 @@ PROCESS_THREAD(udp_server_process, ev, data)
 
   PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
   while(1) {
+    printf("inside while..\n");
     PROCESS_YIELD();
+    printf("yielded..\n");
     if(ev == tcpip_event) {
       printf("inside if..");
       tcpip_handler();
