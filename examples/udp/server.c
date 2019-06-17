@@ -121,10 +121,10 @@ PROCESS_THREAD(udp_server_process, ev, data)
   while(1){
     etimer_set(&timer, CLOCK_CONF_SECOND*5);
   server_conn = udp_new(NULL, UIP_HTONS(0), NULL);
-      printf("2nd");
+ //     printf("2nd");
   udp_bind(server_conn, UIP_HTONS(3000));
 
-  PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
+  printf("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
 etimer_reset(&timer);
   }
   while(1) {
