@@ -94,7 +94,8 @@ PROCESS_THREAD(udp_server_process, ev, data)
   PROCESS_BEGIN();
   while(1){
   etimer_set(&timer, CLOCK_SECOND * 5);
-  uip_ip6addr(saddr, 0xfe80,0,0,0,0xbaae,0xedff,0xfe75,0xbaaf);
+  //uip_ip6addr(saddr, 0xfe80,0,0,0,0xbaae,0xedff,0xfe75,0xbaaf);
+    uip_gethostaddr(saddr);
   print_addr2(saddr);
   PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
     etimer_reset(&timer);
