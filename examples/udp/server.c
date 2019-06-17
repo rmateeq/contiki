@@ -123,6 +123,8 @@ PROCESS_THREAD(udp_server_process, ev, data)
   server_conn = udp_new(&saddr, UIP_HTONS(0), NULL);
       print_addr2(&saddr);
   udp_bind(server_conn, UIP_HTONS(3000));
+etimer_reset(&timer);
+  }
 
   PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
   while(1) {
@@ -133,8 +135,6 @@ PROCESS_THREAD(udp_server_process, ev, data)
       printf("inside if..");
       tcpip_handler();
     }
-  }
-etimer_reset(&timer);
   }
 
   PROCESS_END();
