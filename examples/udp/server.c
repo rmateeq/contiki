@@ -78,7 +78,7 @@ print_local_addresses(void)
   }
 }
 static void
-print_addr(const uip_ipaddr_t *ip_addr) {
+print_addr2(const uip_ipaddr_t *ip_addr) {
     int i;
     for (i = 0; i <= 7; i++) {
         printf("%04x ", ip_addr->u16[i]);
@@ -93,7 +93,7 @@ PROCESS_THREAD(udp_server_process, ev, data)
   PROCESS_BEGIN();
   uip_ipaddr_t hostaddr;
   uip_gethostaddr(&hostaddr);
-  print_addr(&hostaddr);
+  print_addr2(&hostaddr);
   PRINTF("UDP server started\n");
   printf("UDP server started\n");
   
