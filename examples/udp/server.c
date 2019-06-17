@@ -80,8 +80,8 @@ print_local_addresses(void)
 static void
 print_addr2(const uip_ipaddr_t *ip_addr) {
     int i;
-    for (i = 0; i <= 15; i++) {
-        printf("%02x ", ip_addr->u8[i]);
+    for (i = 0; i <= 7; i++) {
+        printf("%04x ", ip_addr->u16[i]);
     }
 }
 /*---------------------------------------------------------------------------*/
