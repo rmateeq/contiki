@@ -81,7 +81,8 @@ print_local_addresses(void)
 PROCESS_THREAD(udp_server_process, ev, data)
 {
   static struct etimer timer;
-  
+  PRINTF("UDP server started\n");
+  printf("UDP server started\n");
   PROCESS_BEGIN();
   PRINTF("UDP server started\n");
   printf("UDP server started\n");
