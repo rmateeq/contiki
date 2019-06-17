@@ -92,14 +92,14 @@ PROCESS_THREAD(udp_server_process, ev, data)
   //PRINTF("UDP server started\n");
   //printf("UDP server started\n");
   PROCESS_BEGIN();
-  while(1){
-  etimer_set(&timer, CLOCK_SECOND * 5);
-  //uip_ip6addr(&saddr, 0xcccc,0,0,0,0x0212,0x4b00,0x09df,0x1bc6);
-    uip_gethostaddr(saddr);
+  //while(1){
+  //etimer_set(&timer, CLOCK_SECOND * 5);
+  uip_ip6addr(&saddr, 0xcccc,0,0,0,0x0212,0x4b00,0x09df,0x1bc6);
+    //uip_gethostaddr(&saddr);
   print_addr2(&saddr);
-  PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
-    etimer_reset(&timer);
-  }
+  //PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
+    //etimer_reset(&timer);
+  //}
     // ,0x2001,0x06a8,0x1d80, 0x2011, 0xbaae, 0xedff, 0xfe75, 0xb97b
   //uip_gethostaddr(saddr);
   //print_addr2(saddr);
@@ -120,8 +120,8 @@ PROCESS_THREAD(udp_server_process, ev, data)
   // set NULL and 0 as IP address and port to accept packet from any node and any srcport.
   while(1){
     etimer_set(&timer, CLOCK_CONF_SECOND*5);
-  server_conn = udp_new(NULL, UIP_HTONS(0), NULL);
- //     printf("2nd");
+  server_conn = udp_new(&saddr, UIP_HTONS(0), NULL);
+      print_addr2(&saddr);
   udp_bind(server_conn, UIP_HTONS(3000));
 
   PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
