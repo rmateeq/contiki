@@ -118,13 +118,14 @@ PROCESS_THREAD(udp_server_process, ev, data)
 
  
   // set NULL and 0 as IP address and port to accept packet from any node and any srcport.
-  while(1){
-    etimer_set(&timer, CLOCK_CONF_SECOND*5);
   server_conn = udp_new(&saddr, UIP_HTONS(0), NULL);
-      print_addr2(&saddr);
+//      print_addr2(&saddr);
   udp_bind(server_conn, UIP_HTONS(3000));
-etimer_reset(&timer);
-  }
+//  while(1){
+ //   etimer_set(&timer, CLOCK_CONF_SECOND*5);
+
+ // etimer_reset(&timer);
+  //}
 
   PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
   while(1) {
