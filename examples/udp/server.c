@@ -91,9 +91,8 @@ PROCESS_THREAD(udp_server_process, ev, data)
   PRINTF("UDP server started\n");
   printf("UDP server started\n");
   PROCESS_BEGIN();
-  //uip_ipaddr_t hostaddr;
-  //uip_gethostaddr(&hostaddr);
-  //print_addr2(&hostaddr);
+  uip_ipaddr_t saddr;
+  print_addr2(uip_gethostaddr(&saddr));
   PRINTF("UDP server started\n");
   printf("UDP server started\n");
   
