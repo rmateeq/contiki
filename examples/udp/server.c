@@ -105,17 +105,22 @@ PROCESS_THREAD(udp_server_process, ev, data)
   //print_addr2(saddr);
   //PRINTF("UDP server started\n");
   printf("UDP server started\n");
-  
+
+    while(1){
+  //etimer_set(&timer, CLOCK_SECOND * 5);
+
   // wait 3 second, in order to have the IP addresses well configured
   etimer_set(&timer, CLOCK_CONF_SECOND*5);
-  
+  printf("1st");
   // wait until the timer has expired
   PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
   
   print_local_addresses();
-
+etimer_reset(&timer);
+    }
   // set NULL and 0 as IP address and port to accept packet from any node and any srcport.
   server_conn = udp_new(NULL, UIP_HTONS(0), NULL);
+      printf("2nd");
   udp_bind(server_conn, UIP_HTONS(3000));
 
   PRINTF("Server listening on UDP port %u\n", UIP_HTONS(server_conn->lport));
