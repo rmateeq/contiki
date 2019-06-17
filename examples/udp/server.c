@@ -112,7 +112,7 @@ PROCESS_THREAD(udp_server_process, ev, data)
   
   printf("1st");
   // wait until the timer has expired
-  PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
+  //PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_TIMER);
   
   print_local_addresses();
 
