@@ -92,11 +92,13 @@ PROCESS_THREAD(udp_server_process, ev, data)
   PRINTF("UDP server started\n");
   printf("UDP server started\n");
   PROCESS_BEGIN();
+  while(1){
   etimer_set(&timer, CLOCK_SECOND * 5);
   uip_ip6addr(saddr, 0xfe80,0x0000,0x0000,0x0000,0xbaae,0xedff,0xfe75,0xbaaf);
   print_addr2(saddr);
   PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&timer));
     etimer_reset(&timer);
+  }
     // ,0x2001,0x06a8,0x1d80, 0x2011, 0xbaae, 0xedff, 0xfe75, 0xb97b
   //uip_gethostaddr(saddr);
   //print_addr2(saddr);
